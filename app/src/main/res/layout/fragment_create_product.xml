@@ -3,12 +3,156 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.admin.CreateProductFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:background="@color/white">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="30dp"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="30dp"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.07" />
+
+        <TextView
+            android:id="@+id/textHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/roboto_bold"
+            android:text="CREATE PRODUCT"
+            android:textColor="@color/blue"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toStartOf="@id/guideEnd"
+            app:layout_constraintStart_toEndOf="@id/guideStart"
+            app:layout_constraintTop_toBottomOf="@id/guideTop" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutImage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:boxStrokeColor="#0000FF"
+            app:boxStrokeWidth="1dp"
+            android:layout_marginTop="20dp"
+            app:boxCornerRadiusTopStart="8dp"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:layout_constraintEnd_toStartOf="@id/guideEnd"
+            app:layout_constraintStart_toEndOf="@id/guideStart"
+            app:layout_constraintTop_toBottomOf="@id/textHeader">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:hint="Image"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:boxStrokeColor="#0000FF"
+            app:boxStrokeWidth="1dp"
+            android:layout_marginTop="16dp"
+            app:boxCornerRadiusTopStart="8dp"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:layout_constraintEnd_toStartOf="@id/guideEnd"
+            app:layout_constraintStart_toEndOf="@id/guideStart"
+            app:layout_constraintTop_toBottomOf="@id/layoutImage">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:hint="Name"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:boxStrokeColor="#0000FF"
+            app:boxStrokeWidth="1dp"
+            android:layout_marginTop="16dp"
+            app:boxCornerRadiusTopStart="8dp"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:layout_constraintEnd_toStartOf="@id/guideEnd"
+            app:layout_constraintStart_toEndOf="@id/guideStart"
+            app:layout_constraintTop_toBottomOf="@id/layoutName">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edPrice"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:inputType="numberDecimal"
+                android:hint="Price"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:boxStrokeColor="#0000FF"
+            app:boxStrokeWidth="1dp"
+            android:layout_marginTop="16dp"
+            app:boxCornerRadiusTopStart="8dp"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:layout_constraintEnd_toStartOf="@id/guideEnd"
+            app:layout_constraintStart_toEndOf="@id/guideStart"
+            app:layout_constraintTop_toBottomOf="@id/layoutPrice">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edDescription"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:inputType="textMultiLine"
+                android:hint="Description"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCreate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="CREATE"
+            android:textSize="20sp"
+            android:layout_marginTop="24dp"
+            app:cornerRadius="10dp"
+            android:backgroundTint="@color/blue"
+            android:paddingVertical="12dp"
+            app:layout_constraintStart_toEndOf="@id/guideStart"
+            app:layout_constraintEnd_toStartOf="@id/guideEnd"
+            app:layout_constraintTop_toBottomOf="@id/layoutDescription"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
