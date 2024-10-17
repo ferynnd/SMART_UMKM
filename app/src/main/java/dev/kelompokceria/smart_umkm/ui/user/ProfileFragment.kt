@@ -11,7 +11,10 @@ import dev.kelompokceria.smart_umkm.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment() {
 
-    private lateinit var binding: FragmentProfileBinding
+    private  var _binding: FragmentProfileBinding? = null
+
+    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -21,12 +24,15 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentProfileBinding.inflate(inflater, container,false)
+        _binding = FragmentProfileBinding.inflate(inflater, container,false)
         return binding.root
 //        return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
-    companion object {
-
+     override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
+
+
 }

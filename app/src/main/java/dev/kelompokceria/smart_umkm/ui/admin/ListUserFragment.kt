@@ -6,9 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dev.kelompokceria.smart_umkm.R
+import dev.kelompokceria.smart_umkm.databinding.FragmentListUserBinding
 
 
 class ListUserFragment : Fragment() {
+
+    private var _binding : FragmentListUserBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,8 +24,15 @@ class ListUserFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list_user, container, false)
+        _binding = FragmentListUserBinding.inflate(inflater,container,false)
+        return binding.root
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 
 
 }
