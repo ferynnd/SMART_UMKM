@@ -3,6 +3,7 @@ package dev.kelompokceria.smart_umkm.data.dao
 import android.provider.ContactsContract.CommonDataKinds.Email
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -14,6 +15,9 @@ interface UserDao {
 
     @Query("SELECT * FROM user_table")
     suspend fun getAllUser() : List<User>
+
+    @Delete
+    suspend fun delete(user: User)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addUser(vararg user: User)
