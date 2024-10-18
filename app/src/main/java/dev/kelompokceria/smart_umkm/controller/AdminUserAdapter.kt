@@ -17,22 +17,21 @@ import dev.kelompokceria.smart_umkm.databinding.CardUserBinding
 import dev.kelompokceria.smart_umkm.model.User
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
 
-class AdminUserAdapter(private val context: Context,
-                       var userList: List<User>) : RecyclerView.Adapter<AdminUserAdapter.viewHolder>() {
+class AdminUserAdapter( var userList: List<User>) : RecyclerView.Adapter<AdminUserAdapter.userViewHolder>() {
 
 
-    inner class viewHolder( var view: CardUserBinding) : RecyclerView.ViewHolder(view.root)
+    class userViewHolder( var view: CardUserBinding) : RecyclerView.ViewHolder(view.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): viewHolder {
-        val binding = CardUserBinding.inflate(LayoutInflater.from(context),parent,false)
-        return viewHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): userViewHolder {
+        val binding = CardUserBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return userViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
         return userList.size
     }
 
-    override fun onBindViewHolder(holder: viewHolder, position: Int) {
+    override fun onBindViewHolder(holder: userViewHolder, position: Int) {
 
         val user = userList.get(position)
         val view = holder.view
@@ -46,6 +45,14 @@ class AdminUserAdapter(private val context: Context,
 
         view.buttonEdit.setOnClickListener {
 //            Toast.makeText(context,"TEXT",)
+        }
+
+        view.Expand.setOnClickListener {
+                if (view.groupProfile.visibility == View.GONE) {
+                    view.groupProfile.visibility = View.VISIBLE  // Tampilkan
+                } else {
+                    view.groupProfile.visibility = View.GONE  // Sembunyikan
+                }
         }
 
     }
