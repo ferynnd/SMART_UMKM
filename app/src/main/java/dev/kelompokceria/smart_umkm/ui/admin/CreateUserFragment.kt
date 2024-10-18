@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.data.dao.UserDao
 import dev.kelompokceria.smart_umkm.data.database.AppDatabase
@@ -16,13 +18,13 @@ import dev.kelompokceria.smart_umkm.databinding.FragmentCreateUserBinding
 import dev.kelompokceria.smart_umkm.model.User
 import dev.kelompokceria.smart_umkm.model.UserRole
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
+import kotlinx.coroutines.launch
 
 class CreateUserFragment : Fragment() {
 
-    private var _binding : FragmentCreateUserBinding? = null
-    private val binding get() = _binding!!
 
-
+    private lateinit var binding: FragmentCreateUserBinding
+    private lateinit var userViewModel: UserViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +36,10 @@ class CreateUserFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentCreateUserBinding.inflate(inflater,container,false)
+        binding = FragmentCreateUserBinding.inflate(inflater,container,false)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
+
 
         return binding.root
     }
@@ -48,7 +53,6 @@ class CreateUserFragment : Fragment() {
         binding.btnLogin.setOnClickListener {
              if (validateInputs()) {
                 createUser() // Membuat user jika input valid
-
                 navigateToUserList() // Berpindah ke ListUserFragment
             } else {
                 Toast.makeText(requireContext(), "Silahkan lengkapi semua field", Toast.LENGTH_SHORT).show()
@@ -56,10 +60,6 @@ class CreateUserFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 
     private fun setupSpinner() {
         val roles = arrayListOf("ADMIN", "USER")
@@ -91,6 +91,7 @@ class CreateUserFragment : Fragment() {
         val password = binding.edPassword.text.toString()
         val role = UserRole.valueOf(binding.userRole.selectedItem.toString())
 
+
         val user = User(
             name = name,
             email = email,
@@ -99,6 +100,10 @@ class CreateUserFragment : Fragment() {
             password = password,
             role = role
         )
+
+        lifecycleScope.launch {
+            userViewModel.addUser(user)
+        }
 
     }
 

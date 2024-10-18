@@ -1,20 +1,38 @@
 package dev.kelompokceria.smart_umkm.viewmodel
 
-import android.content.Context
-import android.util.Log
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import dev.kelompokceria.smart_umkm.data.dao.UserDao
+import dev.kelompokceria.smart_umkm.data.database.AppDatabase
+import dev.kelompokceria.smart_umkm.data.repository.UserRepository
 import dev.kelompokceria.smart_umkm.model.User
-import dev.kelompokceria.smart_umkm.model.UserRole
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class UserViewModel(private val userDao: UserDao) : ViewModel() {
+class UserViewModel(application: Application) : AndroidViewModel(application) {
+
+
+    private val repository : UserRepository
+    private val _allUser = MutableLiveData<List<User>>()
+    val allUser : LiveData<List<User>> get() = _allUser
+
+    init {
+        val userDao = AppDatabase.getInstance(application).UserDao()
+        repository = UserRepository(userDao)
+        getAllUser()
+    }
+
+    private fun getAllUser() {
+        viewModelScope.launch {
+            _allUser.value = repository.getAllUser()
+        }
+    }
+
+    fun addUser(user: User) = viewModelScope.launch {
+        repository.addUser(user)
+    }
 
 
 
