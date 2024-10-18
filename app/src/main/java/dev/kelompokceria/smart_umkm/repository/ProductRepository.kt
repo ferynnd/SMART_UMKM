@@ -6,24 +6,32 @@ import dev.kelompokceria.smart_umkm.model.Product
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class ProductRepository (private val productDao: ProductDao) {
+class ProductRepository(private val productDao: ProductDao) {
 
+    // Fungsi untuk mendapatkan semua produk
+    fun getAllProducts(): LiveData<List<Product>> {
+        return productDao.getAllProducts()
+    }
+
+    // Fungsi untuk memasukkan produk baru
     suspend fun insert(product: Product) {
-        return withContext(Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             productDao.insert(product)
         }
     }
 
-    suspend fun delete(loker: Product) {
-        productDao.delete(loker)
+    // Fungsi untuk menghapus produk
+    suspend fun delete(product: Product) {
+        withContext(Dispatchers.IO) {
+            productDao.delete(product)
+        }
     }
 
-    suspend fun update(loker: Product   ) {
-        productDao.update(loker)
+    // Fungsi untuk memperbarui produk
+    suspend fun update(product: Product) {
+        withContext(Dispatchers.IO) {
+            productDao.update(product)
+        }
     }
-
-    suspend fun getAllLoker(): List<Product> {
-        return productDao.getAllProduct()
-    }
-
 }
+

@@ -6,19 +6,18 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import dev.kelompokceria.smart_umkm.data.dao.ProductDao
 import dev.kelompokceria.smart_umkm.data.dao.UserDao
-import dev.kelompokceria.smart_umkm.model.Product
 import dev.kelompokceria.smart_umkm.model.User
 import dev.kelompokceria.smart_umkm.model.Product
 
-@Database( entities = [User::class,Product::class] , version = 1)
-
+@Database(entities = [User::class, Product::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
     abstract fun productDao(): ProductDao
 
     companion object {
-        @Volatile private var INSTANCE: AppDatabase? = null
+        @Volatile
+        private var INSTANCE: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
@@ -28,7 +27,8 @@ abstract class AppDatabase : RoomDatabase() {
                     "smartumkm_database"
                 )
                     .fallbackToDestructiveMigration()
-                    .allowMainThreadQueries() // Pertimbangkan untuk menghindari ini pada aplikasi produksi
+                    // Hindari pemanggilan ini pada aplikasi produksi
+                    // .allowMainThreadQueries()
                     .build()
                     .also { INSTANCE = it }
             }
