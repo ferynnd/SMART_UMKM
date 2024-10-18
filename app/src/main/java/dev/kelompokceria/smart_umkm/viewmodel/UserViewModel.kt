@@ -19,7 +19,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     val allUser : LiveData<List<User>> get() = _allUser
 
     init {
-        val userDao = AppDatabase.getInstance(application).UserDao()
+        val userDao = AppDatabase.getInstance(application).userDao()
         repository = UserRepository(userDao)
         getAllUser()
     }
