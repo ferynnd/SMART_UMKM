@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/transaction"
+        android:title="TRANSACTION"
+        android:icon="@drawable/transaction"/>
+
+    <item
+        android:id="@+id/product"
+        android:title="PRODUCT"
+        android:icon="@drawable/box"/>
+
+    <item
+        android:id="@+id/user"
+        android:title="USER"
+        android:icon="@drawable/group"/>
+
+    <item
+        android:id="@+id/profile"
+        android:title="PROFILE"
+        android:icon="@drawable/user"/>
+
+</menu>

@@ -5,6 +5,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.databinding.ActivityUserBinding
@@ -19,8 +20,21 @@ class UserActivity : AppCompatActivity() {
         binding = ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment_user) as NavHostFragment
-        val navController = navHostFragment.navController
+        loadFragment(DashboardFragment())
+
+        binding.bottomNavUser.setOnItemSelectedListener {
+            when (it.itemId) {
+                    R.id.dashboard -> loadFragment(DashboardFragment())
+                    R.id.user_profile -> loadFragment(ProfileFragment())
+                    else -> false
+            }
+            true
+        }
+    }
+
+       private  fun loadFragment(fragment: Fragment){
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.nav_host_fragment_user,fragment)
+        transaction.commit()
     }
 }

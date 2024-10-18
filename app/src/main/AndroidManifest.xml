@@ -12,9 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SMART_UMKM"
         tools:targetApi="31">
+
         <activity
             android:name=".ui.user.UserActivity"
-            android:exported="false" />
+            android:exported="true" >
+
+        </activity>
+
         <activity
             android:name=".ui.admin.AdminActivity"
             android:exported="true" >
@@ -24,6 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.LoginActivity"
             android:exported="true">

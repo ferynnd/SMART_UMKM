@@ -15,7 +15,6 @@ import dev.kelompokceria.smart_umkm.data.database.AppDatabase
 import dev.kelompokceria.smart_umkm.databinding.ActivityLoginBinding
 import dev.kelompokceria.smart_umkm.model.User
 import dev.kelompokceria.smart_umkm.model.UserRole
-import dev.kelompokceria.smart_umkm.repository.UserRepository
 import dev.kelompokceria.smart_umkm.ui.admin.AdminActivity
 import dev.kelompokceria.smart_umkm.ui.user.UserActivity
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
@@ -40,32 +39,32 @@ class LoginActivity : AppCompatActivity() {
             val username = binding.edUsername.text
             val password = binding.edPassword.text
 
-             if (username.toString().isNotEmpty() && password.toString().isNotEmpty()) {
-                    lifecycleScope.launch {
-                        val user = UserViewModel.geuUserLogin(username.toString(), password.toString())
-
-                        if (user != null) {
-                            when (user.role) {
-                                UserRole.ADMIN -> {
-                                    val intent = Intent(applicationContext, AdminActivity::class.java)
-//                                    intent.putExtra("KEY_USERNAME", username)
-                                    startActivity(intent)
-                                }
-                                UserRole.USER -> {
-                                    val intent = Intent(applicationContext, UserActivity::class.java)
-//                                    intent.putExtra("KEY_USERNAME", username)
-                                    startActivity(intent)
-                                }
-                            }
-                        } else {
-                            Toast.makeText(
-                                applicationContext,
-                                "Username atau password salah",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-             }
+//             if (username.toString().isNotEmpty() && password.toString().isNotEmpty()) {
+//                    lifecycleScope.launch {
+//                        val user = UserViewModel.geuUserLogin(username.toString(), password.toString())
+//
+//                        if (user != null) {
+//                            when (user.role) {
+//                                UserRole.ADMIN -> {
+//                                    val intent = Intent(applicationContext, AdminActivity::class.java)
+////                                    intent.putExtra("KEY_USERNAME", username)
+//                                    startActivity(intent)
+//                                }
+//                                UserRole.USER -> {
+//                                    val intent = Intent(applicationContext, UserActivity::class.java)
+////                                    intent.putExtra("KEY_USERNAME", username)
+//                                    startActivity(intent)
+//                                }
+//                            }
+//                        } else {
+//                            Toast.makeText(
+//                                applicationContext,
+//                                "Username atau password salah",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        }
+//                    }
+//             }
 
         }
 
