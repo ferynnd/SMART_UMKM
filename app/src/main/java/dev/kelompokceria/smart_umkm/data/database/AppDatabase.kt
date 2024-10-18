@@ -4,10 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import dev.kelompokceria.smart_umkm.data.dao.ProductDao
+import dev.kelompokceria.smart_umkm.data.dao.UserDao
 import dev.kelompokceria.smart_umkm.model.User
 
 @Database( entities = [User::class] , version = 1)
 abstract class AppDatabase : RoomDatabase() {
+
+    abstract fun UserDao() : UserDao
+    abstract fun ProductDao() : ProductDao
 
     companion object {
         @Volatile private var INSTANCE : AppDatabase? = null
