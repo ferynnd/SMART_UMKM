@@ -3,35 +3,28 @@ package dev.kelompokceria.smart_umkm.data.repository
 import androidx.lifecycle.LiveData
 import dev.kelompokceria.smart_umkm.data.dao.ProductDao
 import dev.kelompokceria.smart_umkm.model.Product
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class ProductRepository(private val productDao: ProductDao) {
 
-    // Fungsi untuk mendapatkan semua produk
+    // Mengambil semua produk dari database sebagai LiveData
     fun getAllProducts(): LiveData<List<Product>> {
-        return productDao.getAllProducts()
+        return productDao.getAllProducts() // Pastikan ada fungsi di DAO yang mengembalikan LiveData
     }
 
-    // Fungsi untuk memasukkan produk baru
+    // Menambahkan metode untuk mendapatkan produk berdasarkan ID
+    fun getProductById(id: Int): LiveData<Product?> {
+        return productDao.getProductById(id) // Mengambil produk berdasarkan ID dari DAO
+    }
+
     suspend fun insert(product: Product) {
-        withContext(Dispatchers.IO) {
-            productDao.insert(product)
-        }
+        productDao.insert(product) // Pastikan ada fungsi insert di DAO
     }
 
-    // Fungsi untuk menghapus produk
     suspend fun delete(product: Product) {
-        withContext(Dispatchers.IO) {
-            productDao.delete(product)
-        }
+        productDao.delete(product) // Pastikan ada fungsi delete di DAO
     }
 
-    // Fungsi untuk memperbarui produk
     suspend fun update(product: Product) {
-        withContext(Dispatchers.IO) {
-            productDao.update(product)
-        }
+        productDao.update(product) // Pastikan ada fungsi update di DAO
     }
 }
-

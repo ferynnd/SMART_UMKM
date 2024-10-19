@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.app.AlertDialog
 import dev.kelompokceria.smart_umkm.R
-import dev.kelompokceria.smart_umkm.controller.AdminProductAdapter
+import dev.kelompokceria.smart_umkm.controller.ProductAdapter
 import dev.kelompokceria.smart_umkm.databinding.FragmentListProductBinding
 import dev.kelompokceria.smart_umkm.model.Product
 import dev.kelompokceria.smart_umkm.viewmodel.ProductViewModel
@@ -18,8 +18,7 @@ class ListProductFragment : Fragment() {
 
     private lateinit var binding: FragmentListProductBinding
     private lateinit var productViewModel: ProductViewModel
-    private lateinit var recyclerView: RecyclerView
-    private var productList = mutableListOf<Product>()
+    private lateinit var productAdapter: ProductAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,16 +32,25 @@ class ListProductFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentListProductBinding.inflate(inflater, container, false)
 
-        recyclerView = binding.recy
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        // Setup RecyclerView
+        binding.recy.layoutManager = LinearLayoutManager(requireContext())
 
-        productViewModel.allProducts.observe(viewLifecycleOwner) { productList ->
-            productList?.let {
-                recyclerView.adapter = AdminProductAdapter(it)
+        // Inisialisasi adapter dengan fungsi edit dan hapus
+        productAdapter = ProductAdapter(emptyList(), { product ->
+            onEditClick(product)
+        }, { product ->
+            onDeleteClick(product)
+        })
+        binding.recy.adapter = productAdapter
+
+        // Observasi LiveData untuk produk
+        productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
+            products?.let {
+                productAdapter.updateProducts(it) // Update data di adapter
             }
         }
 
-        // Mengganti fragment menggunakan FragmentTransaction
+        // Navigasi ke CreateProductFragment
         binding.btnAddProduct.setOnClickListener {
             val createProductFragment = CreateProductFragment()
             parentFragmentManager.beginTransaction()
@@ -54,7 +62,36 @@ class ListProductFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun onEditClick(product: Product) {
+        // Navigasi ke CreateProductFragment dengan ID produk
+        val bundle = Bundle().apply {
+            putInt("productId", product.id ?: 0)
+        }
+        val createProductFragment = CreateProductFragment()
+        createProductFragment.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.nav_host_fragment_admin, createProductFragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun onDeleteClick(product: Product) {
+        // Menampilkan dialog konfirmasi sebelum menghapus produk
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+        dialogBuilder.setMessage("Apakah Anda yakin ingin menghapus produk ${product.name}?")
+            .setCancelable(false)
+            .setPositiveButton("Ya") { _, _ ->
+                // Jika pengguna mengkonfirmasi, hapus produk
+                productViewModel.deleteProduct(product)
+            }
+            .setNegativeButton("Tidak") { dialog, _ ->
+                // Jika pengguna membatalkan, tutup dialog
+                dialog.dismiss()
+            }
+
+        val alert = dialogBuilder.create()
+        alert.setTitle("Hapus Produk")
+        alert.show()
     }
 }
