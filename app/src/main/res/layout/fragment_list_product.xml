@@ -52,7 +52,7 @@
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
         app:layout_constraintTop_toBottomOf="@id/editTextSearch" />
 
-    <!-- Scrollable user list -->
+    <!-- Scrollable product list -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewProduct"
         android:layout_width="0dp"
