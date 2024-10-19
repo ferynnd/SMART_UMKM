@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import dev.kelompokceria.smart_umkm.data.database.AppDatabase
 import dev.kelompokceria.smart_umkm.model.Product
-import dev.kelompokceria.smart_umkm.repository.ProductRepository
+import dev.kelompokceria.smart_umkm.data.repository.ProductRepository
 import kotlinx.coroutines.launch
 
 class ProductViewModel(application: Application) : AndroidViewModel(application) {
@@ -24,7 +24,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 
     // Fungsi untuk menambahkan produk baru ke database
     fun addProduct(product: Product) = viewModelScope.launch {
-        repository.insert(product) // Memastikan ini memanggil fungsi insert yang tepat
+        repository.insert(product)
     }
 
     // Fungsi untuk menghapus produk
