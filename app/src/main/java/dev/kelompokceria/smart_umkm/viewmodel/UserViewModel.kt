@@ -2,6 +2,7 @@ package dev.kelompokceria.smart_umkm.viewmodel
 
 import android.app.Application
 import android.icu.text.StringSearch
+import android.media.Image
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -57,9 +58,9 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         getAllUser()
     }
 
-    suspend fun userUpdate( userEmail: String, userPhone :String, userPassword : String, userRole: UserRole, user : String) {
+    suspend fun userUpdate(userImage: ByteArray, userEmail: String, userPhone :String, userPassword : String, userRole: UserRole, user : String) {
          withContext(Dispatchers.IO) {
-            repository.userUpdate(userEmail, userPhone, userPassword, userRole, user)
+            repository.userUpdate(userImage,userEmail, userPhone, userPassword, userRole, user)
         }
     }
 

@@ -23,7 +23,6 @@ import kotlinx.coroutines.withContext
 class AdminUserAdapter(var userList: List<User>, private var userViewModel: UserViewModel, val userEditNavigate : (userName: String, userEmail: String, userPhone :String, userUsername : String, userPassword : String, userRole: String) -> Unit) : RecyclerView.Adapter<AdminUserAdapter.userViewHolder>() {
 
 
-
     class userViewHolder( var view: CardUserBinding) : RecyclerView.ViewHolder(view.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): userViewHolder {

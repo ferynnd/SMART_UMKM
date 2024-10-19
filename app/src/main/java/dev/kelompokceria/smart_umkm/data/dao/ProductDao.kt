@@ -13,7 +13,7 @@ import dev.kelompokceria.smart_umkm.model.Product
 interface ProductDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(product: Product)
+    suspend fun insert(vararg product: Product)
 
     @Update
     suspend fun update(product: Product)
@@ -27,4 +27,7 @@ interface ProductDao {
     // Menambahkan metode untuk mendapatkan produk berdasarkan ID
     @Query("SELECT * FROM product_table WHERE id_product = :id LIMIT 1")
     fun getProductById(id: Int): LiveData<Product?>
+
+    @Query("SELECT * FROM product_table WHERE name_product LIKE :productSearch")
+    suspend fun productSearch(productSearch: String): List<Product>
 }

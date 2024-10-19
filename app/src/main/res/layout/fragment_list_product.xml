@@ -8,6 +8,7 @@
     android:background="@android:color/white"
     tools:context=".ui.admin.ListUserFragment">
 
+
     <!-- Guidelines for consistent margin -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineStart"
@@ -24,7 +25,7 @@
         app:layout_constraintGuide_end="16dp" />
 
     <!-- Search bar -->
-    <EditText
+    <SearchView
         android:id="@+id/editTextSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -32,19 +33,19 @@
         android:background="@android:color/darker_gray"
         android:drawableStart="@android:drawable/ic_menu_search"
         android:drawablePadding="8dp"
-        android:hint="Search Product"
+        android:hint="Search User"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Title -->
 
     <TextView
         android:id="@+id/textViewListUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginEnd="18dp"
         android:fontFamily="@font/roboto_bold"
         android:text="LIST PRODUCT"
         android:textColor="#110E9B"
@@ -54,36 +55,30 @@
         app:layout_constraintTop_toBottomOf="@id/editTextSearch" />
 
     <!-- Scrollable user list -->
-    <androidx.core.widget.NestedScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recy"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnAddProduct"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
-        app:layout_constraintTop_toBottomOf="@id/textViewListUser">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recy"
-            android:layout_width="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/card_product_layout"
-            android:layout_height="match_parent"/>
-
-    </androidx.core.widget.NestedScrollView>
+        app:layout_constraintTop_toBottomOf="@id/textViewListUser"
+        tools:listitem="@layout/card_user" />
 
     <!-- Floating action button to add new user -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnAddProduct"
+         android:id="@+id/btnAddProduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:src="@android:drawable/ic_input_add"
         android:contentDescription="Add User"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="#110E9B"
+        app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:fabSize="normal"
-        app:tint="#FFFFFFFF"
-        app:backgroundTint="#110E9B" />
+        app:tint="#FFFFFFFF" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

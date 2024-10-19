@@ -27,4 +27,8 @@ class ProductRepository(private val productDao: ProductDao) {
     suspend fun update(product: Product) {
         productDao.update(product) // Pastikan ada fungsi update di DAO
     }
+
+    suspend fun productSearch(product: String) : List<Product> {
+        return productDao.productSearch(product)
+    }
 }
