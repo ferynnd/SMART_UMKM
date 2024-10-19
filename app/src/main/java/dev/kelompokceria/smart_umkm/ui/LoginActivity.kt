@@ -51,8 +51,16 @@ class LoginActivity : AppCompatActivity() {
                     UserViewModel.user.observe(this) { user ->
                         if (user != null) {
                             when (user.role) {
-                                ADMIN -> startActivity(Intent(this, AdminActivity::class.java))
-                                USER -> startActivity(Intent(this, UserActivity::class.java))
+                                ADMIN -> {
+                                    val intent = Intent(this, AdminActivity::class.java)
+                                    intent.putExtra("KEY_USERNAME", username)
+                                    startActivity(intent)
+                                }
+                                USER -> {
+                                    val intent = Intent(this, UserActivity::class.java)
+                                    intent.putExtra("KEY_USERNAME", username)
+                                    startActivity(intent)
+                                }
                             }
                         } else {
                             Toast.makeText(this, "Invalid username or password", Toast.LENGTH_SHORT).show()
@@ -61,7 +69,7 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(this, "Please enter both username and password", Toast.LENGTH_SHORT).show()
                 }
-            }
+        }
 
 
     }
