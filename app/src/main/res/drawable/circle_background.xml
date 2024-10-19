@@ -1,0 +1,7 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="#FFFFFF"/> <!-- Warna lingkaran latar belakang -->
+    <stroke
+        android:width="2dp"
+        android:color="#FFFFFF"/> <!-- Garis tepi (opsional) -->
+</shape>
