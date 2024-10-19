@@ -5,8 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import dev.kelompokceria.smart_umkm.data.database.AppDatabase
+import dev.kelompokceria.smart_umkm.data.repository.ProductRepository
 import dev.kelompokceria.smart_umkm.model.Product
-import dev.kelompokceria.smart_umkm.repository.ProductRepository
 import kotlinx.coroutines.launch
 
 class ProductViewModel(application: Application) : AndroidViewModel(application) {
@@ -35,5 +35,10 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     // Fungsi untuk memperbarui produk
     fun updateProduct(product: Product) = viewModelScope.launch {
         repository.update(product)
+    }
+
+    // Fungsi untuk mendapatkan produk berdasarkan ID
+    fun getProductById(id: Int): LiveData<Product?> {
+        return repository.getProductById(id) // Mengambil produk dari repository
     }
 }
