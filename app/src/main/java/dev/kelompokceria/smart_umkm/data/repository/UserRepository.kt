@@ -30,8 +30,8 @@ class UserRepository(private val userDao: UserDao) {
         userDao.delUser(userUsername)
     }
 
-    suspend fun userUpdate( userEmail: String, userPhone :String, userPassword : String, userRole: UserRole, user : String) {
-        userDao.userUpdate( userEmail, userPhone, userPassword, userRole, user)
+    suspend fun userUpdate(userImage : ByteArray, userEmail: String, userPhone :String, userPassword : String, userRole: UserRole, user : String) {
+        userDao.userUpdate(userImage, userEmail, userPhone, userPassword, userRole, user)
     }
 
     suspend fun userSearch( userSeach : String) : List<User> {

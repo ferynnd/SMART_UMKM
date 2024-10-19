@@ -1,5 +1,8 @@
 package dev.kelompokceria.smart_umkm.ui.admin
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,8 +11,10 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.data.database.AppDatabase
 import dev.kelompokceria.smart_umkm.databinding.FragmentEditUserBinding
@@ -17,6 +22,7 @@ import dev.kelompokceria.smart_umkm.model.User
 import dev.kelompokceria.smart_umkm.model.UserRole
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 
 
 class EditUserFragment : Fragment() {
@@ -26,6 +32,12 @@ class EditUserFragment : Fragment() {
     private lateinit var database: AppDatabase
     private var userIDINT :Int? = null
     private var userID : String? = null
+
+    private var imageUri: Uri? = null
+    private var imageBytes: ByteArray? = null
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -39,6 +51,14 @@ class EditUserFragment : Fragment() {
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         database = AppDatabase.getInstance(requireContext())
+
+              // Ambil data dari arguments (termasuk gambar)
+        val imageBytesFromArgs = arguments?.getByteArray("IMAGE")
+        imageBytesFromArgs?.let {
+            imageBytes = it
+            val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
+            Glide.with(this).load(bitmap).into(binding.ImagePreview) // Menampilkan preview gambar
+        }
 
         binding.edName.isEnabled = false
         binding.edUsername.isEnabled = false
@@ -59,6 +79,13 @@ class EditUserFragment : Fragment() {
 
         setupSpinner()
 
+
+        // Menambahkan listener untuk mengambil gambar
+        binding.btnAddImage.setOnClickListener {
+            pickImageLauncher.launch("image/*")
+        }
+
+
         // Menetapkan listener untuk tombol
         binding.btnSave.setOnClickListener {
 //            Toast.makeText(requireContext(), "id sama dengan ${userID}", Toast.LENGTH_SHORT).show()
@@ -69,13 +96,42 @@ class EditUserFragment : Fragment() {
                  val password = binding.edPassword.text.toString()
                  val role = UserRole.valueOf(binding.userRole.selectedItem.toString())
 
+                  // Jika ada gambar baru dipilih, konversi ke byte array
+                    val updatedImageBytes = imageUri?.let { uri ->
+                        val bitmap = uriToBitmap(uri)
+                        bitmapToByteArray(bitmap)
+                    } ?: imageBytes // Jika tidak ada perubahan gambar, gunakan gambar yang sudah ada
+
                  lifecycleScope.launch {
-                     userViewModel.userUpdate(email,phone,password,role, username)
+                     userViewModel.userUpdate(updatedImageBytes!!,email,phone,password,role, username)
                  }
                  navigateToUserList() // Berpindah ke ListUserFragment
             } else {
                 Toast.makeText(requireContext(), "Silahkan lengkapi semua field", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            imageUri = it
+            Glide.with(this).load(it).into(binding.ImagePreview) // Menampilkan gambar yang dipilih
+        }
+    }
+
+    private fun bitmapToByteArray(bitmap: Bitmap?): ByteArray {
+        val stream = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        return stream.toByteArray()
+    }
+
+    private fun uriToBitmap(uri: Uri): Bitmap? {
+        return try {
+            val inputStream = requireContext().contentResolver.openInputStream(uri)
+            BitmapFactory.decodeStream(inputStream)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 

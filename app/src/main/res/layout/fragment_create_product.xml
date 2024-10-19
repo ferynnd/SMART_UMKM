@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.07" />
+            app:layout_constraintGuide_percent="0.0" />
 
         <TextView
             android:id="@+id/textHeader"
@@ -45,23 +45,37 @@
             app:layout_constraintStart_toEndOf="@id/guideStart"
             app:layout_constraintTop_toBottomOf="@id/guideTop" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutImage"
+           <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:boxStrokeColor="@color/blue"
-            app:boxStrokeWidth="1dp"
-            android:layout_marginTop="20dp"
+            android:layout_height="230dp"
+            android:layout_marginTop="10dp"
+            app:cardBackgroundColor="@color/gray"
+            app:cardCornerRadius="10dp"
             app:layout_constraintEnd_toStartOf="@id/guideEnd"
             app:layout_constraintStart_toEndOf="@id/guideStart"
-            app:layout_constraintTop_toBottomOf="@id/textHeader">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edImage"
+            app:layout_constraintTop_toBottomOf="@id/textHeader"
+            >
+            <ImageView
+                android:id="@+id/ImagePreview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Image URL" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="180dp"
+                android:scaleType="centerCrop"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/picture"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddImage"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="bottom"
+                app:backgroundTint="@color/blue"
+                android:textColor="@color/white"
+                android:layout_marginBottom="5dp"
+                android:layout_marginHorizontal="50dp"
+                android:text="ADD IMAGE"/>
+        </androidx.cardview.widget.CardView>
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutName"
@@ -72,7 +86,7 @@
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toStartOf="@id/guideEnd"
             app:layout_constraintStart_toEndOf="@id/guideStart"
-            app:layout_constraintTop_toBottomOf="@id/layoutImage">
+            app:layout_constraintTop_toBottomOf="@id/cardView">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edName"
@@ -96,7 +110,7 @@
             <Spinner
                 android:id="@+id/spinnerCategory"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="60dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
