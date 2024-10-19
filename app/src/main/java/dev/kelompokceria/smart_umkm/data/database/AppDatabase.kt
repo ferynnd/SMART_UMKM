@@ -4,37 +4,71 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.kelompokceria.smart_umkm.data.dao.ProductDao
 import dev.kelompokceria.smart_umkm.data.dao.UserDao
 import dev.kelompokceria.smart_umkm.model.User
+import dev.kelompokceria.smart_umkm.model.Product
+import dev.kelompokceria.smart_umkm.model.UserRole
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-@Database( entities = [User::class] , version = 1)
+@Database(entities = [User::class, Product::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun UserDao() : UserDao
-    abstract fun ProductDao() : ProductDao
+    abstract fun userDao(): UserDao
+    abstract fun productDao(): ProductDao
 
     companion object {
-        @Volatile private var INSTANCE : AppDatabase? = null
+        @Volatile
+        private var INSTANCE: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase {
-            if (INSTANCE == null){
-                synchronized(AppDatabase::class){
-                    INSTANCE = Room.databaseBuilder(
-                        context.applicationContext,
-                        AppDatabase::class.java,
-                        "smartumkm_database")
-                        .fallbackToDestructiveMigration()
-                        .allowMainThreadQueries()
-                        .build()
-                }
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java,
+                    "smartumkm_database"
+                )
+                    .fallbackToDestructiveMigration()
+                    .addCallback(DatabaseCallback(context)) // Tambahkan callback
+                    .build()
+                    .also { INSTANCE = it }
             }
-            return INSTANCE!!
         }
 
-        fun destroyInstance(){
+        fun destroyInstance() {
             INSTANCE = null
         }
+    }
 
+    private class DatabaseCallback(
+        private val context: Context
+    ) : RoomDatabase.Callback() {
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            // Tambahkan data default di sini menggunakan coroutine
+            INSTANCE?.let { database ->
+                GlobalScope.launch(Dispatchers.IO) {
+                    populateDatabase(database.userDao())
+                }
+            }
+        }
+
+        private suspend fun populateDatabase(userDao: UserDao) {
+            // Tambah data default User
+            val defaultUser = User(
+                name = "admin",
+                email = "admin@example.com",
+                phone = "081111111",
+                username = "admin",
+                password = "admin",
+                role = UserRole.ADMIN,
+                id = 1,
+                image = null
+            )
+            userDao.addUser(defaultUser)
+        }
     }
 }

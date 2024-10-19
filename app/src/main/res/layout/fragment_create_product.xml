@@ -16,14 +16,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="30dp"/>
+            app:layout_constraintGuide_begin="30dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="30dp"/>
+            app:layout_constraintGuide_end="30dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideTop"
@@ -49,13 +49,9 @@
             android:id="@+id/layoutImage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:boxStrokeColor="#0000FF"
+            app:boxStrokeColor="@color/blue"
             app:boxStrokeWidth="1dp"
             android:layout_marginTop="20dp"
-            app:boxCornerRadiusTopStart="8dp"
-            app:boxCornerRadiusBottomEnd="8dp"
-            app:boxCornerRadiusTopEnd="8dp"
-            app:boxCornerRadiusBottomStart="8dp"
             app:layout_constraintEnd_toStartOf="@id/guideEnd"
             app:layout_constraintStart_toEndOf="@id/guideStart"
             app:layout_constraintTop_toBottomOf="@id/textHeader">
@@ -64,21 +60,16 @@
                 android:id="@+id/edImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
-                android:hint="Image"/>
+                android:hint="Image URL" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:boxStrokeColor="#0000FF"
+            app:boxStrokeColor="@color/blue"
             app:boxStrokeWidth="1dp"
             android:layout_marginTop="16dp"
-            app:boxCornerRadiusTopStart="8dp"
-            app:boxCornerRadiusBottomEnd="8dp"
-            app:boxCornerRadiusTopEnd="8dp"
-            app:boxCornerRadiusBottomStart="8dp"
             app:layout_constraintEnd_toStartOf="@id/guideEnd"
             app:layout_constraintStart_toEndOf="@id/guideStart"
             app:layout_constraintTop_toBottomOf="@id/layoutImage">
@@ -87,45 +78,53 @@
                 android:id="@+id/edName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
-                android:hint="Name"/>
+                android:hint="Name" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- TextInputLayout for Spinner -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutCategory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:boxStrokeColor="@color/blue"
+            app:boxStrokeWidth="1dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toEndOf="@id/guideStart"
+            app:layout_constraintEnd_toStartOf="@id/guideEnd"
+            app:layout_constraintTop_toBottomOf="@id/layoutName">
+
+            <Spinner
+                android:id="@+id/spinnerCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutPrice"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:boxStrokeColor="#0000FF"
+            app:boxStrokeColor="@color/blue"
             app:boxStrokeWidth="1dp"
             android:layout_marginTop="16dp"
-            app:boxCornerRadiusTopStart="8dp"
-            app:boxCornerRadiusBottomEnd="8dp"
-            app:boxCornerRadiusTopEnd="8dp"
-            app:boxCornerRadiusBottomStart="8dp"
             app:layout_constraintEnd_toStartOf="@id/guideEnd"
             app:layout_constraintStart_toEndOf="@id/guideStart"
-            app:layout_constraintTop_toBottomOf="@id/layoutName">
+            app:layout_constraintTop_toBottomOf="@id/layoutCategory">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edPrice"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
                 android:inputType="numberDecimal"
-                android:hint="Price"/>
+                android:hint="Price" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:boxStrokeColor="#0000FF"
+            app:boxStrokeColor="@color/blue"
             app:boxStrokeWidth="1dp"
             android:layout_marginTop="16dp"
-            app:boxCornerRadiusTopStart="8dp"
-            app:boxCornerRadiusBottomEnd="8dp"
-            app:boxCornerRadiusTopEnd="8dp"
-            app:boxCornerRadiusBottomStart="8dp"
             app:layout_constraintEnd_toStartOf="@id/guideEnd"
             app:layout_constraintStart_toEndOf="@id/guideStart"
             app:layout_constraintTop_toBottomOf="@id/layoutPrice">
@@ -134,9 +133,8 @@
                 android:id="@+id/edDescription"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
                 android:inputType="textMultiLine"
-                android:hint="Description"/>
+                android:hint="Description" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -144,15 +142,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="CREATE"
-            android:textSize="20sp"
             android:layout_marginTop="24dp"
             app:cornerRadius="10dp"
             android:backgroundTint="@color/blue"
             android:paddingVertical="12dp"
             app:layout_constraintStart_toEndOf="@id/guideStart"
             app:layout_constraintEnd_toStartOf="@id/guideEnd"
-            app:layout_constraintTop_toBottomOf="@id/layoutDescription"/>
+            app:layout_constraintTop_toBottomOf="@id/layoutDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </FrameLayout>

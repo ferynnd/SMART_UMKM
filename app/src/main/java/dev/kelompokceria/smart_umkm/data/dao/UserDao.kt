@@ -1,5 +1,6 @@
 package dev.kelompokceria.smart_umkm.data.dao
 
+import android.icu.text.StringSearch
 import android.provider.ContactsContract.CommonDataKinds.Email
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -13,7 +14,7 @@ import dev.kelompokceria.smart_umkm.model.UserRole
 @Dao
 interface UserDao {
 
-    @Query("SELECT * FROM user_table")
+    @Query("SELECT * FROM user_table ORDER BY user_id ASC")
     suspend fun getAllUser() : List<User>
 
     @Delete
@@ -22,12 +23,15 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addUser(vararg user: User)
 
-     @Query("SELECT * FROM user_table WHERE user_username = :userName AND user_password = :userPassword ")
+    @Query("SELECT * FROM user_table WHERE user_username = :userName AND user_password = :userPassword ")
     suspend fun getUserLogin( userName : String , userPassword : String) : User?
 
-    @Query("UPDATE user_table SET user_name = :userName, user_email = :userEmail , user_phone = :userPhone, user_username = :userUsername ,user_password = :userPassword , user_role = :userRole  WHERE user_id = :userID ")
-    suspend fun userUpdate(userName: String, userEmail: String, userPhone :String, userUsername : String, userPassword : String, userRole: UserRole, userID : Int?)
+    @Query("UPDATE user_table SET user_email = :userEmail , user_phone = :userPhone ,user_password = :userPassword , user_role = :userRole  WHERE user_username = :user ")
+    suspend fun userUpdate( userEmail: String, userPhone :String, userPassword : String, userRole: UserRole, user: String )
 
     @Query("DELETE FROM user_table WHERE user_username = :userUsername ")
     suspend fun delUser( userUsername : String )
+
+     @Query("SELECT * FROM user_table WHERE user_name LIKE :userSearch OR user_username LIKE :userSearch")
+    suspend fun userSearch(userSearch: String): List<User>
 }

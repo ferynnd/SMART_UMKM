@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "user_table" , indices = [Index(value = ["user_username"], unique = true)])
 data class User (
+    @ColumnInfo(name = "user_image") val image : ByteArray? = null ,
     @ColumnInfo(name = "user_name") val name : String ,
     @ColumnInfo(name = "user_email") val email : String,
     @ColumnInfo(name = "user_phone") val phone : String,

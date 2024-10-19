@@ -1,14 +1,27 @@
 package dev.kelompokceria.smart_umkm.ui.admin
 
+import android.app.Activity
+import android.content.ContentResolver
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.data.dao.UserDao
 import dev.kelompokceria.smart_umkm.data.database.AppDatabase
@@ -16,13 +29,15 @@ import dev.kelompokceria.smart_umkm.databinding.FragmentCreateUserBinding
 import dev.kelompokceria.smart_umkm.model.User
 import dev.kelompokceria.smart_umkm.model.UserRole
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
+import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 
 class CreateUserFragment : Fragment() {
 
-    private var _binding : FragmentCreateUserBinding? = null
-    private val binding get() = _binding!!
 
-
+    private lateinit var binding: FragmentCreateUserBinding
+    private lateinit var userViewModel: UserViewModel
+    private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +49,10 @@ class CreateUserFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentCreateUserBinding.inflate(inflater,container,false)
+        binding = FragmentCreateUserBinding.inflate(inflater,container,false)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
+
 
         return binding.root
     }
@@ -42,24 +60,43 @@ class CreateUserFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        hideBottomNavigationView()
         setupSpinner()
 
         // Menetapkan listener untuk tombol
         binding.btnLogin.setOnClickListener {
              if (validateInputs()) {
                 createUser() // Membuat user jika input valid
-
                 navigateToUserList() // Berpindah ke ListUserFragment
             } else {
                 Toast.makeText(requireContext(), "Silahkan lengkapi semua field", Toast.LENGTH_SHORT).show()
             }
         }
+
+        binding.btnAddImage.setOnClickListener {
+            pickImageLauncher.launch("image/*") // Memilih gambar dari galeri
+        }
+
     }
 
-    override fun onDestroyView() {
+      override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+
+        showBottomNavigationView()
     }
+
+     // Fungsi untuk menyembunyikan BottomNavigationView
+    private fun hideBottomNavigationView() {
+        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavAdmin)
+        bottomNavigationView?.visibility = View.GONE
+    }
+
+    // Fungsi untuk menampilkan BottomNavigationView kembali
+    private fun showBottomNavigationView() {
+        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavAdmin)
+        bottomNavigationView?.visibility = View.VISIBLE
+    }
+
 
     private fun setupSpinner() {
         val roles = arrayListOf("ADMIN", "USER")
@@ -90,8 +127,17 @@ class CreateUserFragment : Fragment() {
         val username = binding.edUsername.text.toString()
         val password = binding.edPassword.text.toString()
         val role = UserRole.valueOf(binding.userRole.selectedItem.toString())
+//
+//        val imageBytes = bitmapToByteArray(selectedImage)
+
+           // Ubah URI gambar menjadi Bitmap dan kemudian menjadi Byte Array
+        val imageBytes = imageUri?.let { uri ->
+            val bitmap = uriToBitmap(uri)
+            bitmapToByteArray(bitmap)
+        }
 
         val user = User(
+            image = imageBytes,
             name = name,
             email = email,
             phone = phone,
@@ -99,6 +145,10 @@ class CreateUserFragment : Fragment() {
             password = password,
             role = role
         )
+
+        lifecycleScope.launch {
+            userViewModel.addUser(user)
+        }
 
     }
 
@@ -109,7 +159,28 @@ class CreateUserFragment : Fragment() {
             .commit()
     }
 
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            imageUri = it
+            Glide.with(this).load(it).into(binding.ImagePreview) // Preview image
+        }
+    }
 
+    private fun bitmapToByteArray(bitmap: Bitmap?): ByteArray {
+        val stream = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        return stream.toByteArray()
+   }
+
+    private fun uriToBitmap(uri: Uri): Bitmap? {
+        return try {
+            val inputStream = requireContext().contentResolver.openInputStream(uri)
+            BitmapFactory.decodeStream(inputStream)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
 
 
 

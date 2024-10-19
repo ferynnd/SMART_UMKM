@@ -24,7 +24,7 @@
         app:layout_constraintGuide_end="16dp" />
 
     <!-- Search bar -->
-    <EditText
+    <SearchView
         android:id="@+id/editTextSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
