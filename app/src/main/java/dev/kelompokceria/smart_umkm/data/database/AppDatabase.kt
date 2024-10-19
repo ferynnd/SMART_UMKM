@@ -63,9 +63,10 @@ abstract class AppDatabase : RoomDatabase() {
                 email = "admin@example.com",
                 phone = "081111111",
                 username = "admin",
-                password = "password123",
+                password = "admin",
                 role = UserRole.ADMIN,
                 id = 1,
+                image = null
             )
             userDao.addUser(defaultUser)
         }
