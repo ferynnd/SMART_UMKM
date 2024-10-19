@@ -37,4 +37,8 @@ class UserRepository(private val userDao: UserDao) {
     suspend fun userSearch( userSeach : String) : List<User> {
         return userDao.userSearch(userSeach)
     }
+
+    suspend fun getUserByUsername(username: String): User? {
+        return userDao.getUserByUsername(username)
+    }
 }

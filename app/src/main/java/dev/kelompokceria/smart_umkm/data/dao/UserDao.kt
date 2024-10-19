@@ -34,4 +34,8 @@ interface UserDao {
 
      @Query("SELECT * FROM user_table WHERE user_name LIKE :userSearch OR user_username LIKE :userSearch")
     suspend fun userSearch(userSearch: String): List<User>
+
+
+    @Query("SELECT * FROM user_table WHERE user_username = :username LIMIT 1")
+    suspend fun getUserByUsername(username: String): User?
 }
