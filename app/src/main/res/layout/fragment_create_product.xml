@@ -81,23 +81,22 @@
                 android:hint="Name" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Text Input for Category -->
+        <!-- TextInputLayout for Spinner -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutCategory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:boxStrokeColor="@color/blue"
             app:boxStrokeWidth="1dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toStartOf="@id/guideEnd"
+            android:layout_marginTop="20dp"
             app:layout_constraintStart_toEndOf="@id/guideStart"
+            app:layout_constraintEnd_toStartOf="@id/guideEnd"
             app:layout_constraintTop_toBottomOf="@id/layoutName">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edCategory"
+            <Spinner
+                android:id="@+id/spinnerCategory"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Category" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
