@@ -1,4 +1,4 @@
-package dev.kelompokceria.smart_umkm.repository
+package dev.kelompokceria.smart_umkm.data.repository
 
 import androidx.lifecycle.LiveData
 import dev.kelompokceria.smart_umkm.data.dao.ProductDao

@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dev.kelompokceria.smart_umkm.R
-import dev.kelompokceria.smart_umkm.controller.ProductAdapter
+import dev.kelompokceria.smart_umkm.controller.AdminProductAdapter
 import dev.kelompokceria.smart_umkm.databinding.FragmentListProductBinding
 import dev.kelompokceria.smart_umkm.model.Product
 import dev.kelompokceria.smart_umkm.viewmodel.ProductViewModel
@@ -38,7 +38,7 @@ class ListProductFragment : Fragment() {
 
         productViewModel.allProducts.observe(viewLifecycleOwner) { productList ->
             productList?.let {
-                recyclerView.adapter = ProductAdapter(it)
+                recyclerView.adapter = AdminProductAdapter(it)
             }
         }
 

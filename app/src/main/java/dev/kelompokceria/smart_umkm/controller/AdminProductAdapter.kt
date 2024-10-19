@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.model.Product
 
-class ProductAdapter(private val productList: List<Product>) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+class AdminProductAdapter(private val productList: List<Product>) : RecyclerView.Adapter<AdminProductAdapter.ProductViewHolder>() {
 
     // ViewHolder untuk item produk
     inner class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
