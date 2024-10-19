@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
  <!-- CardView for Evita -->
-    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/cardEvita"
-         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        app:cardBackgroundColor="@color/white"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardEvita"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@color/white"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -26,6 +27,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
+              <ImageView
+                  android:id="@+id/imageView"
+                  android:layout_width="100dp"
+                  android:layout_height="100dp"
+                  android:scaleType="centerCrop"
+                  tools:src="@drawable/picture"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"/>
+
             <TextView
                 android:id="@+id/textViewName"
                 android:layout_width="wrap_content"
@@ -33,8 +43,9 @@
                 android:text="Evita"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
+                android:layout_marginStart="10dp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageView"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -44,7 +55,7 @@
                 android:text="OWNER"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@id/textViewName"
                 app:layout_constraintTop_toBottomOf="@id/textViewName" />
 
             <TextView
@@ -54,7 +65,7 @@
                 android:text="evitaduatiga@gmail.com"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@id/textViewRole"
                 app:layout_constraintTop_toBottomOf="@id/textViewRole" />
 
             <TextView
@@ -64,7 +75,7 @@
                 android:text="081234568235"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@id/textViewEmail"
                 app:layout_constraintTop_toBottomOf="@id/textViewEmail" />
 
              <TextView
@@ -74,7 +85,7 @@
                 android:text="evita"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@id/textViewPhone"
                 app:layout_constraintTop_toBottomOf="@id/textViewPhone" />
 
              <TextView
@@ -84,7 +95,7 @@
                 android:text="evita123"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@id/textViewUsername"
                 app:layout_constraintTop_toBottomOf="@id/textViewUsername" />
 
             <Button
