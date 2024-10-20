@@ -1,6 +1,7 @@
 package dev.kelompokceria.smart_umkm.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
@@ -22,9 +23,8 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         allProducts = repository.getAllProducts() // Mengambil LiveData dari repository
     }
 
-    // Fungsi untuk menambahkan produk baru ke database
     fun addProduct(product: Product) = viewModelScope.launch {
-        repository.insert(product) // Memastikan ini memanggil fungsi insert yang tepat
+        repository.insert(product)
     }
 
     // Fungsi untuk menghapus produk
