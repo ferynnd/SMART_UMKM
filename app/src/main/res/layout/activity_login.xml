@@ -48,12 +48,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:boxStrokeColor="@color/blue"
-        app:boxStrokeWidth="2dp"
+        app:boxStrokeWidth="1dp"
         app:placeholderText="USERNAME"
         android:layout_marginTop="20dp"
         app:boxCornerRadiusTopStart="5dp"
         app:boxCornerRadiusBottomEnd="5dp"
-        android:tooltipText="USERNAME"
         app:boxCornerRadiusTopEnd="5dp"
         app:boxCornerRadiusBottomStart="5dp"
         app:boxStrokeErrorColor="@color/red"
@@ -61,11 +60,14 @@
         app:layout_constraintStart_toEndOf="@id/guideStart"
         app:layout_constraintTop_toBottomOf="@id/textHeader"
         >
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edUsername"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"/>
+            android:hint="USERNAME"
+            android:padding="10dp"
+            android:inputType="text"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -73,9 +75,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:boxStrokeColor="@color/blue"
-        app:boxStrokeWidth="2dp"
+        app:boxStrokeWidth="1dp"
         app:placeholderText="PASSWORD"
-        android:tooltipText="PASSWORD"
         android:layout_marginTop="20dp"
         app:boxCornerRadiusTopStart="5dp"
         app:boxCornerRadiusBottomEnd="5dp"
@@ -86,11 +87,14 @@
         app:layout_constraintStart_toEndOf="@id/guideStart"
         app:layout_constraintTop_toBottomOf="@id/layoutUsername"
         >
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edPassword"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"/>
+            android:hint="PASSWORD"
+            android:padding="10dp"
+            android:inputType="textPassword"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
