@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.admin.CreateUserFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:paddingVertical="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
@@ -30,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.07" />
+            app:layout_constraintGuide_percent="0.0" />
 
         <TextView
             android:id="@+id/textHeader"
@@ -44,6 +46,38 @@
             app:layout_constraintEnd_toStartOf="@id/guideEnd"
             app:layout_constraintStart_toEndOf="@id/guideStart"
             app:layout_constraintTop_toBottomOf="@id/guideTop" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="0dp"
+            android:layout_height="230dp"
+            android:layout_marginTop="10dp"
+            app:cardBackgroundColor="@color/gray"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintEnd_toStartOf="@id/guideEnd"
+            app:layout_constraintStart_toEndOf="@id/guideStart"
+            app:layout_constraintTop_toBottomOf="@id/textHeader"
+            >
+            <ImageView
+                android:id="@+id/ImagePreview"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:scaleType="centerCrop"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/picture"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddImage"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="bottom"
+                app:backgroundTint="@color/blue"
+                android:textColor="@color/white"
+                android:layout_marginBottom="5dp"
+                android:layout_marginHorizontal="50dp"
+                android:text="ADD IMAGE"/>
+        </androidx.cardview.widget.CardView>
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutName"
@@ -60,7 +94,7 @@
             app:boxStrokeErrorColor="@color/red"
             app:layout_constraintEnd_toStartOf="@id/guideEnd"
             app:layout_constraintStart_toEndOf="@id/guideStart"
-            app:layout_constraintTop_toBottomOf="@id/textHeader">
+            app:layout_constraintTop_toBottomOf="@id/cardView">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edName"
                 android:layout_width="match_parent"
@@ -187,10 +221,11 @@
             app:cornerRadius="10dp"
             android:backgroundTint="@color/blue"
             android:paddingVertical="10dp"
+            android:paddingBottom="50dp"
             app:layout_constraintStart_toEndOf="@id/guideStart"
             app:layout_constraintEnd_toStartOf="@id/guideEnd"
             app:layout_constraintTop_toBottomOf="@id/userRole"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</FrameLayout>
+</ScrollView>

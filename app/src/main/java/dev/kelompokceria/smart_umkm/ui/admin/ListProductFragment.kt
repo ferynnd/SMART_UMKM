@@ -28,7 +28,7 @@ class ListProductFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         // Inflate the layout for this fragment
         binding = FragmentListProductBinding.inflate(inflater, container, false)
 
@@ -36,13 +36,11 @@ class ListProductFragment : Fragment() {
         binding.recy.layoutManager = LinearLayoutManager(requireContext())
 
         // Inisialisasi adapter dengan fungsi edit dan hapus
-        // Inisialisasi adapter dengan fungsi edit dan hapus
-        productAdapter = ProductAdapter(mutableListOf(), { product ->
+        productAdapter = ProductAdapter(emptyList(), { product ->
             onEditClick(product)
         }, { product ->
             onDeleteClick(product)
         })
-
         binding.recy.adapter = productAdapter
 
         // Observasi LiveData untuk produk

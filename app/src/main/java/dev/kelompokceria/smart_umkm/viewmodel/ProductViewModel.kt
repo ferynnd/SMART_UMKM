@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dev.kelompokceria.smart_umkm.data.database.AppDatabase
 import dev.kelompokceria.smart_umkm.data.repository.ProductRepository
@@ -13,14 +14,22 @@ import kotlinx.coroutines.launch
 class ProductViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: ProductRepository
+    private val _allProduct = MutableLiveData<List<Product>>()
+    val allProduct : LiveData<List<Product>> get() = _allProduct
+
 
     // LiveData untuk mendapatkan semua produk
     val allProducts: LiveData<List<Product>>
+
+      // Tambahkan MutableLiveData untuk menyimpan produk yang dipilih
+    private val _selectedProducts = MutableLiveData<MutableMap<String, Pair<Int, Int>>>()
+    val selectedProducts: LiveData<MutableMap<String, Pair<Int, Int>>> = _selectedProducts
 
     init {
         val productDao = AppDatabase.getInstance(application).productDao()
         repository = ProductRepository(productDao)
         allProducts = repository.getAllProducts() // Mengambil LiveData dari repository
+        _selectedProducts.value = mutableMapOf()
     }
 
     fun addProduct(product: Product) = viewModelScope.launch {
@@ -41,4 +50,38 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     fun getProductById(id: Int): LiveData<Product?> {
         return repository.getProductById(id) // Mengambil produk dari repository
     }
+
+     suspend fun productSearch(product: String) {
+         viewModelScope.launch {
+            _allProduct.postValue(repository.productSearch(product))
+        }
+    }
+
+
+    // Fungsi untuk menambahkan produk ke daftar yang dipilih
+    fun addToSelectedProducts(productName: String, quantity: Int, price: Int) {
+        val products = _selectedProducts.value ?: mutableMapOf()
+        if (products.containsKey(productName)) {
+            val existingQuantity = products[productName]!!.first
+            products[productName] = Pair(existingQuantity + quantity, price)
+        } else {
+            products[productName] = Pair(quantity, price)
+        }
+        _selectedProducts.value = products
+    }
+
+    // Fungsi untuk mengurangi atau menghapus produk dari daftar yang dipilih
+    fun removeFromSelectedProducts(productName: String, price: Int) {
+        val products = _selectedProducts.value ?: mutableMapOf()
+        if (products.containsKey(productName)) {
+            val (currentQuantity, _) = products[productName]!!
+            if (currentQuantity > 1) {
+                products[productName] = Pair(currentQuantity - 1, price)
+            } else {
+                products.remove(productName)
+            }
+        }
+        _selectedProducts.value = products
+    }
+
 }

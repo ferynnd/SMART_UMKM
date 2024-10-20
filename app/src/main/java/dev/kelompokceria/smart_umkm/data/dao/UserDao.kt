@@ -14,24 +14,28 @@ import dev.kelompokceria.smart_umkm.model.UserRole
 @Dao
 interface UserDao {
 
-    @Query("SELECT * FROM user_table ORDER BY user_id ASC")
+    @Query("SELECT * FROM user_table LIMIT 10 OFFSET 0")
     suspend fun getAllUser() : List<User>
 
     @Delete
     suspend fun delete(user: User)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addUser(vararg user: User)
 
-    @Query("SELECT * FROM user_table WHERE user_username = :userName AND user_password = :userPassword ")
+    @Query("SELECT * FROM user_table WHERE user_username = :userName AND user_password = :userPassword LIMIT 1 ")
     suspend fun getUserLogin( userName : String , userPassword : String) : User?
 
-    @Query("UPDATE user_table SET user_email = :userEmail , user_phone = :userPhone ,user_password = :userPassword , user_role = :userRole  WHERE user_username = :user ")
-    suspend fun userUpdate( userEmail: String, userPhone :String, userPassword : String, userRole: UserRole, user: String )
+    @Query("UPDATE user_table SET user_image = :userImage, user_email = :userEmail , user_phone = :userPhone ,user_password = :userPassword , user_role = :userRole  WHERE user_username = :user ")
+    suspend fun userUpdate(userImage : ByteArray , userEmail: String, userPhone :String, userPassword : String, userRole: UserRole, user: String )
 
     @Query("DELETE FROM user_table WHERE user_username = :userUsername ")
     suspend fun delUser( userUsername : String )
 
      @Query("SELECT * FROM user_table WHERE user_name LIKE :userSearch OR user_username LIKE :userSearch")
     suspend fun userSearch(userSearch: String): List<User>
+
+
+    @Query("SELECT * FROM user_table WHERE user_username = :username LIMIT 1")
+    suspend fun getUserByUsername(username: String): User?
 }

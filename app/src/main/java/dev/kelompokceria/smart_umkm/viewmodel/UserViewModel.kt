@@ -2,9 +2,11 @@ package dev.kelompokceria.smart_umkm.viewmodel
 
 import android.app.Application
 import android.icu.text.StringSearch
+import android.media.Image
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import dev.kelompokceria.smart_umkm.data.database.AppDatabase
 import dev.kelompokceria.smart_umkm.data.repository.UserRepository
@@ -16,6 +18,7 @@ import kotlinx.coroutines.withContext
 
 
 class UserViewModel(application: Application) : AndroidViewModel(application) {
+
 
 
     private val repository : UserRepository
@@ -57,9 +60,9 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         getAllUser()
     }
 
-    suspend fun userUpdate( userEmail: String, userPhone :String, userPassword : String, userRole: UserRole, user : String) {
+    suspend fun userUpdate(userImage: ByteArray, userEmail: String, userPhone :String, userPassword : String, userRole: UserRole, user : String) {
          withContext(Dispatchers.IO) {
-            repository.userUpdate(userEmail, userPhone, userPassword, userRole, user)
+            repository.userUpdate(userImage,userEmail, userPhone, userPassword, userRole, user)
         }
     }
 
@@ -68,6 +71,23 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
             _allUser.postValue(repository.userSearch(userSearch))
         }
     }
+
+    fun getUserByUsername(username: String) {
+        viewModelScope.launch {
+            val user = repository.getUserByUsername(username)
+            _user.postValue(user) // Menggunakan postValue untuk mengupdate LiveData
+        }
+    }
+
+
+
+
+//    fun getUserByUsername(username: String) = liveData {
+//        val user = repository.getUserByUsername(username)
+//        emit(user) // Kirim hasilnya ke LiveData
+//    }
+
+
 
 
 

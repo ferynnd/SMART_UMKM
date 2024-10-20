@@ -28,7 +28,6 @@ class ListUserFragment : Fragment() {
     private lateinit var binding: FragmentListUserBinding
     private lateinit var userViewModel: UserViewModel
     private lateinit var recyclerView: RecyclerView
-//    private lateinit var database: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +64,7 @@ class ListUserFragment : Fragment() {
             }
         }
 
-        binding.editTextSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.editTextSearch.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }

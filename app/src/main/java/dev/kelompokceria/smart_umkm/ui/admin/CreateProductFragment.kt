@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -49,13 +50,14 @@ class CreateProductFragment : Fragment() {
                     binding.edName.setText(it.name)
                     binding.edPrice.setText(it.price.toString())
                     binding.edDescription.setText(it.description)
-                    binding.edImage.setText(it.imageUrl)
 
                     // Set selected item di spinner sesuai dengan kategori produk yang diterima
                     val categoryIndex = Category.values().indexOf(it.category)
                     if (categoryIndex >= 0) {
                         binding.spinnerCategory.setSelection(categoryIndex)
                     }
+
+                    binding.edImage.setText(it.imageUrl)
 
                     // Sesuaikan teks tombol menjadi "Update" jika produk sedang diedit
                     binding.btnCreate.text = "Update"
@@ -167,7 +169,6 @@ class CreateProductFragment : Fragment() {
         binding.edPrice.text?.clear()
         binding.edDescription.text?.clear()
         binding.edImage.text?.clear()
-        binding.spinnerCategory.setSelection(0) // Reset spinner ke item pertama
     }
 
     private fun navigateToProductList() {
