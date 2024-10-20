@@ -22,30 +22,26 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="16dp" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupProfile"
+        android:visibility="gone"
+        app:constraint_referenced_ids="tv_email_label,tv_email_value,tv_name_label,tv_name_value,tv_phone_label,tv_phone_value,btnLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <TextView
         android:id="@+id/tv_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/roboto_bold"
         android:text="Profile"
         android:textColor="@android:color/black"
-        android:fontFamily="@font/roboto_bold"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_start"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/btn_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Menu"
-        android:src="@drawable/menu"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintTop_toTopOf="@id/tv_profile"
-        app:layout_constraintBottom_toBottomOf="@id/tv_profile" />
 
     <ImageView
         android:id="@+id/iv_profile"
@@ -174,5 +170,17 @@
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_start"
         app:layout_constraintTop_toBottomOf="@id/tv_phone_label" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintTop_toBottomOf="@id/tv_phone_value"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/blue"
+        android:text="LOGOUT"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

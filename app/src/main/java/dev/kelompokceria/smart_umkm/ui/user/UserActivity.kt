@@ -20,19 +20,25 @@ class UserActivity : AppCompatActivity() {
         binding = ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        loadFragment(DashboardFragment())
+        val username = intent.getStringExtra("KEY_USERNAME")
+
+        loadFragment(DashboardFragment(), username!!)
 
         binding.bottomNavUser.setOnItemSelectedListener {
             when (it.itemId) {
-                    R.id.dashboard -> loadFragment(DashboardFragment())
-                    R.id.user_profile -> loadFragment(ProfileFragment())
+                    R.id.dashboard -> loadFragment(DashboardFragment(), username)
+                    R.id.user_profile -> loadFragment(ProfileFragment(), username)
                     else -> false
             }
             true
         }
     }
 
-       private  fun loadFragment(fragment: Fragment){
+    private  fun loadFragment(fragment: Fragment, username : String){
+        val bundle = Bundle()
+        bundle.putString("KEY_USERNAME", username)
+        fragment.arguments = bundle
+
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.nav_host_fragment_user,fragment)
         transaction.commit()
