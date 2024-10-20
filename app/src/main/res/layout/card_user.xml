@@ -52,7 +52,7 @@
                 android:id="@+id/textViewRole"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="OWNER"
+                android:text="ADMIN"
                 android:textColor="@color/gray_100"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="@id/textViewName"
