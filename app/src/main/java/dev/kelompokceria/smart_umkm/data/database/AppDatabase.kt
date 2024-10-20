@@ -5,20 +5,25 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import dev.kelompokceria.smart_umkm.dao.EmployeeScheduleDao
 import dev.kelompokceria.smart_umkm.data.dao.ProductDao
 import dev.kelompokceria.smart_umkm.data.dao.UserDao
 import dev.kelompokceria.smart_umkm.model.User
 import dev.kelompokceria.smart_umkm.model.Product
+import dev.kelompokceria.smart_umkm.model.EmployeeSchedule // Tambahkan entitas EmployeeSchedule
 import dev.kelompokceria.smart_umkm.model.UserRole
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import dev.kelompokceria.smart_umkm.util.Converters // Tambahkan import ini
 
-@Database(entities = [User::class, Product::class], version = 1, exportSchema = false)
+
+@Database(entities = [User::class, Product::class, EmployeeSchedule::class], version = 1, exportSchema = false) // Tambahkan EmployeeSchedule di sini
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
     abstract fun productDao(): ProductDao
+    abstract fun employeeScheduleDao(): EmployeeScheduleDao
 
     companion object {
         @Volatile
@@ -32,7 +37,7 @@ abstract class AppDatabase : RoomDatabase() {
                     "smartumkm_database"
                 )
                     .fallbackToDestructiveMigration()
-                    .addCallback(DatabaseCallback(context)) // Tambahkan callback
+                    .addCallback(DatabaseCallback(context)) // Tambahkan callback untuk populasi data
                     .build()
                     .also { INSTANCE = it }
             }
@@ -41,6 +46,10 @@ abstract class AppDatabase : RoomDatabase() {
         fun destroyInstance() {
             INSTANCE = null
         }
+
+        fun getDatabase(application: Context): AppDatabase {
+            return getInstance(application)
+        }
     }
 
     private class DatabaseCallback(
@@ -48,16 +57,15 @@ abstract class AppDatabase : RoomDatabase() {
     ) : RoomDatabase.Callback() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
-            // Tambahkan data default di sini menggunakan coroutine
             INSTANCE?.let { database ->
-                GlobalScope.launch(Dispatchers.IO) {
+                CoroutineScope(Dispatchers.IO).launch {
                     populateDatabase(database.userDao())
                 }
             }
         }
 
-        private suspend fun populateDatabase(userDao: UserDao) {
-            // Tambah data default User
+        suspend fun populateDatabase(userDao: UserDao) {
+            // Tambahkan data default User
             val defaultUser = User(
                 name = "admin",
                 email = "admin@example.com",

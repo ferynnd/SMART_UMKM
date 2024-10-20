@@ -21,4 +21,9 @@
         android:title="PROFILE"
         android:icon="@drawable/user"/>
 
+    <item
+        android:id="@+id/employee_schedule"
+        android:title="SCHEDULE"
+        android:icon="@drawable/jadwal"/>
+
 </menu>
