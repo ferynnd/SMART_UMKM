@@ -71,37 +71,17 @@ class DashboardFragment : Fragment(), DashboardProductAdapter.QuantityChangeList
             }
         })
 
-//        binding.btnCheckout.setOnClickListener {
-//            val bundle = Bundle()
-//            val productList = ArrayList<Triple<String, Int, Int>>()
-//
-//            // Masukkan item yang dipilih ke dalam bundle
-//            selectedProducts.forEach { (productName, details) ->
-//                val (quantity, price) = details
-//                productList.add(Triple(productName, quantity, price))
-//            }
-//
-//            bundle.putSerializable("selectedProducts", productList)
-//
-//            // Buat instance baru dari TransaksiFragment
-//            val transaksiFragment = TransaksiFragment()
-//            transaksiFragment.arguments = bundle
-//
-//            // Pindah ke fragment transaksi
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.nav_host_fragment_user, transaksiFragment)
-//                .addToBackStack(null)
-//                .commit()
-//        }
+        binding.btnCheckout.setOnClickListener {
+            // Pindah ke fragment transaksi
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment_user, TransactionFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
 
         return binding.root
     }
-
-//    override fun onQuantityChanged(price: Int, items: Int) {
-//        totalPrice += price
-//        totalItems = if (items > 0) totalItems + 1 else totalItems - 1
-//        updateCheckoutUI()
-//    }
 
 
      override fun addToSelectedProducts(productName: String, quantity: Int, price: Int) {
