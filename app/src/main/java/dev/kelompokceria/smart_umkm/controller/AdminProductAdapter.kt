@@ -4,8 +4,6 @@ import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.databinding.CardProductLayoutBinding
@@ -19,9 +17,11 @@ class ProductAdapter(
     private val onDeleteClick: (Product) -> Unit
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
+    // Simpan daftar produk lengkap untuk filter
+    private var fullProductList: List<Product> = productList
+
     // ViewHolder untuk item produk
     inner class ProductViewHolder(var view: CardProductLayoutBinding) : RecyclerView.ViewHolder(view.root) {
-
         init {
             view.btnEdit.setOnClickListener {
                 onEditClick(productList[adapterPosition]) // Menangani klik edit
@@ -35,7 +35,7 @@ class ProductAdapter(
 
     // Menginflate layout untuk setiap item
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val binding = CardProductLayoutBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding = CardProductLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ProductViewHolder(binding)
     }
 
@@ -49,7 +49,7 @@ class ProductAdapter(
         view.viewCate.text = currentProduct.category.name
         view.viewDesk.text = currentProduct.description
 
-         currentProduct.image?.let {
+        currentProduct.image?.let {
             val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
             view.imageView.setImageBitmap(bitmap)
         } ?: run {
@@ -58,11 +58,11 @@ class ProductAdapter(
         }
 
         view.Expand.setOnClickListener {
-                if (view.viewDesk.visibility == View.GONE) {
-                    view.viewDesk.visibility = View.VISIBLE  // Tampilkan
-                } else {
-                    view.viewDesk.visibility = View.GONE  // Sembunyikan
-                }
+            if (view.viewDesk.visibility == View.GONE) {
+                view.viewDesk.visibility = View.VISIBLE  // Tampilkan
+            } else {
+                view.viewDesk.visibility = View.GONE  // Sembunyikan
+            }
         }
     }
 
@@ -74,6 +74,19 @@ class ProductAdapter(
     // Fungsi untuk memperbarui produk di adapter
     fun updateProducts(products: List<Product>) {
         this.productList = products
+        this.fullProductList = products // Update daftar lengkap juga
         notifyDataSetChanged() // Memperbarui tampilan
+    }
+
+    // Fungsi untuk memfilter produk berdasarkan nama
+    fun filter(query: String) {
+        val filteredList = if (query.isEmpty()) {
+            fullProductList // Jika tidak ada teks, kembalikan semua produk
+        } else {
+            fullProductList.filter { product ->
+                product.name.contains(query, ignoreCase = true) // Filter berdasarkan nama produk
+            }
+        }
+        updateProducts(filteredList) // Memperbarui adapter dengan daftar yang difilter
     }
 }

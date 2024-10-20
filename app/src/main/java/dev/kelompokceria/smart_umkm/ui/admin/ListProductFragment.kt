@@ -9,19 +9,15 @@ import android.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.controller.ProductAdapter
 import dev.kelompokceria.smart_umkm.databinding.FragmentListProductBinding
 import dev.kelompokceria.smart_umkm.model.Product
-import dev.kelompokceria.smart_umkm.model.User
 import dev.kelompokceria.smart_umkm.viewmodel.ProductViewModel
-import kotlinx.coroutines.launch
 
 class ListProductFragment : Fragment() {
 
-     private lateinit var binding: FragmentListProductBinding
+    private lateinit var binding: FragmentListProductBinding
     private lateinit var productViewModel: ProductViewModel
     private lateinit var productAdapter: ProductAdapter
 
@@ -37,7 +33,6 @@ class ListProductFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentListProductBinding.inflate(inflater, container, false)
 
-
         // Inisialisasi adapter dengan list kosong dan callback untuk edit dan hapus
         productAdapter = ProductAdapter(emptyList(), { product ->
             onEditClick(product)
@@ -46,7 +41,7 @@ class ListProductFragment : Fragment() {
         })
 
         // Setup RecyclerView
-        binding.recy.apply {
+        binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = productAdapter
         }
@@ -67,23 +62,33 @@ class ListProductFragment : Fragment() {
                 .commit()
         }
 
-        binding.editTextSearch.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        // Setup SearchView
+        setupSearchView()
+
+        return binding.root
+    }
+
+    private fun setupSearchView() {
+        binding.searchView1.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
 
             override fun onQueryTextChange(searchText: String?): Boolean {
-                if (searchText != null) {
-                    lifecycleScope.launch {
-                        productViewModel.productSearch(searchText)
+                if (searchText.isNullOrEmpty()) {
+                    // Jika pencarian dibatalkan atau teks kosong, tampilkan semua produk
+                    productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
+                        products?.let {
+                            productAdapter.updateProducts(it) // Tampilkan semua produk
+                        }
                     }
+                } else {
+                    // Panggil metode filter dari adapter
+                    productAdapter.filter(searchText)
                 }
                 return true
             }
         })
-
-
-        return binding.root
     }
 
     private fun onEditClick(product: Product) {

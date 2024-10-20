@@ -20,7 +20,7 @@
         android:id="@+id/bottomNavAdmin"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-       app:backgroundTint="@color/white"
+       app:backgroundTint="@color/gray"
        android:background="@color/white"
         android:layout_alignParentBottom="true"
         app:layout_constraintBottom_toBottomOf="parent"

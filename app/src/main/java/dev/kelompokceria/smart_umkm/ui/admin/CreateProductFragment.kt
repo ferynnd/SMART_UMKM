@@ -168,7 +168,7 @@ class CreateProductFragment : Fragment() {
     }
 
     private fun updateProduct() {
-          // Cek jika ada gambar baru, jika tidak, tetap gunakan gambar lama
+        // Cek jika ada gambar baru, jika tidak, tetap gunakan gambar lama
         val imageBytes = imageUri?.let { uri ->
             val bitmap = uriToBitmap(uri)
             bitmap?.let { bitmapToByteArray(scaleBitmap(it, 1024, 1024)) }
