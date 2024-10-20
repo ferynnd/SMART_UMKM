@@ -1,5 +1,6 @@
 package dev.kelompokceria.smart_umkm.ui.admin
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.databinding.FragmentAdminProfileBinding
+import dev.kelompokceria.smart_umkm.ui.LoginActivity
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
@@ -51,6 +53,18 @@ class AdminProfileFragment : Fragment() {
                     Toast.makeText(requireContext(), "User tidak ditemukan", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+
+        binding.btnShowProfile.setOnClickListener {
+             if (binding.groupProfile.visibility == View.GONE) {
+                    binding.groupProfile.visibility = View.VISIBLE  // Tampilkan
+                } else {
+                    binding.groupProfile.visibility = View.GONE  // Sembunyikan
+                }
+        }
+
+        binding.btnLogout.setOnClickListener {
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
         }
 
 

@@ -23,7 +23,7 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addUser(vararg user: User)
 
-    @Query("SELECT * FROM user_table WHERE user_username = :userName AND user_password = :userPassword ")
+    @Query("SELECT * FROM user_table WHERE user_username = :userName AND user_password = :userPassword LIMIT 1 ")
     suspend fun getUserLogin( userName : String , userPassword : String) : User?
 
     @Query("UPDATE user_table SET user_image = :userImage, user_email = :userEmail , user_phone = :userPhone ,user_password = :userPassword , user_role = :userRole  WHERE user_username = :user ")
