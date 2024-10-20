@@ -23,27 +23,20 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="16dp" />
 
-    <!-- Search bar -->
-    <com.google.android.material.search.SearchBar
-        android:id="@+id/SearchBar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+    <!-- SearchView for searching users with outline -->
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView1"
+        android:layout_width="340dp"
+        android:layout_height="60dp"
         android:layout_marginTop="32dp"
-        android:hint="Search User"
-        app:backgroundTint="@color/gray"
-        app:elevation="10dp"
+        android:queryHint="Search User"
+        android:background="@drawable/search_view_outline"
+        app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
-        app:layout_constraintTop_toTopOf="parent" >
-
-         <androidx.appcompat.widget.SearchView
-            android:id="@+id/editTextSearch"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </com.google.android.material.search.SearchBar>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Title -->
-
     <TextView
         android:id="@+id/textViewListUser"
         android:layout_width="wrap_content"
@@ -55,7 +48,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
-        app:layout_constraintTop_toBottomOf="@id/SearchBar" />
+        app:layout_constraintTop_toBottomOf="@id/searchView1" />
 
     <!-- Scrollable user list -->
     <androidx.recyclerview.widget.RecyclerView
@@ -83,5 +76,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="#FFFFFFFF" />
-  
+
 </androidx.constraintlayout.widget.ConstraintLayout>

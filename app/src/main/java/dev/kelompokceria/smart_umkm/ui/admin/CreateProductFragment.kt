@@ -1,21 +1,27 @@
 package dev.kelompokceria.smart_umkm.ui.admin
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.databinding.FragmentCreateProductBinding
 import dev.kelompokceria.smart_umkm.model.Category
 import dev.kelompokceria.smart_umkm.model.Product
 import dev.kelompokceria.smart_umkm.viewmodel.ProductViewModel
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 
 class CreateProductFragment : Fragment() {
 
@@ -23,6 +29,7 @@ class CreateProductFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var productViewModel: ProductViewModel
     private var productId: Int? = null // Menyimpan ID produk jika ada
+    private var imageUri: Uri? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,9 +63,6 @@ class CreateProductFragment : Fragment() {
                     if (categoryIndex >= 0) {
                         binding.spinnerCategory.setSelection(categoryIndex)
                     }
-
-                    binding.edImage.setText(it.imageUrl)
-
                     // Sesuaikan teks tombol menjadi "Update" jika produk sedang diedit
                     binding.btnCreate.text = "Update"
                 } ?: run {
@@ -68,11 +72,17 @@ class CreateProductFragment : Fragment() {
             }
         }
 
+        binding.btnAddImage.setOnClickListener {
+            pickImageLauncher.launch("image/*") // Memilih gambar dari galeri
+        }
+
+        hideBottomNavigationView()
         // Inisialisasi spinner kategori
         setupCategorySpinner()
 
         binding.btnCreate.setOnClickListener {
             if (validateInputs()) {
+                binding.btnCreate.isEnabled = false // Nonaktifkan tombol untuk mencegah pengulangan
                 if (productId != null) {
                     updateProduct() // Jika produk ada, update
                 } else {
@@ -82,6 +92,16 @@ class CreateProductFragment : Fragment() {
                 Toast.makeText(requireContext(), "Silahkan lengkapi semua field", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun hideBottomNavigationView() {
+        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavAdmin)
+        bottomNavigationView?.visibility = View.GONE
+    }
+
+    private fun showBottomNavigationView() {
+        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavAdmin)
+        bottomNavigationView?.visibility = View.VISIBLE
     }
 
     private fun setupCategorySpinner() {
@@ -94,73 +114,122 @@ class CreateProductFragment : Fragment() {
 
     private fun validateInputs(): Boolean {
         val name = binding.edName.text?.toString()?.trim()
-        val price = binding.edPrice.text?.toString()?.trim()
+        val price = binding.edPrice.text?.toString()?.replace(",", ".")?.toDoubleOrNull() // Memastikan format harga valid
         val description = binding.edDescription.text?.toString()?.trim()
         val category = binding.spinnerCategory.selectedItem?.toString()?.trim()
 
         return !name.isNullOrEmpty() &&
-                !price.isNullOrEmpty() &&
+                price != null && price > 0 &&
                 !description.isNullOrEmpty() &&
-                !category.isNullOrEmpty() &&
-                (price.toDoubleOrNull() ?: 0.0) > 0
+                !category.isNullOrEmpty()
     }
 
     private fun saveProduct() {
         val name = binding.edName.text?.toString()?.trim() ?: ""
-        val priceString = binding.edPrice.text?.toString()
+        val priceString = binding.edPrice.text?.toString()?.replace(",", ".")
         val price = priceString?.toDoubleOrNull()
         val description = binding.edDescription.text?.toString()?.trim() ?: ""
         val categoryString = binding.spinnerCategory.selectedItem?.toString()?.trim() ?: ""
-        val imageUrl = binding.edImage.text?.toString()?.trim() ?: ""
 
         // Pastikan kategori valid sebelum konversi
         val categoryEnum = try {
             Category.valueOf(categoryString.uppercase()) // Konversi String ke enum
         } catch (e: IllegalArgumentException) {
-            null // Atau tangani kesalahan sesuai kebutuhan
-        }
-
-        if (categoryEnum == null) {
             Toast.makeText(requireContext(), "Kategori tidak valid", Toast.LENGTH_SHORT).show()
+            binding.btnCreate.isEnabled = true // Aktifkan kembali tombol jika ada kesalahan
             return // Menghentikan eksekusi jika kategori tidak valid
         }
 
+        val imageBytes = imageUri?.let { uri ->
+            val bitmap = uriToBitmap(uri)
+            bitmap?.let { bitmapToByteArray(scaleBitmap(it, 1024, 1024)) } // Lakukan scaling gambar
+        }
+
         val newProduct = Product(
-            id = 0, // ID is auto-generated
+            image = imageBytes,
             name = name,
             price = price ?: 0.0,
             description = description,
-            category = categoryEnum, // Masukkan enum sebagai kategori
-            imageUrl = imageUrl
+            category = categoryEnum
         )
 
         lifecycleScope.launch {
-            productViewModel.addProduct(newProduct)
-            Toast.makeText(requireContext(), "Produk berhasil ditambahkan", Toast.LENGTH_SHORT).show()
-            clearFields()
-            navigateToProductList()
+            try {
+                productViewModel.addProduct(newProduct)
+                Toast.makeText(requireContext(), "Produk berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+                clearFields()
+                navigateToProductList()
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Terjadi kesalahan: ${e.message}", Toast.LENGTH_SHORT).show()
+            } finally {
+                binding.btnCreate.isEnabled = true // Aktifkan kembali tombol setelah proses selesai
+            }
         }
     }
 
     private fun updateProduct() {
+        // Cek jika ada gambar baru, jika tidak, tetap gunakan gambar lama
+        val imageBytes = imageUri?.let { uri ->
+            val bitmap = uriToBitmap(uri)
+            bitmap?.let { bitmapToByteArray(scaleBitmap(it, 1024, 1024)) }
+        } ?: productViewModel.getProductById(productId!!).value?.image // Jika gambar baru tidak ada, gunakan gambar lama
+
+
         val updatedProduct = Product(
+            image = imageBytes,
             id = productId!!, // Gunakan ID yang ada
             name = binding.edName.text?.toString()?.trim() ?: "",
-            price = binding.edPrice.text?.toString()?.toDoubleOrNull() ?: 0.0,
+            price = binding.edPrice.text?.toString()?.replace(",", ".")?.toDoubleOrNull() ?: 0.0,
             description = binding.edDescription.text?.toString()?.trim() ?: "",
             category = try {
                 Category.valueOf(binding.spinnerCategory.selectedItem.toString().uppercase()) // Konversi String ke enum
             } catch (e: IllegalArgumentException) {
                 Toast.makeText(requireContext(), "Kategori tidak valid", Toast.LENGTH_SHORT).show()
-                return // Menghentikan eksekusi jika kategori tidak valid
-            },
-            imageUrl = binding.edImage.text?.toString()?.trim() ?: ""
+                binding.btnCreate.isEnabled = true // Aktifkan kembali tombol jika ada kesalahan
+                return
+            }
         )
 
         lifecycleScope.launch {
-            productViewModel.updateProduct(updatedProduct)
-            Toast.makeText(requireContext(), "Produk berhasil diperbarui", Toast.LENGTH_SHORT).show()
-            navigateToProductList()
+            try {
+                productViewModel.updateProduct(updatedProduct)
+                Toast.makeText(requireContext(), "Produk berhasil diperbarui", Toast.LENGTH_SHORT).show()
+                navigateToProductList()
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Terjadi kesalahan: ${e.message}", Toast.LENGTH_SHORT).show()
+            } finally {
+                binding.btnCreate.isEnabled = true // Aktifkan kembali tombol setelah proses selesai
+            }
+        }
+    }
+
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            imageUri = it
+            Glide.with(this).load(it).into(binding.ImagePreview) // Preview image
+        }
+    }
+
+    private fun bitmapToByteArray(bitmap: Bitmap?): ByteArray {
+        val stream = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        return stream.toByteArray()
+    }
+
+    private fun scaleBitmap(bitmap: Bitmap, maxWidth: Int, maxHeight: Int): Bitmap {
+        val aspectRatio = bitmap.width.toFloat() / bitmap.height.toFloat()
+        val width = if (bitmap.width > bitmap.height) maxWidth else (maxHeight * aspectRatio).toInt()
+        val height = if (bitmap.height > bitmap.width) maxHeight else (maxWidth / aspectRatio).toInt()
+        return Bitmap.createScaledBitmap(bitmap, width, height, true)
+    }
+
+    private fun uriToBitmap(uri: Uri): Bitmap? {
+        return try {
+            val inputStream = requireContext().contentResolver.openInputStream(uri)
+            BitmapFactory.decodeStream(inputStream)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 
@@ -168,7 +237,6 @@ class CreateProductFragment : Fragment() {
         binding.edName.text?.clear()
         binding.edPrice.text?.clear()
         binding.edDescription.text?.clear()
-        binding.edImage.text?.clear()
     }
 
     private fun navigateToProductList() {
@@ -180,6 +248,6 @@ class CreateProductFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        showBottomNavigationView()
     }
 }

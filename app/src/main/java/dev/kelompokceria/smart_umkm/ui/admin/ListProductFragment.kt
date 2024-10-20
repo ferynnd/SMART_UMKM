@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.appcompat.app.AlertDialog
@@ -32,16 +33,18 @@ class ListProductFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentListProductBinding.inflate(inflater, container, false)
 
-        // Setup RecyclerView
-        binding.recy.layoutManager = LinearLayoutManager(requireContext())
-
-        // Inisialisasi adapter dengan fungsi edit dan hapus
+        // Inisialisasi adapter dengan list kosong dan callback untuk edit dan hapus
         productAdapter = ProductAdapter(emptyList(), { product ->
             onEditClick(product)
         }, { product ->
             onDeleteClick(product)
         })
-        binding.recy.adapter = productAdapter
+
+        // Setup RecyclerView
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = productAdapter
+        }
 
         // Observasi LiveData untuk produk
         productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
@@ -55,11 +58,37 @@ class ListProductFragment : Fragment() {
             val createProductFragment = CreateProductFragment()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.nav_host_fragment_admin, createProductFragment)
-                .addToBackStack(null)  // Menambahkan ke backstack untuk kembali ke fragment sebelumnya
+                .addToBackStack(null)
                 .commit()
         }
 
+        // Setup SearchView
+        setupSearchView()
+
         return binding.root
+    }
+
+    private fun setupSearchView() {
+        binding.searchView1.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(searchText: String?): Boolean {
+                if (searchText.isNullOrEmpty()) {
+                    // Jika pencarian dibatalkan atau teks kosong, tampilkan semua produk
+                    productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
+                        products?.let {
+                            productAdapter.updateProducts(it) // Tampilkan semua produk
+                        }
+                    }
+                } else {
+                    // Panggil metode filter dari adapter
+                    productAdapter.filter(searchText)
+                }
+                return true
+            }
+        })
     }
 
     private fun onEditClick(product: Product) {

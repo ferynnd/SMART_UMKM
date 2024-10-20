@@ -1,7 +1,6 @@
 package dev.kelompokceria.smart_umkm.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,16 +13,19 @@ import kotlinx.coroutines.launch
 class ProductViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: ProductRepository
-    private val _allProduct = MutableLiveData<List<Product>>()
-    val allProduct : LiveData<List<Product>> get() = _allProduct
-
+    private val _allProduct = MutableLiveData<List<Product>>() // LiveData untuk semua produk
+    val allProduct: LiveData<List<Product>> get() = _allProduct
 
     // LiveData untuk mendapatkan semua produk
     val allProducts: LiveData<List<Product>>
 
-      // Tambahkan MutableLiveData untuk menyimpan produk yang dipilih
+    // Tambahkan MutableLiveData untuk menyimpan produk yang dipilih
     private val _selectedProducts = MutableLiveData<MutableMap<String, Pair<Int, Int>>>()
     val selectedProducts: LiveData<MutableMap<String, Pair<Int, Int>>> = _selectedProducts
+
+    // LiveData untuk menyimpan hasil pencarian produk
+    private val _filteredProducts = MutableLiveData<List<Product>>() // LiveData untuk hasil pencarian
+    val filteredProducts: LiveData<List<Product>> get() = _filteredProducts
 
     init {
         val productDao = AppDatabase.getInstance(application).productDao()
@@ -32,8 +34,9 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         _selectedProducts.value = mutableMapOf()
     }
 
+    // Fungsi untuk menambahkan produk baru ke database
     fun addProduct(product: Product) = viewModelScope.launch {
-        repository.insert(product)
+        repository.insert(product) // Memastikan ini memanggil fungsi insert yang tepat
     }
 
     // Fungsi untuk menghapus produk
@@ -51,12 +54,13 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         return repository.getProductById(id) // Mengambil produk dari repository
     }
 
-     suspend fun productSearch(product: String) {
-         viewModelScope.launch {
-            _allProduct.postValue(repository.productSearch(product))
+    // Fungsi untuk mencari produk berdasarkan nama
+    fun productSearch(query: String) {
+        viewModelScope.launch {
+            val result = repository.productSearch(query) // Memanggil metode pencarian dari repository
+            _filteredProducts.postValue(result) // Memperbarui LiveData dengan hasil pencarian
         }
     }
-
 
     // Fungsi untuk menambahkan produk ke daftar yang dipilih
     fun addToSelectedProducts(productName: String, quantity: Int, price: Int) {
@@ -83,5 +87,4 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
         _selectedProducts.value = products
     }
-
 }
