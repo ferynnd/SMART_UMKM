@@ -64,7 +64,7 @@ class ListUserFragment : Fragment() {
             }
         }
 
-        binding.editTextSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.editTextSearch.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
