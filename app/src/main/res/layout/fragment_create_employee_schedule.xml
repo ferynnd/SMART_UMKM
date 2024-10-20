@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.admin.CreateEmployeeScheduleFragment">
+
+    <EditText
+        android:id="@+id/edEmployeeName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Nama Karyawan"
+        android:inputType="textPersonName"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"/>
+
+    <Spinner
+        android:id="@+id/spinnerShiftTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:entries="@array/shift_time_array"
+        app:layout_constraintTop_toBottomOf="@id/edEmployeeName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"/>
+
+    <Switch
+        android:id="@+id/switchIsPresent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hadir"
+        app:layout_constraintTop_toBottomOf="@id/spinnerShiftTime"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="16dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Simpan"
+        android:backgroundTint="@color/blue"
+        app:cornerRadius="10dp"
+        app:layout_constraintTop_toBottomOf="@id/switchIsPresent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
