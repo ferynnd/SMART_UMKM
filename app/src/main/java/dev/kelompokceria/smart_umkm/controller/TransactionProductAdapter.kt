@@ -4,8 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.kelompokceria.smart_umkm.databinding.ItemCartBinding
+import dev.kelompokceria.smart_umkm.model.Product
+import dev.kelompokceria.smart_umkm.model.Transaksi
 
-class TransactionProductAdapter ( private val productList: List<Pair<String, Pair<Int, Int>>>
+class TransactionProductAdapter (private var transaksiList: List<Transaksi>
 ) : RecyclerView.Adapter<TransactionProductAdapter.TransactionViewHolder>() {
 
     class TransactionViewHolder(val binding: ItemCartBinding) : RecyclerView.ViewHolder(binding.root)
@@ -18,23 +20,22 @@ class TransactionProductAdapter ( private val productList: List<Pair<String, Pai
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
 
         val view = holder.binding
-        val (productName, details) = productList[position]
-        val (quantity, price) = details
+        val transaksi = transaksiList[position]
 
-        view.NamaProduk.text = productName
-        holder.binding.HargaProduk.text = "Rp. $price"
-        holder.binding.JumlahProduk.text = quantity.toString()
+        view.namaProduk.text = transaksi.transactionProduct
+//        view.namaProduk.text = transaksi.transactionProduct.toString()
+        view.namaUser.text = transaksi.transactionUser
+        view.Total.text = "Rp. ${transaksi.transactionTotal}"
+        view.cashback.text = "Rp. ${transaksi.transactionCashback}"
 
-        holder.binding.btnTambah.setOnClickListener {
-            // Logika untuk menambah item (Opsional)
-        }
-
-        holder.binding.btnKurang.setOnClickListener {
-            // Logika untuk mengurangi item (Opsional)
-        }
     }
 
     override fun getItemCount(): Int {
-        return productList.size
+        return transaksiList.size
+    }
+
+    fun update(upList: List<Transaksi>) {
+        transaksiList =upList
+        notifyDataSetChanged() // Memperbarui seluruh daftar
     }
 }

@@ -32,7 +32,7 @@ interface UserDao {
     @Query("DELETE FROM user_table WHERE user_username = :userUsername ")
     suspend fun delUser( userUsername : String )
 
-     @Query("SELECT * FROM user_table WHERE user_name LIKE :userSearch OR user_username LIKE :userSearch")
+    @Query("SELECT * FROM user_table WHERE user_name LIKE :userSearch OR user_username LIKE :userSearch")
     suspend fun userSearch(userSearch: String): List<User>
 
 
