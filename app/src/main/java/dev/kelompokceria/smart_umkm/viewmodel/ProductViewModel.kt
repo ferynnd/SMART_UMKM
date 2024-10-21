@@ -8,14 +8,14 @@ import androidx.lifecycle.viewModelScope
 import dev.kelompokceria.smart_umkm.data.database.AppDatabase
 import dev.kelompokceria.smart_umkm.data.repository.ProductRepository
 import dev.kelompokceria.smart_umkm.model.Product
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ProductViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: ProductRepository
-    private val _allProduct = MutableLiveData<List<Product>>() // LiveData untuk semua produk
+    private val _allProduct = MutableLiveData<List<Product>>()
     val allProduct: LiveData<List<Product>> get() = _allProduct
-
     // LiveData untuk mendapatkan semua produk
     val allProducts: LiveData<List<Product>>
 
@@ -57,11 +57,10 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     // Fungsi untuk mencari produk berdasarkan nama
     fun productSearch(query: String) {
         viewModelScope.launch {
-            val result = repository.productSearch(query) // Memanggil metode pencarian dari repository
-            _filteredProducts.postValue(result) // Memperbarui LiveData dengan hasil pencarian
+            val result = repository.productSearch(query)
+            _filteredProducts.postValue(result)
         }
     }
-
     // Fungsi untuk menambahkan produk ke daftar yang dipilih
     fun addToSelectedProducts(productName: String, quantity: Int, price: Int) {
         val products = _selectedProducts.value ?: mutableMapOf()
@@ -73,8 +72,6 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
         _selectedProducts.value = products
     }
-
-    // Fungsi untuk mengurangi atau menghapus produk dari daftar yang dipilih
     fun removeFromSelectedProducts(productName: String, price: Int) {
         val products = _selectedProducts.value ?: mutableMapOf()
         if (products.containsKey(productName)) {
@@ -87,4 +84,6 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
         _selectedProducts.value = products
     }
+
+
 }

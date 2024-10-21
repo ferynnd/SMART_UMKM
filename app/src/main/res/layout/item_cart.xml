@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
+    android:layout_margin="10dp"
     app:cardElevation="8dp"
     app:cardCornerRadius="15dp">
 
@@ -14,109 +14,76 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Gambar Produk -->
-        <ImageView
-            android:id="@+id/GambarProduk"
-            android:layout_width="94dp"
-            android:layout_height="94dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/bakso" />
 
         <!-- Nama Produk -->
         <TextView
-            android:id="@+id/NamaProduk"
+            android:id="@+id/namaProduk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="10dp"
             android:text="Nama Barang"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/btnTambah"
             app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toEndOf="@+id/GambarProduk"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Harga Produk -->
         <TextView
-            android:id="@+id/HargaProduk"
+            android:id="@+id/namaUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:text="Rp. 0"
-            android:textSize="14sp"
-            app:layout_constraintStart_toEndOf="@+id/GambarProduk"
-            app:layout_constraintTop_toBottomOf="@+id/NamaProduk" />
-
-        <!-- Tombol Kurang -->
-
-        <!-- Jumlah Barang -->
-
-        <!-- Tombol Tambah -->
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnKurang"
-            android:layout_width="25dp"
-            android:layout_height="33dp"
-            android:layout_marginEnd="20dp"
-            android:backgroundTint="@color/blue"
-            android:text=""
-            app:cornerRadius="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/JumlahProduk"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.485" />
-
-        <TextView
-            android:id="@+id/JumlahProduk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:gravity="center"
-            android:text="1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnTambah"
+            android:text="Ryy"
+            android:textSize="17sp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnTambah"
-            android:layout_width="25dp"
-            android:layout_height="33dp"
-            android:backgroundTint="@color/blue"
-            android:text="+"
-            app:cornerRadius="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <TextView
+            android:id="@+id/labelTotal"
+            android:text="Total "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/namaProduk"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            />
+        <TextView
+            android:id="@+id/Total"
+            android:text="Rp.10000 "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/namaUser"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.485" />
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="5dp"
+            />
 
+         <TextView
+            android:id="@+id/labelCashback"
+            android:layout_width="wrap_content"
+            android:text="Cashback"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/labelTotal"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            />
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/cashback"
+            android:text="Rp.200000 "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="9dp"
-            android:layout_marginBottom="4dp"
-            android:fontFamily="sans-serif-black"
-            android:text="-"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/btnKurang"
-            app:layout_constraintStart_toStartOf="@+id/btnKurang"
-            app:layout_constraintTop_toTopOf="@+id/btnKurang" />
+            app:layout_constraintTop_toBottomOf="@id/Total"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="5dp"
+            />
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:fontFamily="sans-serif-black"
-            android:text="+"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/btnTambah"
-            app:layout_constraintEnd_toEndOf="@+id/btnTambah"
-            app:layout_constraintStart_toStartOf="@+id/btnTambah"
-            app:layout_constraintTop_toTopOf="@+id/btnTambah" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

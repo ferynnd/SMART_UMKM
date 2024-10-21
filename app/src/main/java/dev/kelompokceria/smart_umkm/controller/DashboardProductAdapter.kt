@@ -21,7 +21,7 @@ class DashboardProductAdapter(
 
     interface QuantityChangeListener {
         fun onQuantityChanged(price: Int, quantityChange: Int)
-         fun removeFromSelectedProducts(productName: String, price: Int)
+        fun removeFromSelectedProducts(productName: String, price: Int)
         fun addToSelectedProducts(productName: String, quantity: Int, price: Int)
 
     }
