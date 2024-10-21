@@ -40,6 +40,7 @@ class AdminActivity : AppCompatActivity() {
                     R.id.product -> loadFragment(ListProductFragment(),username)
                     R.id.user -> loadFragment(ListUserFragment(),username)
                     R.id.profile -> loadFragment(AdminProfileFragment(),username)
+                    R.id.employee_schedule -> loadFragment(ListEmployeeScheduleFragment(),username)
                     else -> false
             }
             true
