@@ -22,23 +22,25 @@ import dev.kelompokceria.smart_umkm.model.Product
 import dev.kelompokceria.smart_umkm.viewmodel.ProductViewModel
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 
 class CreateProductFragment : Fragment() {
 
-    private var _binding: FragmentCreateProductBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentCreateProductBinding
     private lateinit var productViewModel: ProductViewModel
-    private var productId: Int? = null // Menyimpan ID produk jika ada
+    private var productId : Int? = null
+    private var productImage : String? = null
     private var imageUri: Uri? = null
+    private var imagePath: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCreateProductBinding.inflate(inflater, container, false)
 
-        // Initialize ViewModel
-        productViewModel = ViewModelProvider(requireActivity()).get(ProductViewModel::class.java)
+        binding = FragmentCreateProductBinding.inflate(inflater, container, false)
+        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
 
         return binding.root
     }
@@ -46,8 +48,9 @@ class CreateProductFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Ambil ID produk dari argumen
+//        // Ambil ID produk dari argumen
         productId = arguments?.getInt("productId")
+        productImage = arguments?.getString("productImage")
 
         // Jika ID produk ada, ambil produk dari ViewModel
         productId?.let { id ->
@@ -58,13 +61,17 @@ class CreateProductFragment : Fragment() {
                     binding.edPrice.setText(it.price.toString())
                     binding.edDescription.setText(it.description)
 
+                    productImage?.let {
+                        Glide.with(this).load(File(it)).into(binding.ImagePreview)
+                    }
+
                     // Set selected item di spinner sesuai dengan kategori produk yang diterima
                     val categoryIndex = Category.values().indexOf(it.category)
                     if (categoryIndex >= 0) {
                         binding.spinnerCategory.setSelection(categoryIndex)
                     }
                     // Sesuaikan teks tombol menjadi "Update" jika produk sedang diedit
-                    binding.btnCreate.text = "Update"
+                    binding.btnCreate.text = "UPDATE"
                 } ?: run {
                     Toast.makeText(requireContext(), "Produk tidak ditemukan", Toast.LENGTH_SHORT).show()
                     navigateToProductList()
@@ -77,7 +84,6 @@ class CreateProductFragment : Fragment() {
         }
 
         hideBottomNavigationView()
-        // Inisialisasi spinner kategori
         setupCategorySpinner()
 
         binding.btnCreate.setOnClickListener {
@@ -140,13 +146,14 @@ class CreateProductFragment : Fragment() {
             return // Menghentikan eksekusi jika kategori tidak valid
         }
 
-        val imageBytes = imageUri?.let { uri ->
+        val imagePath = imageUri?.let { uri ->
             val bitmap = uriToBitmap(uri)
-            bitmap?.let { bitmapToByteArray(scaleBitmap(it, 1024, 1024)) } // Lakukan scaling gambar
-        }
+            bitmap?.let { saveImageToLocalStorage(it) }
+        } ?: ""
+
 
         val newProduct = Product(
-            image = imageBytes,
+            image = imagePath,
             name = name,
             price = price ?: 0.0,
             description = description,
@@ -168,24 +175,24 @@ class CreateProductFragment : Fragment() {
     }
 
     private fun updateProduct() {
-        // Cek jika ada gambar baru, jika tidak, tetap gunakan gambar lama
-        val imageBytes = imageUri?.let { uri ->
-            val bitmap = uriToBitmap(uri)
-            bitmap?.let { bitmapToByteArray(scaleBitmap(it, 1024, 1024)) }
-        } ?: productViewModel.getProductById(productId!!).value?.image // Jika gambar baru tidak ada, gunakan gambar lama
 
+         val updatedImagePath = imageUri?.let { uri ->
+            uriToBitmap(uri)?.let { bitmap ->
+                saveImageToLocalStorage(bitmap)
+            }
+        } ?: productImage ?: ""
 
         val updatedProduct = Product(
-            image = imageBytes,
+            image = updatedImagePath,
             id = productId!!, // Gunakan ID yang ada
             name = binding.edName.text?.toString()?.trim() ?: "",
             price = binding.edPrice.text?.toString()?.replace(",", ".")?.toDoubleOrNull() ?: 0.0,
             description = binding.edDescription.text?.toString()?.trim() ?: "",
             category = try {
-                Category.valueOf(binding.spinnerCategory.selectedItem.toString().uppercase()) // Konversi String ke enum
+                Category.valueOf(binding.spinnerCategory.selectedItem.toString().uppercase())
             } catch (e: IllegalArgumentException) {
                 Toast.makeText(requireContext(), "Kategori tidak valid", Toast.LENGTH_SHORT).show()
-                binding.btnCreate.isEnabled = true // Aktifkan kembali tombol jika ada kesalahan
+                binding.btnCreate.isEnabled = true
                 return
             }
         )
@@ -210,19 +217,6 @@ class CreateProductFragment : Fragment() {
         }
     }
 
-    private fun bitmapToByteArray(bitmap: Bitmap?): ByteArray {
-        val stream = ByteArrayOutputStream()
-        bitmap?.compress(Bitmap.CompressFormat.PNG, 100, stream)
-        return stream.toByteArray()
-    }
-
-    private fun scaleBitmap(bitmap: Bitmap, maxWidth: Int, maxHeight: Int): Bitmap {
-        val aspectRatio = bitmap.width.toFloat() / bitmap.height.toFloat()
-        val width = if (bitmap.width > bitmap.height) maxWidth else (maxHeight * aspectRatio).toInt()
-        val height = if (bitmap.height > bitmap.width) maxHeight else (maxWidth / aspectRatio).toInt()
-        return Bitmap.createScaledBitmap(bitmap, width, height, true)
-    }
-
     private fun uriToBitmap(uri: Uri): Bitmap? {
         return try {
             val inputStream = requireContext().contentResolver.openInputStream(uri)
@@ -232,6 +226,17 @@ class CreateProductFragment : Fragment() {
             null
         }
     }
+
+     private fun saveImageToLocalStorage(imageBitmap: Bitmap): String {
+        val filename = "image_product_${System.currentTimeMillis()}.jpg"
+        val file = File(context?.filesDir, filename)
+        val outputStream = FileOutputStream(file)
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        outputStream.flush()
+        outputStream.close()
+        return file.absolutePath
+    }
+
 
     private fun clearFields() {
         binding.edName.text?.clear()

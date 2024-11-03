@@ -35,7 +35,6 @@ class ProfileFragment : Fragment() {
         if (username == null) {
             Toast.makeText(requireContext(), "Username tidak ditemukan", Toast.LENGTH_SHORT).show()
         } else {
-            // Ambil data user berdasarkan username
             userViewModel.getUserByUsername(username)
 
             // Observe LiveData dari userViewModel

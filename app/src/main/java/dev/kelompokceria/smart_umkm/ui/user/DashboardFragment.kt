@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -23,16 +24,15 @@ class DashboardFragment : Fragment(), DashboardProductAdapter.QuantityChangeList
     private lateinit var binding: FragmentDashboardBinding
     private lateinit var productViewModel: ProductViewModel
     private lateinit var recyclerView: RecyclerView
+    private lateinit var userViewModel: UserViewModel
 
     private var totalPrice: Int = 0
     private var totalItems: Int = 0
 
-    // Map untuk menyimpan nama produk dan informasi kuantitas & harga
-    private val selectedProducts: MutableMap<String, Pair<Int, Int>> = mutableMapOf()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -41,6 +41,7 @@ class DashboardFragment : Fragment(), DashboardProductAdapter.QuantityChangeList
     ): View? {
         binding = FragmentDashboardBinding.inflate(inflater, container, false)
 
+        val username = arguments?.getString("KEY_USERNAME")
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
 
@@ -78,6 +79,17 @@ class DashboardFragment : Fragment(), DashboardProductAdapter.QuantityChangeList
                 .addToBackStack(null)
                 .commit()
         }
+
+         userViewModel.getUserByUsername(username!!)
+
+            userViewModel.user.observe(viewLifecycleOwner) { user ->
+                if (user != null) {
+                    // Update UI dengan data user
+                    binding.tvName.text = user.name
+                } else {
+                    Toast.makeText(requireContext(), "User tidak ditemukan", Toast.LENGTH_SHORT).show()
+                }
+            }
 
 
         return binding.root

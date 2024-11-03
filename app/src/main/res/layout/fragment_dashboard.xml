@@ -48,6 +48,7 @@
         app:layout_constraintTop_toTopOf="@id/cardView" />
     <TextView
         android:id="@+id/tvName"
+        android:textAllCaps="true"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Evita"

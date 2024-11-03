@@ -17,6 +17,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
+
     }
 
     buildTypes {
@@ -48,30 +50,39 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.media3.test.utils)
 
     //TAMBAHAN
 
-    implementation("androidx.fragment:fragment-ktx:1.8.4")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
-    ksp("androidx.room:room-compiler:2.6.1")
+    // Fragment
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
+
+    // ViewModel and LiveData
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
+
+    // Room
     implementation("androidx.room:room-ktx:2.6.1")
-    annotationProcessor("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.activity:activity-ktx:1.9.2")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.8.2")
-    implementation("androidx.navigation:navigation-ui-ktx:2.8.2")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.6")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    // For image loading (optional)
-    implementation ("com.github.bumptech.glide:glide:4.14.2")
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")
-    implementation("com.google.android.material:material:1.9.0") // versi terbaru yang mendukung Material 3
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    ksp("androidx.room:room-compiler:2.6.1")
+
+    // Navigation
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
+
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    ksp("com.github.bumptech.glide:compiler:4.16.0")
+
+    testImplementation(libs.junit.v412)
+    androidTestImplementation(libs.androidx.junit.v110)
+    androidTestImplementation(libs.androidx.espresso.core.v311)
+//    androidTestImplementation(libs.androidx.runner)
+
 
 
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.databinding.CardDashboardBinding
 import dev.kelompokceria.smart_umkm.model.Product
@@ -42,11 +43,12 @@ class DashboardProductAdapter(
         val view = holder.view
 
         product.image?.let {
-            val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
-            view.imageProduct.setImageBitmap(bitmap)
+            Glide.with(view.imageProduct.context)
+                .load(it)
+                .placeholder(R.drawable.picture) // Placeholder if image is unavailable
+                .into(view.imageProduct)
         } ?: run {
-            // Default image if no image is provided
-            view.imageProduct.setImageResource(R.drawable.picture)
+            view.imageProduct.setImageResource(R.drawable.picture) // Default image
         }
         val numberFormat = NumberFormat.getCurrencyInstance(Locale("in", "ID"))
 
