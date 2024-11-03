@@ -6,14 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.controller.ProductAdapter
 import dev.kelompokceria.smart_umkm.databinding.FragmentListProductBinding
 import dev.kelompokceria.smart_umkm.model.Product
 import dev.kelompokceria.smart_umkm.viewmodel.ProductViewModel
+import kotlinx.coroutines.launch
 
 class ListProductFragment : Fragment() {
 
@@ -34,7 +37,7 @@ class ListProductFragment : Fragment() {
         binding = FragmentListProductBinding.inflate(inflater, container, false)
 
         // Inisialisasi adapter dengan list kosong dan callback untuk edit dan hapus
-        productAdapter = ProductAdapter(emptyList(), { product ->
+        productAdapter = ProductAdapter({ product ->
             onEditClick(product)
         }, { product ->
             onDeleteClick(product)
@@ -49,11 +52,10 @@ class ListProductFragment : Fragment() {
         // Observasi LiveData untuk produk
         productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
             products?.let {
-                productAdapter.updateProducts(it) // Update data di adapter
+                productAdapter.submitList(it)
             }
         }
 
-        // Navigasi ke CreateProductFragment
         binding.btnAddProduct.setOnClickListener {
             val createProductFragment = CreateProductFragment()
             parentFragmentManager.beginTransaction()
@@ -79,7 +81,7 @@ class ListProductFragment : Fragment() {
                     // Jika pencarian dibatalkan atau teks kosong, tampilkan semua produk
                     productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
                         products?.let {
-                            productAdapter.updateProducts(it) // Tampilkan semua produk
+                            productAdapter.submitList(it) // Tampilkan semua produk
                         }
                     }
                 } else {
@@ -92,9 +94,9 @@ class ListProductFragment : Fragment() {
     }
 
     private fun onEditClick(product: Product) {
-        // Navigasi ke CreateProductFragment dengan ID produk
         val bundle = Bundle().apply {
             putInt("productId", product.id ?: 0)
+            putString("productImage", product.image)
         }
         val createProductFragment = CreateProductFragment()
         createProductFragment.arguments = bundle
@@ -106,19 +108,23 @@ class ListProductFragment : Fragment() {
     }
 
     private fun onDeleteClick(product: Product) {
-        // Menampilkan dialog konfirmasi sebelum menghapus produk
+
         val dialogBuilder = AlertDialog.Builder(requireContext())
         dialogBuilder.setMessage("Apakah Anda yakin ingin menghapus produk ${product.name}?")
             .setCancelable(false)
             .setPositiveButton("Ya") { _, _ ->
-                // Jika pengguna mengkonfirmasi, hapus produk
-                productViewModel.deleteProduct(product)
+                 lifecycleScope.launch {
+                    try {
+                        productViewModel.deleteProduct(product)
+                        Toast.makeText(requireContext(), "Product deleted successfully", Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+                        Toast.makeText(requireContext(), "Delete failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
             .setNegativeButton("Tidak") { dialog, _ ->
-                // Jika pengguna membatalkan, tutup dialog
                 dialog.dismiss()
             }
-
         val alert = dialogBuilder.create()
         alert.setTitle("Hapus Produk")
         alert.show()

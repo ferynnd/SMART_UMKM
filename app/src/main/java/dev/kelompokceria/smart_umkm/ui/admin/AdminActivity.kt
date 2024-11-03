@@ -17,6 +17,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.databinding.ActivityAdminBinding
+import dev.kelompokceria.smart_umkm.ui.user.TransactionFragment
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
 
 class AdminActivity : AppCompatActivity() {
@@ -32,7 +33,7 @@ class AdminActivity : AppCompatActivity() {
 
         val username = intent.getStringExtra("KEY_USERNAME")
 
-        loadFragment(ListUserFragment(), username!!)
+        loadFragment(TransactionFragment(), username!!)
 
         binding.bottomNavAdmin.setOnItemSelectedListener {
             when (it.itemId) {
@@ -40,7 +41,6 @@ class AdminActivity : AppCompatActivity() {
                     R.id.product -> loadFragment(ListProductFragment(),username)
                     R.id.user -> loadFragment(ListUserFragment(),username)
                     R.id.profile -> loadFragment(AdminProfileFragment(),username)
-                    R.id.employee_schedule -> loadFragment(ListEmployeeScheduleFragment(),username)
                     else -> false
             }
             true

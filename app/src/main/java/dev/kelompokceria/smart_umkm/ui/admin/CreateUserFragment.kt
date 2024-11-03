@@ -31,6 +31,8 @@ import dev.kelompokceria.smart_umkm.model.UserRole
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 
 class CreateUserFragment : Fragment() {
 
@@ -39,11 +41,6 @@ class CreateUserFragment : Fragment() {
     private lateinit var userViewModel: UserViewModel
     private var imageUri: Uri? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,8 +48,6 @@ class CreateUserFragment : Fragment() {
 
         binding = FragmentCreateUserBinding.inflate(inflater,container,false)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-
-
 
         return binding.root
     }
@@ -63,9 +58,9 @@ class CreateUserFragment : Fragment() {
         hideBottomNavigationView()
         setupSpinner()
 
-        // Menetapkan listener untuk tombol
+
         binding.btnLogin.setOnClickListener {
-             if (validateInputs()) {
+            if (validateInputs()) {
                 createUser() // Membuat user jika input valid
                 navigateToUserList() // Berpindah ke ListUserFragment
             } else {
@@ -73,13 +68,14 @@ class CreateUserFragment : Fragment() {
             }
         }
 
+
         binding.btnAddImage.setOnClickListener {
             pickImageLauncher.launch("image/*") // Memilih gambar dari galeri
         }
 
     }
 
-      override fun onDestroyView() {
+    override fun onDestroyView() {
         super.onDestroyView()
 
         showBottomNavigationView()
@@ -99,8 +95,7 @@ class CreateUserFragment : Fragment() {
 
 
     private fun setupSpinner() {
-        val roles = arrayListOf("ADMIN", "USER")
-
+        val roles = UserRole.values().map { it.name }
         val adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
@@ -127,17 +122,16 @@ class CreateUserFragment : Fragment() {
         val username = binding.edUsername.text.toString()
         val password = binding.edPassword.text.toString()
         val role = UserRole.valueOf(binding.userRole.selectedItem.toString())
-//
-//        val imageBytes = bitmapToByteArray(selectedImage)
 
-           // Ubah URI gambar menjadi Bitmap dan kemudian menjadi Byte Array
-        val imageBytes = imageUri?.let { uri ->
+           // Mengonversi imageUri menjadi Bitmap dan menyimpannya
+        val imagePath = imageUri?.let { uri ->
             val bitmap = uriToBitmap(uri)
-            bitmapToByteArray(bitmap)
-        }
+            bitmap?.let { saveImageToLocalStorage(it) }
+        } ?: ""
+
 
         val user = User(
-            image = imageBytes,
+            image = imagePath,
             name = name,
             email = email,
             phone = phone,
@@ -151,6 +145,14 @@ class CreateUserFragment : Fragment() {
         }
 
     }
+
+    private fun uriToBitmap(uri: Uri): Bitmap? {
+        return context?.contentResolver?.openInputStream(uri)?.use {
+            BitmapFactory.decodeStream(it)
+        }
+    }
+
+
 
     private fun navigateToUserList() {
         parentFragmentManager.beginTransaction()
@@ -166,20 +168,14 @@ class CreateUserFragment : Fragment() {
         }
     }
 
-    private fun bitmapToByteArray(bitmap: Bitmap?): ByteArray {
-        val stream = ByteArrayOutputStream()
-        bitmap?.compress(Bitmap.CompressFormat.PNG, 100, stream)
-        return stream.toByteArray()
-   }
-
-    private fun uriToBitmap(uri: Uri): Bitmap? {
-        return try {
-            val inputStream = requireContext().contentResolver.openInputStream(uri)
-            BitmapFactory.decodeStream(inputStream)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
+    private fun saveImageToLocalStorage(imageBitmap: Bitmap): String {
+        val filename = "image_${System.currentTimeMillis()}.jpg"
+        val file = File(context?.filesDir, filename)
+        val outputStream = FileOutputStream(file)
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        outputStream.flush()
+        outputStream.close()
+        return file.absolutePath
     }
 
 

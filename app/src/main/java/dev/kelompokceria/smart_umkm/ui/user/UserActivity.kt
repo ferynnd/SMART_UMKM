@@ -28,7 +28,6 @@ class UserActivity : AppCompatActivity() {
             when (it.itemId) {
                     R.id.dashboard -> loadFragment(DashboardFragment(), username)
                     R.id.user_profile -> loadFragment(ProfileFragment(), username)
-                    R.id.transaction -> loadFragment(UserTransactionFragment(), username)
                     else -> false
             }
             true

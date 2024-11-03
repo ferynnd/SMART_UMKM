@@ -7,11 +7,6 @@
         android:icon="@drawable/dashboards"/>
 
     <item
-        android:id="@+id/transaction"
-        android:title="Transaction"
-        android:icon="@drawable/transaction"/>
-
-    <item
         android:id="@+id/user_profile"
         android:title="PROFILE"
         android:icon="@drawable/user"/>

@@ -45,6 +45,11 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         getAllUser()
     }
 
+    fun updateUser(user: User) = viewModelScope.launch {
+        repository.updateUser(user)
+        getAllUser()
+    }
+
       fun getUserLogin(userName: String, userPassword: String) = viewModelScope.launch {
         val result = repository.getUserLogin(userName, userPassword)
         _user.postValue(result)
@@ -55,16 +60,6 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         getAllUser()
     }
 
-    fun userDelete( userUsername : String) = viewModelScope.launch {
-        repository.userDel(userUsername)
-        getAllUser()
-    }
-
-    suspend fun userUpdate(userImage: ByteArray, userEmail: String, userPhone :String, userPassword : String, userRole: UserRole, user : String) {
-         withContext(Dispatchers.IO) {
-            repository.userUpdate(userImage,userEmail, userPhone, userPassword, userRole, user)
-        }
-    }
 
     suspend fun userSearch(userSearch: String) {
          viewModelScope.launch {

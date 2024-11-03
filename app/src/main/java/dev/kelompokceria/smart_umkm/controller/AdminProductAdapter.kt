@@ -4,7 +4,9 @@ import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import com.bumptech.glide.Glide
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.databinding.CardProductLayoutBinding
 import dev.kelompokceria.smart_umkm.model.Product
@@ -12,36 +14,32 @@ import java.text.NumberFormat
 import java.util.Locale
 
 class ProductAdapter(
-    private var productList: List<Product>,
     private val onEditClick: (Product) -> Unit,
     private val onDeleteClick: (Product) -> Unit
-) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
 
-    // Simpan daftar produk lengkap untuk filter
-    private var fullProductList: List<Product> = productList
-
-    // ViewHolder untuk item produk
-    inner class ProductViewHolder(var view: CardProductLayoutBinding) : RecyclerView.ViewHolder(view.root) {
+    // ViewHolder for product item
+    inner class ProductViewHolder(var view: CardProductLayoutBinding) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view.root) {
         init {
             view.btnEdit.setOnClickListener {
-                onEditClick(productList[adapterPosition]) // Menangani klik edit
+                onEditClick(getItem(adapterPosition)) // Handle edit click
             }
 
             view.btnDel.setOnClickListener {
-                onDeleteClick(productList[adapterPosition]) // Menangani klik delete
+                onDeleteClick(getItem(adapterPosition)) // Handle delete click
             }
         }
     }
 
-    // Menginflate layout untuk setiap item
+    // Inflate layout for each item
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val binding = CardProductLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ProductViewHolder(binding)
     }
 
-    // Mengatur data pada ViewHolder
+    // Bind data to ViewHolder
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        val currentProduct = productList[position]
+        val currentProduct = getItem(position)
         val view = holder.view
         view.viewName.text = currentProduct.name
         val numberFormat = NumberFormat.getCurrencyInstance(Locale("in", "ID"))
@@ -50,43 +48,44 @@ class ProductAdapter(
         view.viewDesk.text = currentProduct.description
 
         currentProduct.image?.let {
-            val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
-            view.imageView.setImageBitmap(bitmap)
+            Glide.with(view.imageView.context)
+                .load(it)
+                .placeholder(R.drawable.picture) // Placeholder if image is unavailable
+                .into(view.imageView)
         } ?: run {
-            // Default image if no image is provided
-            view.imageView.setImageResource(R.drawable.picture)
+            view.imageView.setImageResource(R.drawable.picture) // Default image
         }
 
         view.Expand.setOnClickListener {
             if (view.viewDesk.visibility == View.GONE) {
-                view.viewDesk.visibility = View.VISIBLE  // Tampilkan
+                view.viewDesk.visibility = View.VISIBLE  // Show
             } else {
-                view.viewDesk.visibility = View.GONE  // Sembunyikan
+                view.viewDesk.visibility = View.GONE  // Hide
             }
         }
     }
 
-    // Mengembalikan jumlah item dalam daftar
-    override fun getItemCount(): Int {
-        return productList.size
-    }
-
-    // Fungsi untuk memperbarui produk di adapter
-    fun updateProducts(products: List<Product>) {
-        this.productList = products
-        this.fullProductList = products // Update daftar lengkap juga
-        notifyDataSetChanged() // Memperbarui tampilan
-    }
-
-    // Fungsi untuk memfilter produk berdasarkan nama
+    // Filter products by name
     fun filter(query: String) {
         val filteredList = if (query.isEmpty()) {
-            fullProductList // Jika tidak ada teks, kembalikan semua produk
+            currentList // Return all products if query is empty
         } else {
-            fullProductList.filter { product ->
-                product.name.contains(query, ignoreCase = true) // Filter berdasarkan nama produk
+            currentList.filter { product ->
+                product.name.contains(query, ignoreCase = true) // Filter by product name
             }
         }
-        updateProducts(filteredList) // Memperbarui adapter dengan daftar yang difilter
+        submitList(filteredList) // Update adapter with the filtered list
     }
+
+     class ProductDiffCallback : DiffUtil.ItemCallback<Product>() {
+        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
+            return oldItem.id == newItem.id // Compare by unique ID
+        }
+
+        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
+            return oldItem == newItem // Compare content for equality
+        }
+    }
+
+
 }
