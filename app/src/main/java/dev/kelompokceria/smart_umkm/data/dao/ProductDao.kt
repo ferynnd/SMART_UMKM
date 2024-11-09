@@ -30,4 +30,8 @@ interface ProductDao {
 
     @Query("SELECT * FROM product_table WHERE name_product LIKE :productSearch")
     suspend fun productSearch(productSearch: String): List<Product>
+
+    @Query("SELECT * FROM product_table WHERE id_product IN (:ids)")
+    fun getProductsByIds(ids: List<Int>): LiveData<List<Product>> // Mendukung banyak ID
+
 }

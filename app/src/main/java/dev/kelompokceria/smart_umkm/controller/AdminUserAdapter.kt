@@ -68,6 +68,8 @@ class AdminUserAdapter(
            deleteUser(user)
         }
     }
+    
+        override fun getItemId(position: Int): Long = position.toLong()
 
     fun filter(query: String) {
         val filteredList = if (query.isEmpty()) {
