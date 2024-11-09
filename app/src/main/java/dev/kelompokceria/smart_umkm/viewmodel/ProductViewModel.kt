@@ -19,19 +19,19 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     // LiveData untuk mendapatkan semua produk
     val allProducts: LiveData<List<Product>>
 
-    // Tambahkan MutableLiveData untuk menyimpan produk yang dipilih
-    private val _selectedProducts = MutableLiveData<MutableMap<String, Pair<Int, Int>>>()
-    val selectedProducts: LiveData<MutableMap<String, Pair<Int, Int>>> = _selectedProducts
-
     // LiveData untuk menyimpan hasil pencarian produk
     private val _filteredProducts = MutableLiveData<List<Product>>() // LiveData untuk hasil pencarian
     val filteredProducts: LiveData<List<Product>> get() = _filteredProducts
+
+
+    // LiveData untuk menyimpan posisi yang dipilih
+    private val _selectedPositions = MutableLiveData<Set<Product>>(emptySet())
+    val selectedPositions: LiveData<Set<Product>> get() = _selectedPositions
 
     init {
         val productDao = AppDatabase.getInstance(application).productDao()
         repository = ProductRepository(productDao)
         allProducts = repository.getAllProducts() // Mengambil LiveData dari repository
-        _selectedProducts.value = mutableMapOf()
     }
 
     // Fungsi untuk menambahkan produk baru ke database
@@ -54,6 +54,14 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         return repository.getProductById(id) // Mengambil produk dari repository
     }
 
+    fun getProductsByIds(ids: List<Int>): LiveData<List<Product>> {
+    if (ids.isEmpty()) {
+        return MutableLiveData(emptyList()) // Mengembalikan LiveData kosong jika ID kosong
+        }
+        return repository.getProductsByIds(ids)
+    }
+
+
     // Fungsi untuk mencari produk berdasarkan nama
     fun productSearch(query: String) {
         viewModelScope.launch {
@@ -61,29 +69,21 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
             _filteredProducts.postValue(result)
         }
     }
-    // Fungsi untuk menambahkan produk ke daftar yang dipilih
-    fun addToSelectedProducts(productName: String, quantity: Int, price: Int) {
-        val products = _selectedProducts.value ?: mutableMapOf()
-        if (products.containsKey(productName)) {
-            val existingQuantity = products[productName]!!.first
-            products[productName] = Pair(existingQuantity + quantity, price)
+
+     // Tambahkan atau hapus posisi dari daftar seleksi
+    fun toggleSelection(position: Product) {
+        val currentSelections = _selectedPositions.value?.toMutableSet() ?: mutableSetOf()
+        if (currentSelections.contains(position)) {
+            currentSelections.remove(position)
         } else {
-            products[productName] = Pair(quantity, price)
+            currentSelections.add(position)
         }
-        _selectedProducts.value = products
-    }
-    fun removeFromSelectedProducts(productName: String, price: Int) {
-        val products = _selectedProducts.value ?: mutableMapOf()
-        if (products.containsKey(productName)) {
-            val (currentQuantity, _) = products[productName]!!
-            if (currentQuantity > 1) {
-                products[productName] = Pair(currentQuantity - 1, price)
-            } else {
-                products.remove(productName)
-            }
-        }
-        _selectedProducts.value = products
+        _selectedPositions.value = currentSelections
     }
 
+    // Set ulang semua seleksi
+    fun clearSelections() {
+        _selectedPositions.value = emptySet()
+    }
 
 }

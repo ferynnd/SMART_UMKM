@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.databinding.FragmentProfileBinding
 import dev.kelompokceria.smart_umkm.ui.LoginActivity
@@ -15,8 +16,7 @@ import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
 
 class ProfileFragment : Fragment() {
 
-    private var _binding: FragmentProfileBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentProfileBinding
     private lateinit var userViewModel: UserViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +28,7 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
 
         // Ambil username dari arguments
         val username = arguments?.getString("KEY_USERNAME")
@@ -40,7 +40,14 @@ class ProfileFragment : Fragment() {
             // Observe LiveData dari userViewModel
             userViewModel.user.observe(viewLifecycleOwner) { user ->
                 if (user != null) {
-                    // Update UI dengan data user
+                    user.image.let {
+                            Glide.with(binding.ivProfile.context)
+                                .load(it)
+                                .placeholder(R.drawable.picture) // Placeholder if image is unavailable
+                                .into(binding.ivProfile)
+                        } ?: run {
+                            binding.ivProfile.setImageResource(R.drawable.picture) // Default image
+                        }
                     binding.tvNameValue.text = user.name
                     binding.tvEmailValue.text = user.email
                     binding.tvPhoneValue.text = user.phone
@@ -70,6 +77,5 @@ class ProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
     }
 }

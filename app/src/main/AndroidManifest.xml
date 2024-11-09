@@ -16,19 +16,22 @@
 
         <activity
             android:name=".ui.user.UserActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
             android:exported="true" >
 
         </activity>
 
         <activity
             android:name=".ui.admin.AdminActivity"
+             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
             android:exported="true" >
+
         </activity>
 
         <activity
             android:name=".ui.LoginActivity"
             android:exported="true">
-            <intent-filter>
+             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -31,4 +31,8 @@ class ProductRepository(private val productDao: ProductDao) {
     suspend fun productSearch(product: String) : List<Product> {
         return productDao.productSearch(product)
     }
+
+     fun getProductsByIds(ids: List<Int>): LiveData<List<Product>> {
+        return productDao.getProductsByIds(ids)
+    }
 }

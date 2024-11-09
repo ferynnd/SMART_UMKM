@@ -33,7 +33,7 @@ class AdminActivity : AppCompatActivity() {
 
         val username = intent.getStringExtra("KEY_USERNAME")
 
-        loadFragment(TransactionFragment(), username!!)
+        loadFragment(ListTransactionFragment(), username!!)
 
         binding.bottomNavAdmin.setOnItemSelectedListener {
             when (it.itemId) {

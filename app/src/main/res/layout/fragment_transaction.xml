@@ -8,16 +8,90 @@
     tools:context=".ui.user.TransactionFragment"
     android:background="@color/white">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideStart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideEnd"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95"
+        />
+
+      <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="TRANSACTION"
+        android:textColor="#110E9B"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/guideStart"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintEnd_toStartOf="@id/guideEnd"/>
+
     <!-- RecyclerView untuk daftar transaksi -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/cardSummary"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="8dp"/>
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        app:layout_constraintBottom_toTopOf="@+id/layoutCashback"
+        app:layout_constraintStart_toStartOf="@id/guideStart"
+        app:layout_constraintEnd_toEndOf="@id/guideEnd"/>
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutCashback"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        app:boxStrokeColor="@color/blue"
+        app:boxStrokeWidth="2dp"
+        app:boxBackgroundMode="outline"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_marginTop="20dp"
+        app:boxCornerRadiusTopStart="5dp"
+        app:boxCornerRadiusBottomEnd="5dp"
+        app:boxCornerRadiusTopEnd="5dp"
+        app:boxCornerRadiusBottomStart="5dp"
+        app:boxStrokeErrorColor="@color/red"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintStart_toStartOf="@id/guideStart"
+        app:layout_constraintEnd_toStartOf="@id/btnCashback"
+        app:layout_constraintBottom_toTopOf="@id/cardSummary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edCashback"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="number"
+            android:hint="Input Money"
+            android:textColorHint="@color/gray"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+     <com.google.android.material.button.MaterialButton
+         android:id="@+id/btnCashback"
+         android:layout_width="60dp"
+         android:layout_height="62dp"
+         android:text=" ✔ "
+         app:cornerRadius="10dp"
+         android:padding="10dp"
+         android:layout_marginBottom="6dp"
+         android:backgroundTint="@color/blue"
+         android:textColor="@color/white"
+         app:layout_constraintBottom_toTopOf="@id/cardSummary"
+         app:layout_constraintEnd_toEndOf="@id/guideEnd" />
 
     <!-- CardView untuk ringkasan pembayaran -->
     <androidx.cardview.widget.CardView
@@ -26,67 +100,79 @@
         android:layout_height="wrap_content"
         app:cardElevation="4dp"
         app:cardCornerRadius="12dp"
+        android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toTopOf="@+id/btnOrder"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="16dp">
+        app:layout_constraintStart_toStartOf="@id/guideStart"
+        app:layout_constraintEnd_toEndOf="@id/guideEnd">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/RingkasanPembayaran"
+                android:id="@+id/total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ringkasan Pembayaran"
-                android:textColor="@color/blue"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvTotalPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Harga: Rp. 60.000"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-black"
+                android:text="TOTAL"
                 android:textSize="15sp"
-                android:textColor="@color/gray"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/RingkasanPembayaran" />
-
-            <TextView
-                android:id="@+id/tvHandlingFee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Biaya Penanganan: Rp. 5.000"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-black"
-                android:textSize="15sp"
-                android:textColor="@color/gray"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvTotalPrice" />
-
-            <TextView
-                android:id="@+id/tvTotalPayment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Total"
-                android:textStyle="bold"
-                android:fontFamily="@font/roboto_bold"
-                android:textSize="20sp"
                 android:textColor="@color/black"
+                android:fontFamily="@font/roboto_medium"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvHandlingFee" />
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvtotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rp. 20.000"
+                android:textSize="17sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/roboto_medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <View
+                android:id="@+id/line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black"
+                android:layout_marginVertical="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/total"/>
+
+
+            <TextView
+                android:id="@+id/cashback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="CASHBACK"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/line" />
+
+            <TextView
+                android:id="@+id/tvcashback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Rp. 10.000"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/line" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.button.MaterialButton
@@ -97,10 +183,10 @@
         app:cornerRadius="10dp"
         android:backgroundTint="@color/blue"
         android:textColor="@color/white"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="16dp"
+        app:layout_constraintStart_toStartOf="@id/guideStart"
+        app:layout_constraintEnd_toEndOf="@id/guideEnd"
         android:padding="12dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

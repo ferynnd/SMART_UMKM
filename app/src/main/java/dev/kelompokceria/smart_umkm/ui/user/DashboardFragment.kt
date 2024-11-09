@@ -1,16 +1,15 @@
 package dev.kelompokceria.smart_umkm.ui.user
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.controller.DashboardProductAdapter
 import dev.kelompokceria.smart_umkm.databinding.FragmentDashboardBinding
@@ -19,15 +18,14 @@ import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
 
-class DashboardFragment : Fragment(), DashboardProductAdapter.QuantityChangeListener {
+class DashboardFragment : Fragment() {
 
-    private lateinit var binding: FragmentDashboardBinding
+    private var _binding: FragmentDashboardBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var productViewModel: ProductViewModel
-    private lateinit var recyclerView: RecyclerView
     private lateinit var userViewModel: UserViewModel
-
-    private var totalPrice: Int = 0
-    private var totalItems: Int = 0
+    private lateinit var dashboardProductAdapter: DashboardProductAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,100 +36,106 @@ class DashboardFragment : Fragment(), DashboardProductAdapter.QuantityChangeList
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentDashboardBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
 
+        setupRecyclerView()
+        setupProductObservers()
+        setupUserObservers()
+        setupSearch()
+        setupCheckoutButton()
+
+        return binding.root
+    }
+
+    private fun setupRecyclerView() {
+        dashboardProductAdapter = DashboardProductAdapter(
+            { product -> productViewModel.toggleSelection(product) },
+            { isVisible -> toggleCheckoutButton(isVisible) }
+        )
+
+        binding.recyclerView.apply {
+            layoutManager = GridLayoutManager(requireContext(), 2)
+            adapter = dashboardProductAdapter
+        }
+    }
+
+    private fun setupProductObservers() {
+        productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
+            dashboardProductAdapter.submitList(products)
+        }
+
+        productViewModel.selectedPositions.observe(viewLifecycleOwner) { selectedProducts ->
+            dashboardProductAdapter.updateSelections(selectedProducts)
+        }
+    }
+
+    private fun setupUserObservers() {
         val username = arguments?.getString("KEY_USERNAME")
-        recyclerView = binding.recyclerView
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
+        if (username != null) {
+            userViewModel.getUserByUsername(username)
 
-        productViewModel.allProducts.observe(viewLifecycleOwner) { productList ->
-            productList?.let {
-                recyclerView.adapter = DashboardProductAdapter(it, this)
+            userViewModel.user.observe(viewLifecycleOwner) { user ->
+                if (user != null) {
+                    binding.tvName.text = user.name
+                } else {
+                    Toast.makeText(requireContext(), "User tidak ditemukan", Toast.LENGTH_SHORT).show()
+                }
             }
+        } else {
+            Toast.makeText(requireContext(), "Username tidak ditemukan", Toast.LENGTH_SHORT).show()
         }
+    }
 
-        productViewModel.selectedProducts.observe(viewLifecycleOwner) { selectedProducts ->
-            // Perbarui UI setiap kali ada perubahan pada selectedProducts di ViewModel
-            updateCheckoutUI(selectedProducts)
-        }
-
-
+    private fun setupSearch() {
         binding.productSearch.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
 
             override fun onQueryTextChange(searchText: String?): Boolean {
-                if (searchText != null) {
+                searchText?.let {
                     lifecycleScope.launch {
-                        productViewModel.productSearch(searchText)
+                        productViewModel.productSearch(it)
                     }
                 }
                 return true
             }
         })
+    }
 
+    private fun setupCheckoutButton() {
         binding.btnCheckout.setOnClickListener {
-            // Pindah ke fragment transaksi
+            val selectedIds = dashboardProductAdapter.getSelectedProductIds()
+            val bundle = Bundle().apply {
+                putIntArray("KEY_SELECTED_IDS", selectedIds.toIntArray())
+                putString("KEY_USERNAME", binding.tvName.text.toString())
+            }
+            val checkoutFragment = TransactionFragment()
+            checkoutFragment.arguments = bundle
             parentFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment_user, TransactionFragment())
+                .replace(R.id.nav_host_fragment_user, checkoutFragment)
                 .addToBackStack(null)
                 .commit()
         }
-
-         userViewModel.getUserByUsername(username!!)
-
-            userViewModel.user.observe(viewLifecycleOwner) { user ->
-                if (user != null) {
-                    // Update UI dengan data user
-                    binding.tvName.text = user.name
-                } else {
-                    Toast.makeText(requireContext(), "User tidak ditemukan", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-
-        return binding.root
     }
 
 
-     override fun addToSelectedProducts(productName: String, quantity: Int, price: Int) {
-        productViewModel.addToSelectedProducts(productName, quantity, price)
-        updateTotals()
+    private fun toggleCheckoutButton(isVisible: Boolean) {
+        binding.layoutCheckout.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 
-    override fun removeFromSelectedProducts(productName: String, price: Int) {
-        productViewModel.removeFromSelectedProducts(productName, price)
-        updateTotals()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
-    override fun onQuantityChanged(price: Int, quantityChange: Int) {
-        totalPrice += price * quantityChange
-        updateTotals()
+    override fun onResume() {
+        super.onResume()
+         showBottomNavigationView()
     }
-
-    private fun updateTotals() {
-        val selectedProducts = productViewModel.selectedProducts.value ?: mutableMapOf()
-        totalItems = selectedProducts.values.sumOf { it.first }
-        totalPrice = selectedProducts.entries.sumOf { it.value.first * it.value.second }
-
-        updateCheckoutUI(selectedProducts)
+     private fun showBottomNavigationView() {
+        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavUser)
+        bottomNavigationView?.visibility = View.VISIBLE
     }
-
-    private fun updateCheckoutUI(selectedProducts: Map<String, Pair<Int, Int>>) {
-        binding.totalPrice.text = "Rp. $totalPrice"
-        binding.totalItem.text = "$totalItems ITEM SELECTED"
-
-        if (totalItems > 0) {
-            binding.layoutCheckout.visibility = View.VISIBLE
-        } else {
-            binding.layoutCheckout.visibility = View.GONE
-            binding.totalPrice.text = ""
-            binding.totalItem.text = ""
-        }
-    }
-
-
-
 }

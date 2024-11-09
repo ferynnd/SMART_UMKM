@@ -74,13 +74,16 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
+    //gsom
+    implementation("com.google.code.gson:gson:2.10.1")
+
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
     ksp("com.github.bumptech.glide:compiler:4.16.0")
 
-    testImplementation(libs.junit.v412)
-    androidTestImplementation(libs.androidx.junit.v110)
-    androidTestImplementation(libs.androidx.espresso.core.v311)
+//    testImplementation(libs.junit.v412)
+//    androidTestImplementation(libs.androidx.junit.v110)
+//    androidTestImplementation(libs.androidx.espresso.core.v311)
 //    androidTestImplementation(libs.androidx.runner)
 
 

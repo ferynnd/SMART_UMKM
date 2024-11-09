@@ -11,27 +11,38 @@ import androidx.lifecycle.viewModelScope
 import dev.kelompokceria.smart_umkm.data.database.AppDatabase
 import dev.kelompokceria.smart_umkm.data.repository.TransactionRepository
 import dev.kelompokceria.smart_umkm.model.Transaksi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class TransactionViewModel (application: Application) : AndroidViewModel(application) {
 
-    private val _transac = MutableLiveData<List<Transaksi>>()
-    val trans : LiveData<List<Transaksi>> get() = _transac
+    private val _allTransac = MutableLiveData<List<Transaksi>>()
+    val trans : LiveData<List<Transaksi>> get() = _allTransac
 
 
     private val repository : TransactionRepository
 
       init {
-        val transaksiDao = AppDatabase.getInstance(application).transactionDao()
-        repository = TransactionRepository(transaksiDao)
+            val transaksiDao = AppDatabase.getInstance(application).transactionDao()
+            repository = TransactionRepository(transaksiDao)
+            getAllTransactions()
+      }
+
+    private fun getAllTransactions() = viewModelScope.launch(Dispatchers.IO) {
+         val transactions = repository.getAllTransactions()
+            withContext(Dispatchers.Main) {
+                _allTransac.value = transactions
+            }
     }
 
-    val allTransactions: LiveData<List<Transaksi>> = repository.allTransactions.asLiveData()
+
 
     fun insert(transaction: Transaksi) = viewModelScope.launch {
         repository.insert(transaction)
     }
+
 
 
 }

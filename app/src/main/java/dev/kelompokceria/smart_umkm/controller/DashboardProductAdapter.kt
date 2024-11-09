@@ -1,9 +1,10 @@
 package dev.kelompokceria.smart_umkm.controller
 
-import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import dev.kelompokceria.smart_umkm.R
@@ -12,83 +13,81 @@ import dev.kelompokceria.smart_umkm.model.Product
 import java.text.NumberFormat
 import java.util.Locale
 
+
 class DashboardProductAdapter(
-        private var productList: List<Product>,
-        private val quantityChangeListener: QuantityChangeListener
-        ) : RecyclerView.Adapter<DashboardProductAdapter.ProductViewHolder>() {
+    private val onItemClicked: (Product) -> Unit,
+    private val onSelectionChanged: (Boolean) -> Unit
+) : ListAdapter<Product, DashboardProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
 
-        class ProductViewHolder( var view: CardDashboardBinding) : RecyclerView.ViewHolder(view.root)
+    // Simpan daftar produk yang dipilih
+    private val selectedProducts: MutableSet<Product> = mutableSetOf()
 
+    class ProductViewHolder(private val binding: CardDashboardBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(product: Product, isSelected: Boolean) {
+            product.image?.let {
+                Glide.with(binding.imageProduct.context)
+                    .load(it)
+                    .placeholder(R.drawable.picture)
+                    .into(binding.imageProduct)
+            } ?: run {
+                binding.imageProduct.setImageResource(R.drawable.picture)
+            }
 
-    interface QuantityChangeListener {
-        fun onQuantityChanged(price: Int, quantityChange: Int)
-        fun removeFromSelectedProducts(productName: String, price: Int)
-        fun addToSelectedProducts(productName: String, quantity: Int, price: Int)
+            val numberFormat = NumberFormat.getCurrencyInstance(Locale("in", "ID"))
+            binding.tvName.text = product.name
+            binding.tvCategory.text = product.category.toString()
+            binding.tvPrice.text = numberFormat.format(product.price)
 
+            itemView.setBackgroundColor(if (isSelected) Color.LTGRAY else Color.WHITE)
+        }
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val binding = CardDashboardBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding = CardDashboardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ProductViewHolder(binding)
     }
 
-    override fun getItemCount(): Int {
-        return productList.size
-    }
-
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
+        val product = getItem(position)
+        val isSelected = selectedProducts.contains(product)
+        holder.bind(product, isSelected)
 
-        val product = productList.get(position)
-        val view = holder.view
-
-        product.image?.let {
-            Glide.with(view.imageProduct.context)
-                .load(it)
-                .placeholder(R.drawable.picture) // Placeholder if image is unavailable
-                .into(view.imageProduct)
-        } ?: run {
-            view.imageProduct.setImageResource(R.drawable.picture) // Default image
+        holder.itemView.setOnClickListener {
+            toggleSelection(product)
+            onItemClicked(product)
         }
-        val numberFormat = NumberFormat.getCurrencyInstance(Locale("in", "ID"))
-
-        view.tvName.text = product.name
-        view.tvPrice.text = numberFormat.format(product.price)
-
-        view.btnADD.setOnClickListener {
-            view.btnADD.visibility = View.GONE
-            view.liner.visibility = View.VISIBLE
-            view.tvCount.text = "1"
-
-            // Tambahkan produk ke dalam daftar
-            quantityChangeListener.addToSelectedProducts(product.name, 1, product.price.toInt())
-        }
-
-        view.btnPlus.setOnClickListener {
-            val currentQuantity = view.tvCount.text.toString().toInt()
-            view.tvCount.text = (currentQuantity + 1).toString()
-            quantityChangeListener.onQuantityChanged(product.price.toInt(), 1)
-            quantityChangeListener.addToSelectedProducts(product.name, 1, product.price.toInt())
-        }
-
-        view.btnMinn.setOnClickListener {
-            val currentQuantity = view.tvCount.text.toString().toInt()
-            if (currentQuantity > 1) {
-                view.tvCount.text = (currentQuantity - 1).toString()
-                quantityChangeListener.onQuantityChanged(-product.price.toInt(), -1)
-                quantityChangeListener.removeFromSelectedProducts(product.name, product.price.toInt())
-            } else {
-                // Jika jumlah menjadi nol, kembali ke tombol Add dan hapus produk dari daftar yang dipilih
-                view.btnADD.visibility = View.VISIBLE
-                view.liner.visibility = View.GONE
-                quantityChangeListener.removeFromSelectedProducts(product.name, product.price.toInt())
-            }
-        }
-
-
-
-
     }
 
+    private fun toggleSelection(product: Product) {
+        if (selectedProducts.contains(product)) {
+            selectedProducts.remove(product)
+        } else {
+            selectedProducts.add(product)
+        }
+        onSelectionChanged(selectedProducts.isNotEmpty())
+        notifyDataSetChanged()
+    }
 
+    // Perbarui seleksi dari ViewModel
+    fun updateSelections(selections: Set<Product>) {
+        selectedProducts.clear()
+        selectedProducts.addAll(selections)
+        onSelectionChanged(selectedProducts.isNotEmpty())
+        notifyDataSetChanged()
+    }
+
+    // Metode untuk mendapatkan ID produk yang dipilih
+    fun getSelectedProductIds(): List<Int> {
+        return selectedProducts.map { it.id!!}
+    }
+
+    class ProductDiffCallback : DiffUtil.ItemCallback<Product>() {
+        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
+            return oldItem == newItem
+        }
+    }
 }

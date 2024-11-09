@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.databinding.FragmentAdminProfileBinding
 import dev.kelompokceria.smart_umkm.ui.LoginActivity
@@ -43,6 +44,14 @@ class AdminProfileFragment : Fragment() {
             // Observe LiveData dari userViewModel
             userViewModel.user.observe(viewLifecycleOwner) { user ->
                 if (user != null) {
+                    user.image.let {
+                        Glide.with(binding.ivProfile.context)
+                            .load(it)
+                            .placeholder(R.drawable.picture) // Placeholder if image is unavailable
+                            .into(binding.ivProfile)
+                    } ?: run {
+                            binding.ivProfile.setImageResource(R.drawable.picture) // Default image
+                        }
                     // Update UI dengan data user
                     binding.tvNameValue.text = user.name
                     binding.tvEmail.text = user.email
