@@ -50,7 +50,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         getAllUser()
     }
 
-      fun getUserLogin(userName: String, userPassword: String) = viewModelScope.launch {
+    fun getUserLogin(userName: String, userPassword: String) = viewModelScope.launch {
         val result = repository.getUserLogin(userName, userPassword)
         _user.postValue(result)
     }

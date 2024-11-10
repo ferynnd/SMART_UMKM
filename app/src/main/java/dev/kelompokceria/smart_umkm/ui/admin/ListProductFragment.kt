@@ -56,6 +56,25 @@ class ListProductFragment : Fragment() {
             }
         }
 
+        binding.btnSwitch.setOnClickListener {
+                if (binding.btnAddProduct.visibility == View.GONE && binding.btnAddCategory.visibility == View.GONE) {
+                    binding.btnAddProduct.visibility = View.VISIBLE
+                    binding.btnAddCategory.visibility = View.VISIBLE
+                } else {
+                    binding.btnAddProduct.visibility = View.GONE
+                    binding.btnAddCategory.visibility = View.GONE
+                }
+        }
+
+        binding.btnAddCategory.setOnClickListener {
+            val categoryFragment = ListCategoryProductFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment_admin, categoryFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
+
         binding.btnAddProduct.setOnClickListener {
             val createProductFragment = CreateProductFragment()
             parentFragmentManager.beginTransaction()

@@ -16,6 +16,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dev.kelompokceria.smart_umkm.R
+import dev.kelompokceria.smart_umkm.data.helper.Constant
+import dev.kelompokceria.smart_umkm.data.helper.PreferenceHelper
 import dev.kelompokceria.smart_umkm.databinding.ActivityAdminBinding
 import dev.kelompokceria.smart_umkm.ui.user.TransactionFragment
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
@@ -24,6 +26,7 @@ class AdminActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAdminBinding
     private val viewModel : UserViewModel by viewModels()
+     private lateinit var sharedPref: PreferenceHelper
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +34,8 @@ class AdminActivity : AppCompatActivity() {
         binding = ActivityAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val username = intent.getStringExtra("KEY_USERNAME")
+         sharedPref = PreferenceHelper(this)
+        val username = sharedPref.getString(Constant.PREF_USER_NAME)
 
         loadFragment(ListTransactionFragment(), username!!)
 

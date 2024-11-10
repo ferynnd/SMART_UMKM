@@ -44,7 +44,7 @@ class ProductAdapter(
         view.viewName.text = currentProduct.name
         val numberFormat = NumberFormat.getCurrencyInstance(Locale("in", "ID"))
         view.viewPrice.text = numberFormat.format(currentProduct.price)
-        view.viewCate.text = currentProduct.category.name
+        view.viewCate.text = currentProduct.category
         view.viewDesk.text = currentProduct.description
 
         currentProduct.image?.let {

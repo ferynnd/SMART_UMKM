@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.controller.DashboardProductAdapter
+import dev.kelompokceria.smart_umkm.data.helper.Constant
+import dev.kelompokceria.smart_umkm.data.helper.PreferenceHelper
 import dev.kelompokceria.smart_umkm.databinding.FragmentDashboardBinding
 import dev.kelompokceria.smart_umkm.viewmodel.ProductViewModel
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
@@ -27,10 +29,13 @@ class DashboardFragment : Fragment() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var dashboardProductAdapter: DashboardProductAdapter
 
+     private lateinit var sharedPref: PreferenceHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+         sharedPref = PreferenceHelper(requireContext())
     }
 
     override fun onCreateView(
@@ -71,7 +76,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun setupUserObservers() {
-        val username = arguments?.getString("KEY_USERNAME")
+        val username = sharedPref.getString(Constant.PREF_USER_NAME)
         if (username != null) {
             userViewModel.getUserByUsername(username)
 
@@ -109,7 +114,6 @@ class DashboardFragment : Fragment() {
             val selectedIds = dashboardProductAdapter.getSelectedProductIds()
             val bundle = Bundle().apply {
                 putIntArray("KEY_SELECTED_IDS", selectedIds.toIntArray())
-                putString("KEY_USERNAME", binding.tvName.text.toString())
             }
             val checkoutFragment = TransactionFragment()
             checkoutFragment.arguments = bundle

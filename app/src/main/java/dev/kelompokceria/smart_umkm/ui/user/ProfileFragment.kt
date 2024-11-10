@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import dev.kelompokceria.smart_umkm.R
+import dev.kelompokceria.smart_umkm.data.helper.Constant
+import dev.kelompokceria.smart_umkm.data.helper.PreferenceHelper
 import dev.kelompokceria.smart_umkm.databinding.FragmentProfileBinding
 import dev.kelompokceria.smart_umkm.ui.LoginActivity
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
@@ -19,9 +21,12 @@ class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private lateinit var userViewModel: UserViewModel
 
+    private lateinit var sharedPref: PreferenceHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+         sharedPref = PreferenceHelper(requireContext())
     }
 
     override fun onCreateView(
@@ -30,8 +35,8 @@ class ProfileFragment : Fragment() {
     ): View {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
 
-        // Ambil username dari arguments
-        val username = arguments?.getString("KEY_USERNAME")
+        // Ambil username dari arguments]
+        val username = sharedPref.getString(Constant.PREF_USER_NAME)
         if (username == null) {
             Toast.makeText(requireContext(), "Username tidak ditemukan", Toast.LENGTH_SHORT).show()
         } else {
@@ -69,6 +74,8 @@ class ProfileFragment : Fragment() {
         }
 
         binding.btnLogout.setOnClickListener {
+            sharedPref.clear()
+            Toast.makeText(requireContext(), "Logout berhasil", Toast.LENGTH_SHORT).show()
             startActivity(Intent(requireContext(), LoginActivity::class.java))
         }
 

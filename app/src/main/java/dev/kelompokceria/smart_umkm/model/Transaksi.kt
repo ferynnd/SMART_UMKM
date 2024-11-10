@@ -21,5 +21,6 @@ data class Transaksi(
 
 data class TransactionProduct(
     val name: String,
+    val price: String,
     val quantity: Int
 )
