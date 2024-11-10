@@ -86,22 +86,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:boxStrokeColor="@color/blue"
-            app:boxStrokeWidth="2dp"
-            app:placeholderText="NAME"
-            android:layout_marginTop="20dp"
-            app:boxCornerRadiusTopStart="5dp"
-            app:boxCornerRadiusBottomEnd="5dp"
-            app:boxCornerRadiusTopEnd="5dp"
-            app:boxCornerRadiusBottomStart="5dp"
-            app:boxStrokeErrorColor="@color/red"
+            app:boxStrokeWidth="1dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toStartOf="@id/guideEnd"
             app:layout_constraintStart_toEndOf="@id/guideStart"
             app:layout_constraintTop_toBottomOf="@id/cardView">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
                 android:hint="NAME"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -110,22 +104,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:boxStrokeColor="@color/blue"
-            app:boxStrokeWidth="2dp"
-            app:placeholderText="E-MAIL"
-            android:layout_marginTop="20dp"
-            app:boxCornerRadiusTopStart="5dp"
-            app:boxCornerRadiusBottomEnd="5dp"
-            app:boxCornerRadiusTopEnd="5dp"
-            app:boxCornerRadiusBottomStart="5dp"
-            app:boxStrokeErrorColor="@color/red"
+            app:boxStrokeWidth="1dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toStartOf="@id/guideEnd"
             app:layout_constraintStart_toEndOf="@id/guideStart"
             app:layout_constraintTop_toBottomOf="@id/layoutName">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edEmail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
                 android:inputType="textEmailAddress"
                 android:hint="E-MAIL"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -135,22 +123,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:boxStrokeColor="@color/blue"
-            app:boxStrokeWidth="2dp"
-            app:placeholderText="PHONE"
-            android:layout_marginTop="20dp"
-            app:boxCornerRadiusTopStart="5dp"
-            app:boxCornerRadiusBottomEnd="5dp"
-            app:boxCornerRadiusTopEnd="5dp"
-            app:boxCornerRadiusBottomStart="5dp"
-            app:boxStrokeErrorColor="@color/red"
+            app:boxStrokeWidth="1dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toStartOf="@id/guideEnd"
             app:layout_constraintStart_toEndOf="@id/guideStart"
             app:layout_constraintTop_toBottomOf="@id/layoutEmail">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edPhone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
                 android:inputType="phone"
                 android:hint="PHONE"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -160,22 +142,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:boxStrokeColor="@color/blue"
-            app:boxStrokeWidth="2dp"
-            app:placeholderText="USERNAME"
-            android:layout_marginTop="20dp"
-            app:boxCornerRadiusTopStart="5dp"
-            app:boxCornerRadiusBottomEnd="5dp"
-            app:boxCornerRadiusTopEnd="5dp"
-            app:boxCornerRadiusBottomStart="5dp"
-            app:boxStrokeErrorColor="@color/red"
+            app:boxStrokeWidth="1dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toStartOf="@id/guideEnd"
             app:layout_constraintStart_toEndOf="@id/guideStart"
             app:layout_constraintTop_toBottomOf="@id/layoutPhone">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edUsername"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
                 android:hint="USERNAME"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -184,22 +160,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:boxStrokeColor="@color/blue"
-            app:boxStrokeWidth="2dp"
-            app:placeholderText="PASSWORD"
-            android:layout_marginTop="20dp"
-            app:boxCornerRadiusTopStart="5dp"
-            app:boxCornerRadiusBottomEnd="5dp"
-            app:boxCornerRadiusTopEnd="5dp"
-            app:boxCornerRadiusBottomStart="5dp"
-            app:boxStrokeErrorColor="@color/red"
+            app:boxStrokeWidth="1dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toStartOf="@id/guideEnd"
             app:layout_constraintStart_toEndOf="@id/guideStart"
             app:layout_constraintTop_toBottomOf="@id/layoutUsername">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edPassword"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
                 android:inputType="textPassword"
                 android:hint="PASSWORD"/>
         </com.google.android.material.textfield.TextInputLayout>
