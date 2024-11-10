@@ -12,45 +12,6 @@ data class Product(
     @ColumnInfo(name = "name_product") val name: String,
     @ColumnInfo(name = "description_product") val description: String,
     @ColumnInfo(name = "price_product") val price: Double,
-    @ColumnInfo(name = "category_product") val category: Category,
+    @ColumnInfo(name = "category_product") val category: String,
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id_product") val id: Int? = null
 )
-enum class Category {
-    MAKANAN,
-    MINUMAN
-}
-//    : Parcelable {
-//
-//    // Implementasi Parcelable
-//    constructor(parcel: Parcel) : this(
-//        image = parcel.createByteArray(),
-//        name = parcel.readString() ?: "",
-//        description = parcel.readString() ?: "",
-//        price = parcel.readDouble(),
-//        category = parcel.readSerializable() as? Category ?: Category.MAKANAN, // Default value jika null
-//        id = parcel.readValue(Int::class.java.classLoader) as? Int
-//    )
-//
-//    override fun writeToParcel(parcel: Parcel, flags: Int) {
-//        parcel.writeByteArray(image) // Menulis image ke parcel
-//        parcel.writeString(name)
-//        parcel.writeString(description)
-//        parcel.writeDouble(price)
-//        parcel.writeSerializable(category)
-//        parcel.writeValue(id)
-//    }
-//
-//    override fun describeContents(): Int {
-//        return 0
-//    }
-//
-//    companion object CREATOR : Parcelable.Creator<Product> {
-//        override fun createFromParcel(parcel: Parcel): Product {
-//            return Product(parcel)
-//        }
-//
-//        override fun newArray(size: Int): Array<Product?> {
-//            return arrayOfNulls(size)
-//        }
-//    }
-//}

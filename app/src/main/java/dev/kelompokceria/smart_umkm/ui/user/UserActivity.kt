@@ -8,11 +8,15 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import dev.kelompokceria.smart_umkm.R
+import dev.kelompokceria.smart_umkm.data.helper.Constant
+import dev.kelompokceria.smart_umkm.data.helper.PreferenceHelper
 import dev.kelompokceria.smart_umkm.databinding.ActivityUserBinding
 
 class UserActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUserBinding
+
+     private lateinit var sharedPref: PreferenceHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +24,8 @@ class UserActivity : AppCompatActivity() {
         binding = ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val username = intent.getStringExtra("KEY_USERNAME")
+        sharedPref = PreferenceHelper(this)
+        val username = sharedPref.getString(Constant.PREF_USER_NAME)
 
         loadFragment(DashboardFragment(), username!!)
 
@@ -35,10 +40,6 @@ class UserActivity : AppCompatActivity() {
     }
 
     private  fun loadFragment(fragment: Fragment, username : String){
-        val bundle = Bundle()
-        bundle.putString("KEY_USERNAME", username)
-        fragment.arguments = bundle
-
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.nav_host_fragment_user,fragment)
         transaction.commit()

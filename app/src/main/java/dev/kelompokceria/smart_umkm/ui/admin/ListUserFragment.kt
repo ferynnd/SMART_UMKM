@@ -103,7 +103,7 @@ class ListUserFragment : Fragment() {
 
     private fun deleteUser(user: User) {
         val dialogBuilder = AlertDialog.Builder(requireContext())
-        dialogBuilder.setMessage("Apakah Anda yakin ingin menghapus produk ${user.name}?")
+        dialogBuilder.setMessage("Apakah Anda yakin ingin menghapus User ${user.name}?")
             .setCancelable(false)
             .setPositiveButton("Ya") { _, _ ->
                  lifecycleScope.launch {

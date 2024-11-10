@@ -77,6 +77,18 @@
                 app:layout_constraintStart_toStartOf="@id/textViewTotal"
                 app:layout_constraintTop_toBottomOf="@id/textViewTotal" />
 
+            <TextView
+                android:id="@+id/Product"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-- PRODUCT --"
+                android:layout_marginTop="10dp"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/textViewCashback"
+                app:layout_constraintTop_toBottomOf="@id/textViewCashback" />
+
              <TextView
                 android:id="@+id/textViewProduct"
                 android:layout_width="wrap_content"
@@ -84,8 +96,8 @@
                 android:text="evita"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@id/textViewCashback"
-                app:layout_constraintTop_toBottomOf="@id/textViewCashback" />
+                app:layout_constraintStart_toStartOf="@id/Product"
+                app:layout_constraintTop_toBottomOf="@id/Product" />
 
             <ImageView
                 android:id="@+id/Expand"

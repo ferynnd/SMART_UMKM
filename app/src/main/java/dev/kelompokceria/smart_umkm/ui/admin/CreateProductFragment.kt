@@ -17,8 +17,9 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.databinding.FragmentCreateProductBinding
-import dev.kelompokceria.smart_umkm.model.Category
 import dev.kelompokceria.smart_umkm.model.Product
+import dev.kelompokceria.smart_umkm.model.ProductCategory
+import dev.kelompokceria.smart_umkm.viewmodel.ProductCategoryViewModel
 import dev.kelompokceria.smart_umkm.viewmodel.ProductViewModel
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
@@ -29,6 +30,7 @@ class CreateProductFragment : Fragment() {
 
     private lateinit var binding: FragmentCreateProductBinding
     private lateinit var productViewModel: ProductViewModel
+    private lateinit var productCategoryViewModel : ProductCategoryViewModel
     private var productId : Int? = null
     private var productImage : String? = null
     private var imageUri: Uri? = null
@@ -41,6 +43,7 @@ class CreateProductFragment : Fragment() {
 
         binding = FragmentCreateProductBinding.inflate(inflater, container, false)
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+        productCategoryViewModel = ViewModelProvider(this).get(ProductCategoryViewModel::class.java)
 
         return binding.root
     }
@@ -65,11 +68,17 @@ class CreateProductFragment : Fragment() {
                         Glide.with(this).load(File(it)).into(binding.ImagePreview)
                     }
 
-                    // Set selected item di spinner sesuai dengan kategori produk yang diterima
-                    val categoryIndex = Category.values().indexOf(it.category)
-                    if (categoryIndex >= 0) {
-                        binding.spinnerCategory.setSelection(categoryIndex)
+                    // Set the spinner's selection to match the category
+                    productCategoryViewModel.allProductCategory.observe(viewLifecycleOwner) { categories ->
+                        val categoryNames = categories.map { it.name }
+
+                        // Find the index of the category in the dynamically populated spinner
+                        val categoryIndex = categoryNames.indexOf(it.category)
+                        if (categoryIndex >= 0) {
+                            binding.spinnerCategory.setSelection(categoryIndex)
+                        }
                     }
+
                     // Sesuaikan teks tombol menjadi "Update" jika produk sedang diedit
                     binding.btnCreate.text = "UPDATE"
                 } ?: run {
@@ -111,12 +120,17 @@ class CreateProductFragment : Fragment() {
     }
 
     private fun setupCategorySpinner() {
-        // Mendapatkan daftar nama kategori dari enum
-        val categories = Category.values().map { it.name }
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categories)
+    // Observe LiveData from ViewModel to get the category names
+    productCategoryViewModel.allProductCategory.observe(viewLifecycleOwner) { categories ->
+        // Extract the names from the ProductCategory list
+        val categoryNames = categories.map { it.name }
+
+        // Set up the spinner adapter
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categoryNames)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerCategory.adapter = adapter
     }
+}
 
     private fun validateInputs(): Boolean {
         val name = binding.edName.text?.toString()?.trim()
@@ -137,14 +151,6 @@ class CreateProductFragment : Fragment() {
         val description = binding.edDescription.text?.toString()?.trim() ?: ""
         val categoryString = binding.spinnerCategory.selectedItem?.toString()?.trim() ?: ""
 
-        // Pastikan kategori valid sebelum konversi
-        val categoryEnum = try {
-            Category.valueOf(categoryString.uppercase()) // Konversi String ke enum
-        } catch (e: IllegalArgumentException) {
-            Toast.makeText(requireContext(), "Kategori tidak valid", Toast.LENGTH_SHORT).show()
-            binding.btnCreate.isEnabled = true // Aktifkan kembali tombol jika ada kesalahan
-            return // Menghentikan eksekusi jika kategori tidak valid
-        }
 
         val imagePath = imageUri?.let { uri ->
             val bitmap = uriToBitmap(uri)
@@ -157,7 +163,7 @@ class CreateProductFragment : Fragment() {
             name = name,
             price = price ?: 0.0,
             description = description,
-            category = categoryEnum
+            category = categoryString
         )
 
         lifecycleScope.launch {
@@ -188,13 +194,7 @@ class CreateProductFragment : Fragment() {
             name = binding.edName.text?.toString()?.trim() ?: "",
             price = binding.edPrice.text?.toString()?.replace(",", ".")?.toDoubleOrNull() ?: 0.0,
             description = binding.edDescription.text?.toString()?.trim() ?: "",
-            category = try {
-                Category.valueOf(binding.spinnerCategory.selectedItem.toString().uppercase())
-            } catch (e: IllegalArgumentException) {
-                Toast.makeText(requireContext(), "Kategori tidak valid", Toast.LENGTH_SHORT).show()
-                binding.btnCreate.isEnabled = true
-                return
-            }
+            category = binding.spinnerCategory.selectedItem?.toString()?.trim() ?: ""
         )
 
         lifecycleScope.launch {

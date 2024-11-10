@@ -7,24 +7,27 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.kelompokceria.smart_umkm.data.Converter
+import dev.kelompokceria.smart_umkm.data.dao.ProductCategoryDao
 import dev.kelompokceria.smart_umkm.data.dao.ProductDao
 import dev.kelompokceria.smart_umkm.data.dao.TransactionDao
 import dev.kelompokceria.smart_umkm.data.dao.UserDao
 import dev.kelompokceria.smart_umkm.model.User
 import dev.kelompokceria.smart_umkm.model.Product
+import dev.kelompokceria.smart_umkm.model.ProductCategory
 import dev.kelompokceria.smart_umkm.model.Transaksi
 import dev.kelompokceria.smart_umkm.model.UserRole
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [User::class, Product::class, Transaksi::class], version = 2, exportSchema = false)
+@Database(entities = [User::class, Product::class, Transaksi::class, ProductCategory::class], version = 2, exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
     abstract fun productDao(): ProductDao
     abstract fun transactionDao() : TransactionDao
+    abstract fun productCategoryDao() : ProductCategoryDao
 
     companion object {
         @Volatile

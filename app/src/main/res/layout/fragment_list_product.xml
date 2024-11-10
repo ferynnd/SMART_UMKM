@@ -26,7 +26,7 @@
     <!-- SearchView for searching products with outline -->
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView1"
-        android:layout_width="340dp"
+        android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="32dp"
         android:queryHint="Search Product"
@@ -63,18 +63,53 @@
         app:layout_constraintTop_toBottomOf="@id/textViewListUser"
         tools:listitem="@layout/card_user" />
 
-    <!-- Floating action button to add new product -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnAddProduct"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:contentDescription="Add Product"
-        android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="#110E9B"
-        app:fabSize="normal"
+        android:orientation="vertical"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="#FFFFFFFF" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnAddCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Add Category"
+            android:layout_margin="5dp"
+            android:src="@drawable/fab_tag"
+            app:backgroundTint="#110E9B"
+            android:visibility="gone"
+            app:fabSize="normal"
+            app:tint="#FFFFFFFF" />
+
+         <!-- Floating action button to add new product -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnAddProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Add Product"
+            android:layout_margin="5dp"
+            android:src="@drawable/fab_product"
+            app:backgroundTint="#110E9B"
+
+            android:visibility="gone"
+            app:fabSize="normal"
+            app:tint="#FFFFFFFF" />
+         <!-- Floating action button to add new product -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Switch"
+            android:src="@drawable/fab_menu"
+             android:layout_margin="5dp"
+            app:backgroundTint="#110E9B"
+            app:fabSize="normal"
+            app:tint="#FFFFFFFF" />
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

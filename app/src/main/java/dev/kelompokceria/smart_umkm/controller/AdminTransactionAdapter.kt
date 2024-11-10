@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dev.kelompokceria.smart_umkm.databinding.CardListTransactionBinding
 import dev.kelompokceria.smart_umkm.model.Transaksi
+import java.text.NumberFormat
+import java.util.Locale
 
 class AdminTransactionListAdapter :
     ListAdapter<Transaksi, AdminTransactionListAdapter.TransactionViewHolder>(DiffCallback()) {
@@ -18,12 +20,12 @@ class AdminTransactionListAdapter :
             binding.textViewId.text = transaction.transaction_id
             binding.textViewTime.text = transaction.transactionTime
             binding.textViewUser.text = transaction.transactionUser
-            binding.textViewTotal.text = transaction.transactionTotal
-            binding.textViewCashback.text = transaction.transactionCashback
-
+            binding.textViewTotal.text = " Total : ${transaction.transactionTotal}"
+            binding.textViewCashback.text =" Cashback : ${transaction.transactionCashback}"
+//             val numberFormat = NumberFormat.getCurrencyInstance(Locale("in", "ID"))
             // Mengolah produk
             val products = transaction.transactionProduct.joinToString("\n") {
-                "${it.name} - Qty: ${it.quantity}"
+                "${it.name} - ${it.price} - qty x ${it.quantity}"
             }
             binding.textViewProduct.text = products
             binding.Expand.setOnClickListener {

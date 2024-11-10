@@ -20,6 +20,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.google.gson.Gson
+import dev.kelompokceria.smart_umkm.data.helper.Constant
+import dev.kelompokceria.smart_umkm.data.helper.PreferenceHelper
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -36,6 +38,7 @@ class TransactionFragment : Fragment() {
     private val productQuantities = mutableMapOf<Int, Int>()
     private var totalHargaSemuaProduk = 0
     private lateinit var userTransaction : String
+      private lateinit var sharedPref: PreferenceHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,8 +46,9 @@ class TransactionFragment : Fragment() {
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         transactionViewModel = ViewModelProvider(this).get(TransactionViewModel::class.java)
         val ids = arguments?.getIntArray("KEY_SELECTED_IDS")
-        val username = arguments?.getString("KEY_USERNAME")
+//        val username = arguments?.getString("KEY_USERNAME")
         selectedProductIds = ids?.toList() ?: emptyList()
+         sharedPref = PreferenceHelper(requireContext())
     }
 
     override fun onCreateView(
@@ -144,7 +148,7 @@ class TransactionFragment : Fragment() {
     }
 
     private fun setupUserObservers() {
-        val username = arguments?.getString("KEY_USERNAME")
+        val username = sharedPref.getString(Constant.PREF_USER_NAME)
         if (username != null) {
             userViewModel.getUserByUsername(username)
 
@@ -167,6 +171,7 @@ class TransactionFragment : Fragment() {
             product?.let {
                 TransactionProduct(
                     name = it.name ?: "Unknown",
+                    price = it.price.toString(),
                     quantity = entry.value
                 )
             }
