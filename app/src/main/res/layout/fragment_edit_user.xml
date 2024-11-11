@@ -114,7 +114,7 @@
                 android:id="@+id/edEmail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="Email" />
+                android:hint="E-mail" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
