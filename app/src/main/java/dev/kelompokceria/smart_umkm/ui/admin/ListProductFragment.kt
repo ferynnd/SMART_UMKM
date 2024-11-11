@@ -16,13 +16,19 @@ import dev.kelompokceria.smart_umkm.controller.ProductAdapter
 import dev.kelompokceria.smart_umkm.databinding.FragmentListProductBinding
 import dev.kelompokceria.smart_umkm.model.Product
 import dev.kelompokceria.smart_umkm.viewmodel.ProductViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ListProductFragment : Fragment() {
 
     private lateinit var binding: FragmentListProductBinding
     private lateinit var productViewModel: ProductViewModel
     private lateinit var productAdapter: ProductAdapter
+
+
+   private val groupedData = mutableListOf<Any>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +49,7 @@ class ListProductFragment : Fragment() {
             onDeleteClick(product)
         })
 
+
         // Setup RecyclerView
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -53,6 +60,7 @@ class ListProductFragment : Fragment() {
         productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
             products?.let {
                 productAdapter.submitList(it)
+                setProduct(it)
             }
         }
 
@@ -96,19 +104,28 @@ class ListProductFragment : Fragment() {
             }
 
             override fun onQueryTextChange(searchText: String?): Boolean {
-                if (searchText.isNullOrEmpty()) {
-                    // Jika pencarian dibatalkan atau teks kosong, tampilkan semua produk
-                    productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
-                        products?.let {
-                            productAdapter.submitList(it) // Tampilkan semua produk
-                        }
-                    }
-                } else {
-                    // Panggil metode filter dari adapter
-                    productAdapter.filter(searchText)
-                }
+                val filteredProducts = productViewModel.allProducts.value?.filter {
+                    it.name.contains(searchText ?: "", ignoreCase = true)
+                } ?: emptyList()
+
+                setProduct(filteredProducts)
                 return true
             }
+
+//            override fun onQueryTextChange(searchText: String?): Boolean {
+//                if (searchText.isNullOrEmpty()) {
+//                    // Jika pencarian dibatalkan atau teks kosong, tampilkan semua produk
+//                    productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
+//                        products?.let {
+//                            productAdapter.submitList(it) // Tampilkan semua produk
+//                        }
+//                    }
+//                } else {
+//                    // Panggil metode filter dari adapter
+////                    productAdapter.filter(searchText)
+//                }
+//                return true
+//            }
         })
     }
 
@@ -127,17 +144,19 @@ class ListProductFragment : Fragment() {
     }
 
     private fun onDeleteClick(product: Product) {
-
         val dialogBuilder = AlertDialog.Builder(requireContext())
         dialogBuilder.setMessage("Apakah Anda yakin ingin menghapus produk ${product.name}?")
             .setCancelable(false)
             .setPositiveButton("Ya") { _, _ ->
-                 lifecycleScope.launch {
+                lifecycleScope.launch(Dispatchers.IO) {
                     try {
+                        // Hapus produk dari ViewModel
                         productViewModel.deleteProduct(product)
-                        Toast.makeText(requireContext(), "Product deleted successfully", Toast.LENGTH_SHORT).show()
                     } catch (e: Exception) {
-                        Toast.makeText(requireContext(), "Delete failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                        // Tampilkan pesan error di thread utama
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(requireContext(), "Delete failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }
@@ -147,5 +166,35 @@ class ListProductFragment : Fragment() {
         val alert = dialogBuilder.create()
         alert.setTitle("Hapus Produk")
         alert.show()
+        productViewModel.allProducts.observe(viewLifecycleOwner) { productList ->
+            productList?.let {
+                productAdapter.submitList(productList)
+                setProduct(productList)
+            }
+        }
+
     }
+
+
+    private fun setProduct(newProducts: List<Product>) {
+        groupedData.clear()
+        // Sortir produk berdasarkan kategori
+        val sortedProducts = newProducts.sortedBy { it.category }
+
+        if (sortedProducts.isNotEmpty()) {
+            var currentCategory = sortedProducts[0].category // Kategori awal
+            groupedData.add(currentCategory) // Tambahkan kategori ke daftar
+            for (product in sortedProducts) {
+                if (product.category != currentCategory) {
+                    currentCategory = product.category // Perbarui kategori
+                    groupedData.add(currentCategory) // Tambahkan kategori baru
+                }
+                groupedData.add(product) // Tambahkan produk
+            }
+        }
+
+        // Gunakan groupedData untuk di-render di RecyclerView
+        productAdapter.submitList(groupedData)
+}
+
 }
