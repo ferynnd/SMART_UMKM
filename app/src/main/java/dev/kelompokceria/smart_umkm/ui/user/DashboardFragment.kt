@@ -15,10 +15,10 @@ import dev.kelompokceria.smart_umkm.controller.DashboardProductAdapter
 import dev.kelompokceria.smart_umkm.data.helper.Constant
 import dev.kelompokceria.smart_umkm.data.helper.PreferenceHelper
 import dev.kelompokceria.smart_umkm.databinding.FragmentDashboardBinding
+import dev.kelompokceria.smart_umkm.model.Product
 import dev.kelompokceria.smart_umkm.viewmodel.ProductViewModel
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
-
 
 class DashboardFragment : Fragment() {
 
@@ -29,13 +29,15 @@ class DashboardFragment : Fragment() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var dashboardProductAdapter: DashboardProductAdapter
 
-     private lateinit var sharedPref: PreferenceHelper
+    private lateinit var sharedPref: PreferenceHelper
+
+    private val groupedData = mutableListOf<Any>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-         sharedPref = PreferenceHelper(requireContext())
+        sharedPref = PreferenceHelper(requireContext())
     }
 
     override fun onCreateView(
@@ -56,23 +58,57 @@ class DashboardFragment : Fragment() {
     private fun setupRecyclerView() {
         dashboardProductAdapter = DashboardProductAdapter(
             { product -> productViewModel.toggleSelection(product) },
-            { isVisible -> toggleCheckoutButton(isVisible) }
+            { isVisible -> toggleCheckoutButton(isVisible)}
         )
 
         binding.recyclerView.apply {
-            layoutManager = GridLayoutManager(requireContext(), 2)
+            layoutManager = GridLayoutManager(requireContext(), 2).apply {
+                spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        // Logika untuk menentukan span size berdasarkan posisi atau tipe item
+                        return when (dashboardProductAdapter.getItemViewType(position)) {
+                            DashboardProductAdapter.TYPE_VIEW.TYPE_HEADER.ordinal -> 2  // Header mengambil 2 span
+                            DashboardProductAdapter.TYPE_VIEW.TYPE_CONTENT.ordinal -> 1  // Item produk mengambil 1 span
+                            else -> 1  // Default ke 1 span
+                        }
+                    }
+                }
+            }
+
             adapter = dashboardProductAdapter
         }
+
     }
 
     private fun setupProductObservers() {
         productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
-            dashboardProductAdapter.submitList(products)
+            setProduct(products)
         }
 
         productViewModel.selectedPositions.observe(viewLifecycleOwner) { selectedProducts ->
             dashboardProductAdapter.updateSelections(selectedProducts)
         }
+    }
+
+    private fun setProduct(newProducts: List<Product>) {
+        groupedData.clear()
+        val sortedProducts = newProducts.sortedBy { it.category }
+
+        if (sortedProducts.isNotEmpty()) {
+            var currentCategory = sortedProducts[0].category
+            groupedData.add(currentCategory) // Tambahkan kategori awal sebagai header
+
+            for (product in sortedProducts) {
+                if (product.category != currentCategory) {
+                    currentCategory = product.category
+                    groupedData.add(currentCategory) // Tambahkan kategori baru
+                }
+                groupedData.add(product) // Tambahkan produk
+            }
+        }
+
+        // Kirim data yang sudah dikelompokkan ke adapter
+        dashboardProductAdapter.submitList(groupedData)
     }
 
     private fun setupUserObservers() {
@@ -124,7 +160,6 @@ class DashboardFragment : Fragment() {
         }
     }
 
-
     private fun toggleCheckoutButton(isVisible: Boolean) {
         binding.layoutCheckout.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
@@ -136,9 +171,10 @@ class DashboardFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-         showBottomNavigationView()
+        showBottomNavigationView()
     }
-     private fun showBottomNavigationView() {
+
+    private fun showBottomNavigationView() {
         val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavUser)
         bottomNavigationView?.visibility = View.VISIBLE
     }

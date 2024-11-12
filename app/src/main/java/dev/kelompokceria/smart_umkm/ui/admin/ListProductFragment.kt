@@ -195,6 +195,6 @@ class ListProductFragment : Fragment() {
 
         // Gunakan groupedData untuk di-render di RecyclerView
         productAdapter.submitList(groupedData)
-}
+    }
 
 }
