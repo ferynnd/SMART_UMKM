@@ -60,7 +60,7 @@ class ListProductFragment : Fragment() {
         productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
             products?.let {
                 productAdapter.submitList(it)
-                setProduct(it)
+                setProduct(products)
             }
         }
 
@@ -152,6 +152,13 @@ class ListProductFragment : Fragment() {
                     try {
                         // Hapus produk dari ViewModel
                         productViewModel.deleteProduct(product)
+                        withContext(Dispatchers.Main) {
+                             productViewModel.allProducts.observe(viewLifecycleOwner) { productList ->
+                                productList?.let {
+                                    productAdapter.submitList(productList)
+                                }
+                            }
+                        }
                     } catch (e: Exception) {
                         // Tampilkan pesan error di thread utama
                         withContext(Dispatchers.Main) {
@@ -166,13 +173,6 @@ class ListProductFragment : Fragment() {
         val alert = dialogBuilder.create()
         alert.setTitle("Hapus Produk")
         alert.show()
-        productViewModel.allProducts.observe(viewLifecycleOwner) { productList ->
-            productList?.let {
-                productAdapter.submitList(productList)
-                setProduct(productList)
-            }
-        }
-
     }
 
 
@@ -192,7 +192,6 @@ class ListProductFragment : Fragment() {
                 groupedData.add(product) // Tambahkan produk
             }
         }
-
         // Gunakan groupedData untuk di-render di RecyclerView
         productAdapter.submitList(groupedData)
     }
