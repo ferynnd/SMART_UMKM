@@ -2,6 +2,7 @@ package dev.kelompokceria.smart_umkm.controller
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -14,7 +15,7 @@ import java.util.Locale
 
 class TransactionAdapter(
     private val onQuantityChanged: (Product, Int) -> Unit // Callback untuk perubahan jumlah
-) : ListAdapter<Product, TransactionAdapter.TransactionViewHolder>(ProductAdapter.ProductDiffCallback()) {
+) : ListAdapter<Product, TransactionAdapter.TransactionViewHolder>(TransactionDiffCallback()) {
 
     class TransactionViewHolder(
         private val binding: CardTransactionBinding,
@@ -73,4 +74,14 @@ class TransactionAdapter(
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
+
+    class TransactionDiffCallback : DiffUtil.ItemCallback<Product>() {
+        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
+            return oldItem == newItem
+        }
+}
 }

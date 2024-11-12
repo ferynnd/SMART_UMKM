@@ -92,6 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Password"
+            android:inputType="textPassword"
             android:textColorHint="@color/gray"/><!-- Mengatur warna hint agar samar -->
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -6,84 +6,127 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import dev.kelompokceria.smart_umkm.R
+import dev.kelompokceria.smart_umkm.databinding.CardCategoryLayoutBinding
 import dev.kelompokceria.smart_umkm.databinding.CardProductLayoutBinding
 import dev.kelompokceria.smart_umkm.model.Product
+import dev.kelompokceria.smart_umkm.model.ProductCategory
 import java.text.NumberFormat
 import java.util.Locale
 
 class ProductAdapter(
     private val onEditClick: (Product) -> Unit,
     private val onDeleteClick: (Product) -> Unit
-) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
+) : ListAdapter<Any, RecyclerView.ViewHolder>(ProductDiffCallback()) {
 
     // ViewHolder for product item
     inner class ProductViewHolder(var view: CardProductLayoutBinding) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view.root) {
-        init {
-            view.btnEdit.setOnClickListener {
-                onEditClick(getItem(adapterPosition)) // Handle edit click
-            }
 
-            view.btnDel.setOnClickListener {
-                onDeleteClick(getItem(adapterPosition)) // Handle delete click
+         fun bind(product: Product) {
+            view.viewName.text = product.name
+            view.viewPrice.text = NumberFormat.getCurrencyInstance(Locale("in", "ID")).format(product.price)
+            view.viewCate.text = product.category
+            view.viewDesk.text = product.description
+
+            // Load image using Glide
+            Glide.with(view.imageView.context)
+                .load(product.image)
+                .placeholder(R.drawable.picture)
+                .into(view.imageView)
+
+            // Set up click listeners
+            view.btnEdit.setOnClickListener { onEditClick(product) }
+            view.btnDel.setOnClickListener { onDeleteClick(product) }
+
+            view.Expand.setOnClickListener {
+                view.viewDesk.visibility = if (view.viewDesk.visibility == View.GONE) View.VISIBLE else View.GONE
             }
+    }
+    }
+
+    inner class CategoryViewHolder(var view: CardCategoryLayoutBinding) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view.root)
+
+    // Inflate layout for each item
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        when(viewType) {
+            TYPE_VIEW.CONTENT.ordinal -> {
+                val binding = CardProductLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                return ProductViewHolder(binding)
+            }
+            TYPE_VIEW.HEADER.ordinal -> {
+                val binding = CardCategoryLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                return CategoryViewHolder(binding)
+            }
+             else -> throw IllegalArgumentException("Unknown viewType: $viewType")
+
         }
     }
 
-    // Inflate layout for each item
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val binding = CardProductLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ProductViewHolder(binding)
+    enum class TYPE_VIEW { HEADER , CONTENT }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is Product -> TYPE_VIEW.CONTENT.ordinal
+              is String -> TYPE_VIEW.HEADER.ordinal
+            else -> throw IllegalArgumentException("Unknown item type")
+        }
     }
 
     // Bind data to ViewHolder
-    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        val currentProduct = getItem(position)
-        val view = holder.view
-        view.viewName.text = currentProduct.name
-        val numberFormat = NumberFormat.getCurrencyInstance(Locale("in", "ID"))
-        view.viewPrice.text = numberFormat.format(currentProduct.price)
-        view.viewCate.text = currentProduct.category
-        view.viewDesk.text = currentProduct.description
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = getItem(position)
+       when(holder) {
+           is ProductViewHolder -> {
+                val product = getItem(position) as Product
+               holder.bind(product)
+           }
+           is CategoryViewHolder -> {
+               holder.view.textViewHeader.text = (item as String)
+           }
+       }
 
-        currentProduct.image?.let {
-            Glide.with(view.imageView.context)
-                .load(it)
-                .placeholder(R.drawable.picture) // Placeholder if image is unavailable
-                .into(view.imageView)
-        } ?: run {
-            view.imageView.setImageResource(R.drawable.picture) // Default image
-        }
-
-        view.Expand.setOnClickListener {
-            if (view.viewDesk.visibility == View.GONE) {
-                view.viewDesk.visibility = View.VISIBLE  // Show
-            } else {
-                view.viewDesk.visibility = View.GONE  // Hide
-            }
-        }
     }
 
-    // Filter products by name
-    fun filter(query: String) {
-        val filteredList = if (query.isEmpty()) {
-            currentList // Return all products if query is empty
-        } else {
-            currentList.filter { product ->
-                product.name.contains(query, ignoreCase = true) // Filter by product name
-            }
-        }
-        submitList(filteredList) // Update adapter with the filtered list
-    }
 
-     class ProductDiffCallback : DiffUtil.ItemCallback<Product>() {
-        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
-            return oldItem.id == newItem.id // Compare by unique ID
+     class ProductDiffCallback : DiffUtil.ItemCallback<Any>() {
+        override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
+            return when ( oldItem) {
+                is Product -> {
+                    if (newItem is Product) {
+                        (oldItem.id) == (newItem.id)
+                    } else {
+                        false
+                    }
+                }
+                else -> {
+                    if (newItem is Product) {
+                        false
+                    } else {
+                        (oldItem) == (newItem)
+                    }
+                }
+            } // Compare by unique ID
         }
 
-        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
-            return oldItem == newItem // Compare content for equality
+        override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
+            return when ( oldItem) {
+                is Product -> {
+                    if (newItem is Product) {
+                        (oldItem) == (newItem)
+                    } else {
+                        false
+                    }
+                }
+                else -> {
+                    if (newItem is Product) {
+                        false
+                    } else {
+                        (oldItem) == (newItem)
+                    }
+                }
+            } // Compare by unique ID
         }
     }
 
