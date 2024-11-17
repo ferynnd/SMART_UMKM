@@ -1,5 +1,6 @@
 package dev.kelompokceria.smart_umkm.ui.admin
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -59,29 +60,42 @@ class AdminProfileFragment : Fragment() {
                             binding.ivProfile.setImageResource(R.drawable.picture) // Default image
                         }
                     // Update UI dengan data user
-                    binding.tvNameValue.text = user.name
-                    binding.tvEmail.text = user.email
-                    binding.tvPhoneValue.text = user.phone
+//                    binding.tvNameValue.text = user.name
+//                    binding.tvEmail.text = user.email
+//                    binding.tvPhoneValue.text = user.phone
                     binding.tvName.text = user.username
-                    binding.tvEmailValue.text = user.email
+//                    binding.tvEmailValue.text = user.email
                 } else {
                     Toast.makeText(requireContext(), "User tidak ditemukan", Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
-        binding.btnShowProfile.setOnClickListener {
-             if (binding.groupProfile.visibility == View.GONE) {
-                    binding.groupProfile.visibility = View.VISIBLE  // Tampilkan
-                } else {
-                    binding.groupProfile.visibility = View.GONE  // Sembunyikan
-                }
-        }
+//        binding.btnShowProfile.setOnClickListener {
+//             if (binding.groupProfile.visibility == View.GONE) {
+//                    binding.groupProfile.visibility = View.VISIBLE  // Tampilkan
+//                } else {
+//                    binding.groupProfile.visibility = View.GONE  // Sembunyikan
+//                }
+//        }
 
         binding.btnLogout.setOnClickListener {
-            sharedPref.clear()
-            Toast.makeText(requireContext(), "Logout berhasil", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(requireContext(), LoginActivity::class.java))
+                val dialogBuilder = AlertDialog.Builder(requireContext())
+                dialogBuilder.setMessage("Apakah Anda yakin ingin logout")
+                    .setCancelable(false)
+                    .setPositiveButton("Ya") { _, _ ->
+                        sharedPref.clear()
+                        Toast.makeText(requireContext(), "Logout berhasil", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(requireContext(), LoginActivity::class.java))
+                    }
+                    .setNegativeButton("Tidak") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+
+                val alert = dialogBuilder.create()
+                alert.setTitle("Logout")
+                alert.show()
+
         }
 
 

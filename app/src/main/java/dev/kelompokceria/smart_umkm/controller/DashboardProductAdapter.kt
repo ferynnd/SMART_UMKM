@@ -3,6 +3,7 @@ package dev.kelompokceria.smart_umkm.controller
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -82,17 +83,24 @@ class DashboardProductAdapter(
         when(holder) {
             is ProductViewHolder -> {
                 val product = getItem(position) as Product
+
                 holder.bind(product,true)
+
+
+                // Atur warna latar belakang berdasarkan status seleksi
+                holder.itemView.setBackgroundColor(
+                    if (isSelected(product)) ContextCompat.getColor(holder.itemView.context, R.color.blue)
+                    else ContextCompat.getColor(holder.itemView.context, R.color.white)
+                )
+
+                // Klik item untuk mengubah seleksi
                 holder.itemView.setOnClickListener {
                     toggleSelection(product)
                     onItemClicked(product)
+                    notifyItemChanged(position) // Perbarui tampilan item
                 }
-//                 holder.itemView.setBackgroundColor(
-//                        if (toggleSelection(product)) Color.LTGRAY else Color.WHITE
-//                    )
-                setBackgroundColor(holder, position)
             }
-            is HeaderViewHolder -> {
+           is HeaderViewHolder -> {
                 holder.binding.textViewHeader.text = (item as String)
             }
         }

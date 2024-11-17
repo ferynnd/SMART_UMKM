@@ -13,101 +13,181 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/groupProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="Product,layoutUser,layoutTotal,layoutCashback,textViewFullTime,textViewId,textViewUser,textViewTotal,textViewCashback,textViewProduct" />
+
+        <TextView
+            android:id="@+id/judul"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Amount due"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/tanggal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Due date"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/judul"/>
+
+        <TextView
+            android:id="@+id/tvheadertotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rp.1000,00"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/judul"
+            app:layout_constraintTop_toBottomOf="@+id/judul"/>
+
+        <TextView
+            android:id="@+id/textViewTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="06 Jun 24"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/tanggal"
+            app:layout_constraintTop_toBottomOf="@id/tanggal"
+            app:layout_constraintBaseline_toBaselineOf="@id/tvheadertotal"/>
+
+        <TextView
+            android:id="@+id/textViewFullTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="06 Jun 24"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="8dp"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewTime"/>
+
+        <TextView
+            android:id="@+id/textViewId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TRXbjksbkj"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/tvheadertotal"
+            app:layout_constraintTop_toBottomOf="@+id/tvheadertotal"/>
+
+        <TextView
+            android:id="@+id/layoutUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CASHIER"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/textViewId"
+            app:layout_constraintTop_toBottomOf="@id/textViewId"/>
+
+        <TextView
+            android:id="@+id/textViewUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Evita"
+            android:textColor="@android:color/black"
+            android:textAllCaps="true"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewFullTime"/>
+
+        <TextView
+            android:id="@+id/layoutTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Price"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/layoutUser"
+            app:layout_constraintTop_toBottomOf="@id/layoutUser" />
+        <TextView
+            android:id="@+id/textViewTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rp.1000.00"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewUser" />
+
+        <TextView
+            android:id="@+id/layoutCashback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Cashback"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/layoutTotal"
+            app:layout_constraintTop_toBottomOf="@id/layoutTotal" />
+
+        <TextView
+            android:id="@+id/textViewCashback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rp. 30000.00"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewTotal" />
+
+        <TextView
+            android:id="@+id/Product"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PRODUCT"
+            android:layout_marginTop="10dp"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/layoutCashback"
+            app:layout_constraintTop_toBottomOf="@id/layoutCashback" />
+
+        <TextView
+            android:id="@+id/textViewProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="evita"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/Product"
+            app:layout_constraintTop_toBottomOf="@id/Product" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPayAllBills"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:text="Pay all bills"
+            android:textSize="15sp"
+            android:textColor="#FFFFFFFF"
+            app:cornerRadius="5dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/blue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewProduct"/>
 
-               <!-- Group untuk mengatur beberapa view -->
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/groupProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:constraint_referenced_ids="textViewTotal,textViewCashback,textViewProduct" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/textViewId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TRXbjksbkj"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:layout_marginStart="10dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-            <TextView
-                android:id="@+id/textViewUser"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Evita"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/textViewId"
-                app:layout_constraintTop_toBottomOf="@id/textViewId"/>
-
-            <TextView
-                android:id="@+id/textViewTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2024-09-11 20:20:00"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@id/textViewUser"
-                app:layout_constraintTop_toBottomOf="@id/textViewUser" />
-
-            <TextView
-                android:id="@+id/textViewTotal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rp.1000.00"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@id/textViewTime"
-                app:layout_constraintTop_toBottomOf="@id/textViewTime" />
-
-            <TextView
-                android:id="@+id/textViewCashback"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rp. 30000.00"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@id/textViewTotal"
-                app:layout_constraintTop_toBottomOf="@id/textViewTotal" />
-
-            <TextView
-                android:id="@+id/Product"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="-- PRODUCT --"
-                android:layout_marginTop="10dp"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/textViewCashback"
-                app:layout_constraintTop_toBottomOf="@id/textViewCashback" />
-
-             <TextView
-                android:id="@+id/textViewProduct"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="evita"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@id/Product"
-                app:layout_constraintTop_toBottomOf="@id/Product" />
-
-            <ImageView
-                android:id="@+id/Expand"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@android:drawable/arrow_down_float"
-                app:tint="#110E9B"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.card.MaterialCardView>
+</com.google.android.material.card.MaterialCardView>
