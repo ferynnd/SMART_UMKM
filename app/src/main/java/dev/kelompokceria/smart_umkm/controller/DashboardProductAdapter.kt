@@ -3,6 +3,7 @@ package dev.kelompokceria.smart_umkm.controller
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,11 +14,12 @@ import dev.kelompokceria.smart_umkm.databinding.CardDashboardBinding
 import dev.kelompokceria.smart_umkm.model.Product
 import java.text.NumberFormat
 import java.util.Locale
-import kotlin.properties.Delegates
 
 class DashboardProductAdapter(
     private val onItemClicked: (Product) -> Unit,
     private val onSelectionChanged: (Boolean) -> Unit
+//    private val setBackgroundColor: (Int) -> Unit
+
 ) : ListAdapter<Any, RecyclerView.ViewHolder>(DashboardDiffCallback()) {
 
 
@@ -42,7 +44,7 @@ class DashboardProductAdapter(
             binding.tvCategory.text = product.category
             binding.tvPrice.text = numberFormat.format(product.price)
 
-//            itemView.setBackgroundColor(if (isSelected) Color.BLUE else Color.WHITE)
+            itemView.setBackgroundColor(if (isSelected) Color.BLUE else Color.WHITE)
         }
     }
 
@@ -74,9 +76,6 @@ class DashboardProductAdapter(
         }
     }
 
-    private fun isSelected(product: Product): Boolean {
-        return selectedProducts.contains(product)
-    }
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -84,30 +83,37 @@ class DashboardProductAdapter(
         when(holder) {
             is ProductViewHolder -> {
                 val product = getItem(position) as Product
+
                 holder.bind(product,true)
+
+
+                // Atur warna latar belakang berdasarkan status seleksi
+                holder.itemView.setBackgroundColor(
+                    if (isSelected(product)) ContextCompat.getColor(holder.itemView.context, R.color.blue)
+                    else ContextCompat.getColor(holder.itemView.context, R.color.white)
+                )
+
+                // Klik item untuk mengubah seleksi
                 holder.itemView.setOnClickListener {
                     toggleSelection(product)
                     onItemClicked(product)
+                    notifyItemChanged(position) // Perbarui tampilan item
                 }
-                if (selectedProducts == holder.itemView) {
-                    holder.binding.cardView.setBackgroundColor(Color.LTGRAY);
-                } else {
-                    holder.binding.cardView.setBackgroundColor(Color.WHITE);
-                }
-                holder.itemView.setOnLongClickListener{
-                    toggleSelection(product) // Toggle seleksi item saat long click
-                    holder.itemView.setBackgroundColor(
-                        if (selectedProducts.contains(product)) Color.LTGRAY else Color.WHITE
-                    )
-                    true // Kembalikan true untuk menandakan long click telah ditangani
-                }
-
             }
-            is HeaderViewHolder -> {
+           is HeaderViewHolder -> {
                 holder.binding.textViewHeader.text = (item as String)
             }
         }
     }
+
+    private fun setBackgroundColor(holder: ProductViewHolder, position: Int) {
+            val item = getItem(position)
+            if (item is Product) {
+                holder.itemView.setBackgroundColor(
+                    if (selectedProducts.contains(item)) Color.LTGRAY else Color.WHITE
+                )
+            }
+        }
 
 
     private fun toggleSelection(product: Product) {
@@ -169,7 +175,7 @@ class DashboardProductAdapter(
                         (oldItem) == (newItem)
                     }
                 }
-            } // Compare by unique ID
+            }
         }
     }
 }

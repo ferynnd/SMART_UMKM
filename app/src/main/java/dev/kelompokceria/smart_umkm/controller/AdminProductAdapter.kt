@@ -38,7 +38,7 @@ class ProductAdapter(
 
             // Set up click listeners
             view.btnEdit.setOnClickListener { onEditClick(product) }
-            view.btnDel.setOnClickListener { onDeleteClick(product) }
+            view.btnDel.setOnClickListener { onDeleteClick(product)  }
 
             view.Expand.setOnClickListener {
                 view.viewDesk.visibility = if (view.viewDesk.visibility == View.GONE) View.VISIBLE else View.GONE
@@ -77,15 +77,15 @@ class ProductAdapter(
     // Bind data to ViewHolder
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
-       when(holder) {
-           is ProductViewHolder -> {
-                val product = getItem(position) as Product
-               holder.bind(product)
+           when(holder) {
+               is ProductViewHolder -> {
+                    val product = getItem(position) as Product
+                   holder.bind(product)
+               }
+               is CategoryViewHolder -> {
+                   holder.view.textViewHeader.text = (item as String)
+               }
            }
-           is CategoryViewHolder -> {
-               holder.view.textViewHeader.text = (item as String)
-           }
-       }
 
     }
 
