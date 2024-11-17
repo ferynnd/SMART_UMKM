@@ -45,7 +45,18 @@ class ListCategoryProductFragment : Fragment() {
 
         // Observe LiveData from ViewModel
         productCategoryViewModel.allProductCategory.observe(viewLifecycleOwner) { categories ->
-            categoryAdapter.submitList(categories)
+            categories.let {
+                lifecycleScope.launch(Dispatchers.Main) {
+                    if (it.isNotEmpty()) {
+                        binding.linear.visibility = View.GONE
+                        categoryAdapter.submitList(it)
+                    } else {
+                        binding.linear.visibility = View.VISIBLE
+                        categoryAdapter.submitList(emptyList())
+                        categoryAdapter.notifyDataSetChanged() // Memaksa pembaruan adapter
+                    }
+                }
+            }
         }
 
         // Add category on button click

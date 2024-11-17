@@ -71,6 +71,43 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardImage" />
 
+    <TextView
+        android:id="@+id/tv_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="evitaduatiga@gmail.com"
+        android:textSize="16dp"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_name" />
+
+    <Button
+        android:id="@+id/btn_show_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="55dp"
+        android:layout_marginTop="16dp"
+        android:text="Show Profile"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textColor="#FFFFFFFF"
+        android:backgroundTint="@color/blue"
+        app:cornerRadius="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_email" />
+
+    <TextView
+        android:id="@+id/tv_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Name"
+        android:textSize="16dp"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/btn_show_profile" />
 
     <!-- CardView untuk Menu -->
     <androidx.cardview.widget.CardView

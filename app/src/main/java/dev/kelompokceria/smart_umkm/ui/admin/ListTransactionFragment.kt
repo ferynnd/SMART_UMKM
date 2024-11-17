@@ -57,10 +57,18 @@ class ListTransactionFragment : Fragment() {
 
     private fun fetchTransactions() {
         transactionViewModel.trans.observe(viewLifecycleOwner) { transactions ->
-            lifecycleScope.launch {
-                setTransaction(transactions)
-//                adapter.submitList(transactions)
-            }
+            transactions.let {
+                lifecycleScope.launch {
+                    if (transactions.isNotEmpty()){
+                        binding.linear.visibility = View.GONE
+//                         adapter.submitList(it)
+                         setTransaction(it)
+                    } else {
+                        binding.linear.visibility = View.VISIBLE
+                        adapter.submitList(emptyList())
+                        adapter.notifyDataSetChanged() // Memaksa pembaruan adapter
+                    }
+                }
         }
 
     }

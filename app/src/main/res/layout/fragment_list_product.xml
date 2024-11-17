@@ -27,7 +27,7 @@
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView1"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="55dp"
         android:layout_marginTop="32dp"
         android:queryHint="Search Product"
         android:background="@drawable/search_view_outline"
@@ -44,7 +44,7 @@
         android:layout_marginTop="16dp"
         android:fontFamily="@font/roboto_bold"
         android:text="LIST PRODUCT"
-        android:textColor="#110E9B"
+        android:textColor="@color/blue"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
@@ -64,6 +64,46 @@
         tools:listitem="@layout/card_user" />
 
     <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center"
+            android:translationZ="-10dp"
+            android:src="@drawable/nodata"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Product"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="20sp"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You do not have an product"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="15sp"
+            android:layout_gravity="center"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -73,6 +113,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
 
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnAddCategory"
             android:layout_width="wrap_content"
@@ -80,7 +121,7 @@
             android:contentDescription="Add Category"
             android:layout_margin="5dp"
             android:src="@drawable/fab_tag"
-            app:backgroundTint="#110E9B"
+            app:backgroundTint="@color/blue"
             android:visibility="gone"
             app:fabSize="normal"
             app:tint="#FFFFFFFF" />
@@ -93,7 +134,7 @@
             android:contentDescription="Add Product"
             android:layout_margin="5dp"
             android:src="@drawable/fab_product"
-            app:backgroundTint="#110E9B"
+            app:backgroundTint="@color/blue"
 
             android:visibility="gone"
             app:fabSize="normal"
@@ -105,8 +146,8 @@
             android:layout_height="wrap_content"
             android:contentDescription="Switch"
             android:src="@drawable/fab_menu"
-             android:layout_margin="5dp"
-            app:backgroundTint="#110E9B"
+            android:layout_margin="1dp"
+            app:backgroundTint="@color/blue"
             app:fabSize="normal"
             app:tint="#FFFFFFFF" />
     </LinearLayout>

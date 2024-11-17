@@ -36,7 +36,7 @@
                 android:id="@+id/buttonDelete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#110E9B"
+                android:backgroundTint="@color/red2"
                 android:text="Delete"
                 android:textColor="@color/white"
                 android:textSize="12sp"

@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_bold"
         android:text="LIST CATEGORY"
-        android:textColor="#110E9B"
+        android:textColor="@color/blue"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginTop="50dp"
@@ -72,7 +72,7 @@
            android:id="@+id/btnAddCategory"
            android:layout_width="wrap_content"
            android:layout_height="65dp"
-           android:backgroundTint="#110E9B"
+           android:backgroundTint="@color/blue"
            android:text="ADD"
            android:layout_marginVertical="10dp"
            android:textColor="@color/white"
@@ -95,6 +95,44 @@
         app:layout_constraintTop_toBottomOf="@id/layoutCategory"
         tools:listitem="@layout/card_category" />
 
-         <!-- Floating action button to add new product -->
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center"
+            android:translationZ="-10dp"
+            android:src="@drawable/nodata"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Category Product"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="20sp"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You do not have an product"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="15sp"
+            android:layout_gravity="center"/>
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
