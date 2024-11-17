@@ -24,7 +24,18 @@
         app:layout_constraintGuide_percent="0.95"
         />
 
-      <TextView
+    <ImageView
+
+        android:id="@+id/btnBack"
+        android:layout_width="40dp"
+        android:layout_height="20dp"
+        android:layout_marginVertical="25dp"
+        android:src="@drawable/back"
+        app:layout_constraintStart_toEndOf="@id/guideStart"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/blue" />
+
+    <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,9 +45,9 @@
         android:textColor="@color/blue"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/guideStart"
-          app:layout_constraintTop_toTopOf="parent"
-          app:layout_constraintEnd_toStartOf="@id/guideEnd"/>
+        app:layout_constraintEnd_toStartOf="@id/guideEnd"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- RecyclerView untuk daftar transaksi -->
     <androidx.recyclerview.widget.RecyclerView

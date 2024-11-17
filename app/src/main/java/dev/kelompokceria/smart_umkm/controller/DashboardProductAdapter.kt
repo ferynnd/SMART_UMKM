@@ -1,13 +1,17 @@
 package dev.kelompokceria.smart_umkm.controller
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintSet.Constraint
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.card.MaterialCardView
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.databinding.CardCategoryLayoutBinding
 import dev.kelompokceria.smart_umkm.databinding.CardDashboardBinding
@@ -25,6 +29,8 @@ class DashboardProductAdapter(
 
     // Simpan daftar produk yang dipilih
     private val selectedProducts: MutableSet<Product> = mutableSetOf()
+    private val selectedPositionProducts: MutableSet<Product> = mutableSetOf()
+    private var selected: Boolean = true
 
     // ViewHolder untuk item produk
     inner class ProductViewHolder( val binding: CardDashboardBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -44,7 +50,9 @@ class DashboardProductAdapter(
             binding.tvCategory.text = product.category
             binding.tvPrice.text = numberFormat.format(product.price)
 
-            itemView.setBackgroundColor(if (isSelected) Color.BLUE else Color.WHITE)
+
+//            binding.constColor.setBackgroundColor(R.color.blue)
+
         }
     }
 
@@ -84,21 +92,25 @@ class DashboardProductAdapter(
             is ProductViewHolder -> {
                 val product = getItem(position) as Product
 
-                holder.bind(product,true)
-
-
-                // Atur warna latar belakang berdasarkan status seleksi
-                holder.itemView.setBackgroundColor(
-                    if (isSelected(product)) ContextCompat.getColor(holder.itemView.context, R.color.blue)
-                    else ContextCompat.getColor(holder.itemView.context, R.color.white)
-                )
+                holder.bind(product,selected)
 
                 // Klik item untuk mengubah seleksi
                 holder.itemView.setOnClickListener {
                     toggleSelection(product)
+//                    toggleSelectionProduct(product)
                     onItemClicked(product)
                     notifyItemChanged(position) // Perbarui tampilan item
                 }
+//                val isSelected = toggleSelectionProduct(product)
+                holder.binding.constColor.setBackgroundColor(
+                    if (selected) {
+                        // Warna saat dipilih
+                       Color.WHITE
+                    } else {
+                        // Warna saat tidak dipilih
+                        Color.LTGRAY
+                    }
+                )
             }
            is HeaderViewHolder -> {
                 holder.binding.textViewHeader.text = (item as String)
@@ -106,21 +118,25 @@ class DashboardProductAdapter(
         }
     }
 
-    private fun setBackgroundColor(holder: ProductViewHolder, position: Int) {
-            val item = getItem(position)
-            if (item is Product) {
-                holder.itemView.setBackgroundColor(
-                    if (selectedProducts.contains(item)) Color.LTGRAY else Color.WHITE
-                )
-            }
-        }
+//    private fun toggleSelectionProduct(product: Product) {
+//        if (selectedPositionProducts.contains(product)) {
+//            selectedPositionProducts.remove(product)
+//            selected = true
+//        } else {
+//            selectedPositionProducts.add(product)
+//            selected = false
+//        }
+//    }
+
 
 
     private fun toggleSelection(product: Product) {
         if (selectedProducts.contains(product)) {
             selectedProducts.remove(product)
+            selected = true
         } else {
             selectedProducts.add(product)
+            selected = false
         }
         onSelectionChanged(selectedProducts.isNotEmpty())
         notifyDataSetChanged()
