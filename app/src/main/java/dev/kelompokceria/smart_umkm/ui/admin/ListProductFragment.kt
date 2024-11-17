@@ -1,6 +1,7 @@
 package dev.kelompokceria.smart_umkm.ui.admin
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import dev.kelompokceria.smart_umkm.databinding.FragmentListProductBinding
 import dev.kelompokceria.smart_umkm.model.Product
 import dev.kelompokceria.smart_umkm.viewmodel.ProductViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.handleCoroutineException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -56,13 +58,24 @@ class ListProductFragment : Fragment() {
             adapter = productAdapter
         }
 
-        // Observasi LiveData untuk produk
         productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
             products?.let {
-                productAdapter.submitList(it)
-                setProduct(it)
+                lifecycleScope.launch(Dispatchers.Main) {
+                    if (it.isNotEmpty()) {
+                        binding.linear.visibility = View.GONE
+                        productAdapter.submitList(it)
+                        setProduct(it)
+                    } else {
+//                        Handler().postDelayed({})
+                        binding.linear.visibility = View.VISIBLE
+                        productAdapter.submitList(emptyList())
+                        productAdapter.notifyDataSetChanged() // Memaksa pembaruan adapter
+                    }
+                }
             }
         }
+
+
 
         binding.btnSwitch.setOnClickListener {
                 if (binding.btnAddProduct.visibility == View.GONE && binding.btnAddCategory.visibility == View.GONE) {

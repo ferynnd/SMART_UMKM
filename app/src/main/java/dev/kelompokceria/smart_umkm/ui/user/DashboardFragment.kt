@@ -18,6 +18,7 @@ import dev.kelompokceria.smart_umkm.databinding.FragmentDashboardBinding
 import dev.kelompokceria.smart_umkm.model.Product
 import dev.kelompokceria.smart_umkm.viewmodel.ProductViewModel
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DashboardFragment : Fragment() {
@@ -82,7 +83,18 @@ class DashboardFragment : Fragment() {
 
     private fun setupProductObservers() {
         productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
-            setProduct(products)
+            lifecycleScope.launch(Dispatchers.Main) {
+                if (products.isNotEmpty()) {
+                    binding.linear.visibility = View.GONE
+                    dashboardProductAdapter.submitList(products)
+                    setProduct(products)
+                    setProduct(products)
+                } else {
+                    binding.linear.visibility = View.VISIBLE
+                    dashboardProductAdapter.submitList(emptyList())
+                    dashboardProductAdapter.notifyDataSetChanged() // Memaksa pembaruan adapter
+                }
+            }
         }
 
         productViewModel.selectedPositions.observe(viewLifecycleOwner) { selectedProducts ->
