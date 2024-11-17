@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.card.MaterialCardView
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.controller.DashboardProductAdapter
 import dev.kelompokceria.smart_umkm.data.helper.Constant
@@ -52,6 +53,8 @@ class DashboardFragment : Fragment() {
         setupUserObservers()
         setupSearch()
         setupCheckoutButton()
+        showBottomNavigationView()
+
 
         return binding.root
     }
@@ -167,7 +170,7 @@ class DashboardFragment : Fragment() {
             checkoutFragment.arguments = bundle
             parentFragmentManager.beginTransaction()
                 .replace(R.id.nav_host_fragment_user, checkoutFragment)
-                .addToBackStack(null)
+//                .addToBackStack(null)
                 .commit()
         }
     }
@@ -187,7 +190,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun showBottomNavigationView() {
-        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavUser)
+        val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNav)
         bottomNavigationView?.visibility = View.VISIBLE
     }
 }

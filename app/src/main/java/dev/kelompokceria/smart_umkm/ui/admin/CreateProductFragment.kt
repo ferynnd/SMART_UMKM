@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.card.MaterialCardView
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.databinding.FragmentCreateProductBinding
 import dev.kelompokceria.smart_umkm.model.Product
@@ -110,12 +111,12 @@ class CreateProductFragment : Fragment() {
     }
 
     private fun hideBottomNavigationView() {
-        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavAdmin)
+        val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNav)
         bottomNavigationView?.visibility = View.GONE
     }
 
     private fun showBottomNavigationView() {
-        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavAdmin)
+        val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNav)
         bottomNavigationView?.visibility = View.VISIBLE
     }
 

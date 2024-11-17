@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.card.MaterialCardView
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.data.dao.UserDao
 import dev.kelompokceria.smart_umkm.data.database.AppDatabase
@@ -82,14 +83,13 @@ class CreateUserFragment : Fragment() {
     }
 
      // Fungsi untuk menyembunyikan BottomNavigationView
-    private fun hideBottomNavigationView() {
-        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavAdmin)
-        bottomNavigationView?.visibility = View.GONE
-    }
+     private fun hideBottomNavigationView() {
+         val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNav)
+         bottomNavigationView?.visibility = View.GONE
+     }
 
-    // Fungsi untuk menampilkan BottomNavigationView kembali
     private fun showBottomNavigationView() {
-        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavAdmin)
+        val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNav)
         bottomNavigationView?.visibility = View.VISIBLE
     }
 

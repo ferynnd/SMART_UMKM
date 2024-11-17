@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.card.MaterialCardView
+import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.databinding.FragmentListCategoryProductBinding
 import dev.kelompokceria.smart_umkm.model.ProductCategory
 import dev.kelompokceria.smart_umkm.viewmodel.ProductCategoryViewModel
@@ -33,6 +35,7 @@ class ListCategoryProductFragment : Fragment() {
     ): View {
         binding = FragmentListCategoryProductBinding.inflate(inflater, container, false)
 
+        hideBottomNavigationView()
         // Set up RecyclerView
         categoryAdapter = ProductCategoryAdapter { product ->
             onDeleteClick(product)
@@ -105,4 +108,20 @@ class ListCategoryProductFragment : Fragment() {
         alert.setTitle("Hapus Produk")
         alert.show()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        showBottomNavigationView()
+    }
+
+    private fun hideBottomNavigationView() {
+        val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNav)
+        bottomNavigationView?.visibility = View.GONE
+    }
+
+    private fun showBottomNavigationView() {
+        val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNav)
+        bottomNavigationView?.visibility = View.VISIBLE
+    }
+
 }

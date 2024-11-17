@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.card.MaterialCardView
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.controller.TransactionAdapter
 import dev.kelompokceria.smart_umkm.databinding.FragmentTransactionBinding
@@ -60,6 +61,14 @@ class TransactionFragment : Fragment() {
         setupTransactionDetails()
         hideBottomNavigationView()
         setupUserObservers()
+
+        binding.btnBack.setOnClickListener{
+            val checkoutFragment = DashboardFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment_user, checkoutFragment)
+//                .addToBackStack(null)
+                .commit()
+        }
 
         binding.btnCashback.setOnClickListener {
             updateTotalHargaSemuaProduk()
@@ -197,12 +206,12 @@ class TransactionFragment : Fragment() {
     }
 
     private fun hideBottomNavigationView() {
-        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavUser)
+        val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNav)
         bottomNavigationView?.visibility = View.GONE
     }
 
     private fun showBottomNavigationView() {
-        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavUser)
+        val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNav)
         bottomNavigationView?.visibility = View.VISIBLE
     }
 }
