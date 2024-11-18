@@ -29,8 +29,6 @@ class DashboardProductAdapter(
 
     // Simpan daftar produk yang dipilih
     private val selectedProducts: MutableSet<Product> = mutableSetOf()
-    private val selectedPositionProducts: MutableSet<Product> = mutableSetOf()
-    private var selected: Boolean = true
 
     // ViewHolder untuk item produk
     inner class ProductViewHolder( val binding: CardDashboardBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -49,9 +47,6 @@ class DashboardProductAdapter(
             binding.tvName.text = product.name
             binding.tvCategory.text = product.category
             binding.tvPrice.text = numberFormat.format(product.price)
-
-
-//            binding.constColor.setBackgroundColor(R.color.blue)
 
         }
     }
@@ -92,25 +87,28 @@ class DashboardProductAdapter(
             is ProductViewHolder -> {
                 val product = getItem(position) as Product
 
-                holder.bind(product,selected)
+                holder.bind(product,true)
 
                 // Klik item untuk mengubah seleksi
                 holder.itemView.setOnClickListener {
                     toggleSelection(product)
-//                    toggleSelectionProduct(product)
                     onItemClicked(product)
                     notifyItemChanged(position) // Perbarui tampilan item
                 }
-//                val isSelected = toggleSelectionProduct(product)
-                holder.binding.constColor.setBackgroundColor(
-                    if (selected) {
+
+                val isSelected = selectedProducts.contains(product) // Periksa apakah produk dipilih
+                val view = holder.itemView as MaterialCardView
+
+                view.setCardBackgroundColor(
+                    if (isSelected) {
                         // Warna saat dipilih
-                       Color.WHITE
+                        ContextCompat.getColor(view.context, R.color.gray)
                     } else {
                         // Warna saat tidak dipilih
-                        Color.LTGRAY
+                        ContextCompat.getColor(view.context, R.color.white)
                     }
                 )
+
             }
            is HeaderViewHolder -> {
                 holder.binding.textViewHeader.text = (item as String)
@@ -118,29 +116,16 @@ class DashboardProductAdapter(
         }
     }
 
-//    private fun toggleSelectionProduct(product: Product) {
-//        if (selectedPositionProducts.contains(product)) {
-//            selectedPositionProducts.remove(product)
-//            selected = true
-//        } else {
-//            selectedPositionProducts.add(product)
-//            selected = false
-//        }
-//    }
-
-
-
     private fun toggleSelection(product: Product) {
         if (selectedProducts.contains(product)) {
             selectedProducts.remove(product)
-            selected = true
         } else {
             selectedProducts.add(product)
-            selected = false
         }
         onSelectionChanged(selectedProducts.isNotEmpty())
         notifyDataSetChanged()
     }
+
 
     // Perbarui seleksi dari ViewModel
     fun updateSelections(selections: Set<Product>) {

@@ -59,25 +59,12 @@ class AdminProfileFragment : Fragment() {
                     } ?: run {
                             binding.ivProfile.setImageResource(R.drawable.picture) // Default image
                         }
-                    // Update UI dengan data user
-//                    binding.tvNameValue.text = user.name
-//                    binding.tvEmail.text = user.email
-//                    binding.tvPhoneValue.text = user.phone
                     binding.tvName.text = user.username
-//                    binding.tvEmailValue.text = user.email
                 } else {
                     Toast.makeText(requireContext(), "User tidak ditemukan", Toast.LENGTH_SHORT).show()
                 }
             }
         }
-
-//        binding.btnShowProfile.setOnClickListener {
-//             if (binding.groupProfile.visibility == View.GONE) {
-//                    binding.groupProfile.visibility = View.VISIBLE  // Tampilkan
-//                } else {
-//                    binding.groupProfile.visibility = View.GONE  // Sembunyikan
-//                }
-//        }
 
         binding.btnLogout.setOnClickListener {
                 val dialogBuilder = AlertDialog.Builder(requireContext())

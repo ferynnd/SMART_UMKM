@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -143,22 +144,32 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun setupSearch() {
+   private fun setupSearch() {
         binding.productSearch.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
+                dashboardProductAdapter.submitList(emptyList())
+                return false // Tidak melakukan aksi apapun saat submit
             }
 
             override fun onQueryTextChange(searchText: String?): Boolean {
                 searchText?.let {
+                    // Melakukan pencarian produk dengan query
                     lifecycleScope.launch {
+                        // Cari produk berdasarkan query
                         productViewModel.productSearch(it)
+
+                        // Mengobservasi hasil pencarian dan memperbarui adapter
+                        productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
+                            dashboardProductAdapter.submitList(products)
+                        }
                     }
                 }
                 return true
             }
         })
     }
+
+
 
     private fun setupCheckoutButton() {
         binding.btnCheckout.setOnClickListener {
@@ -190,7 +201,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun showBottomNavigationView() {
-        val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNav)
+        val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNavUser)
         bottomNavigationView?.visibility = View.VISIBLE
     }
 }

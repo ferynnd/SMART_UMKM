@@ -79,7 +79,7 @@ class ProductAdapter(
         val item = getItem(position)
            when(holder) {
                is ProductViewHolder -> {
-                    val product = getItem(position) as Product
+                    val product = item as Product
                    holder.bind(product)
                }
                is CategoryViewHolder -> {

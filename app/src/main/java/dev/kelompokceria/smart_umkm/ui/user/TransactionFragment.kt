@@ -1,6 +1,7 @@
 package dev.kelompokceria.smart_umkm.ui.user
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -47,7 +48,6 @@ class TransactionFragment : Fragment() {
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         transactionViewModel = ViewModelProvider(this).get(TransactionViewModel::class.java)
         val ids = arguments?.getIntArray("KEY_SELECTED_IDS")
-//        val username = arguments?.getString("KEY_USERNAME")
         selectedProductIds = ids?.toList() ?: emptyList()
          sharedPref = PreferenceHelper(requireContext())
     }
@@ -66,7 +66,6 @@ class TransactionFragment : Fragment() {
             val checkoutFragment = DashboardFragment()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.nav_host_fragment_user, checkoutFragment)
-//                .addToBackStack(null)
                 .commit()
         }
 
@@ -74,21 +73,57 @@ class TransactionFragment : Fragment() {
             updateTotalHargaSemuaProduk()
         }
 
-        binding.btnOrder.setOnClickListener {
-            saveTransaction()
-            val bundle = Bundle().apply {
-                putString("KEY_USERNAME", userTransaction)
+            binding.btnOrder.setOnClickListener {
+                    if (validasiCashback()) {
+                        saveTransaction()
+                        val bundle = Bundle().apply {
+                            putString("KEY_USERNAME", userTransaction)
+                        }
+                        val dashboard = DashboardFragment()
+                        dashboard.arguments = bundle
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.nav_host_fragment_user, dashboard)
+                            .addToBackStack(null)
+                            .commit()
+                    }
             }
-            val dashboard = DashboardFragment()
-            dashboard.arguments = bundle
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment_user, dashboard)
-                .addToBackStack(null)
-                .commit()
-        }
+
 
         return binding.root
     }
+
+    private fun validasiCashback(): Boolean {
+
+        val cash = binding.tvcashback.text.toString()
+        if (cash.contains("-")) {
+            Toast.makeText(requireContext(), "Nominal Tidak Boleh Minus", Toast.LENGTH_LONG).show()
+            return false
+        }
+
+        val cashInput = binding.edCashback.text?.toString()
+
+
+        if (cashInput.isNullOrEmpty()) {
+            binding.edCashback.error = "Nominal harus diisi"
+            return false
+        }
+
+        val cashValue = cashInput?.toIntOrNull()
+        if (cashValue == null) {
+            binding.edCashback.error = "Nominal harus berupa angka"
+            return false
+        }
+
+        // Validasi jika nominal kurang dari total harga
+        if (cashValue < totalHargaSemuaProduk) {
+            binding.edCashback.error = "Nominal tidak valid atau kurang dari total harga"
+            return false
+        }
+
+        return true // Validasi berhasil
+    }
+
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -173,6 +208,8 @@ class TransactionFragment : Fragment() {
         }
     }
 
+
+
     private fun saveTransaction() {
         // Konversi productQuantities ke daftar TransactionProduct
         val transactionProducts = productQuantities.mapNotNull { entry ->
@@ -206,12 +243,12 @@ class TransactionFragment : Fragment() {
     }
 
     private fun hideBottomNavigationView() {
-        val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNav)
+        val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNavUser)
         bottomNavigationView?.visibility = View.GONE
     }
 
     private fun showBottomNavigationView() {
-        val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNav)
+        val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNavUser)
         bottomNavigationView?.visibility = View.VISIBLE
     }
 }
