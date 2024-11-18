@@ -115,12 +115,12 @@ class ListCategoryProductFragment : Fragment() {
     }
 
     private fun hideBottomNavigationView() {
-        val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNav)
+        val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNavAdmin)
         bottomNavigationView?.visibility = View.GONE
     }
 
     private fun showBottomNavigationView() {
-        val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNav)
+        val bottomNavigationView = activity?.findViewById<MaterialCardView>(R.id.layoutNavAdmin)
         bottomNavigationView?.visibility = View.VISIBLE
     }
 

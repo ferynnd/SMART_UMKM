@@ -12,13 +12,13 @@
         android:id="@+id/nav_host_fragment_user"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/layoutNav"
+        app:layout_constraintBottom_toTopOf="@+id/layoutNavUser"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
       <com.google.android.material.card.MaterialCardView
-        android:id="@+id/layoutNav"
+        android:id="@+id/layoutNavUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
