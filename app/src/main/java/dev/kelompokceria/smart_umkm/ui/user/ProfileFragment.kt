@@ -43,10 +43,11 @@ class ProfileFragment : Fragment() {
         if (username == null) {
             Toast.makeText(requireContext(), "Username tidak ditemukan", Toast.LENGTH_SHORT).show()
         } else {
+
             userViewModel.getUserByUsername(username)
 
             // Observe LiveData dari userViewModel
-            userViewModel.user.observe(viewLifecycleOwner) { user ->
+            userViewModel.loggedIn.observe(viewLifecycleOwner) { user ->
                 if (user != null) {
                     user.image.let {
                             Glide.with(binding.ivProfile.context)
@@ -56,11 +57,7 @@ class ProfileFragment : Fragment() {
                         } ?: run {
                             binding.ivProfile.setImageResource(R.drawable.picture) // Default image
                         }
-//                    binding.tvNameValue.text = user.name
-//                    binding.tvEmailValue.text = user.email
-//                    binding.tvPhoneValue.text = user.phone
                     binding.tvName.text = user.username
-//                    binding.tvEmail.text = user.email
                 } else {
                     Toast.makeText(requireContext(), "User tidak ditemukan", Toast.LENGTH_SHORT).show()
                 }

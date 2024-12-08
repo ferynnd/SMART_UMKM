@@ -5,13 +5,17 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "product_table")
 data class Product(
-    @ColumnInfo(name = "product_image") val image : String = "" ,
-    @ColumnInfo(name = "name_product") val name: String,
-    @ColumnInfo(name = "description_product") val description: String,
-    @ColumnInfo(name = "price_product") val price: Double,
-    @ColumnInfo(name = "category_product") val category: String,
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id_product") val id: Int? = null
+    val image : String? = null,
+    val name: String? = null,
+    val description: String? = null,
+    val price: Int? = null,
+    val category: String? = null,
+    @SerializedName("created_at") val createAt : String? = null,
+    @SerializedName("updated_at") val updateAt : String? = null,
+    @PrimaryKey val id: Int? = null
+
 )

@@ -38,18 +38,16 @@ class AdminProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentAdminProfileBinding.inflate(inflater,container,false)
-            // Ambil username dari arguments
+        binding = FragmentAdminProfileBinding.inflate(inflater, container, false)
+        // Ambil username dari arguments
         val username = sharedPref.getString(Constant.PREF_USER_NAME)
 
         if (username == null) {
             Toast.makeText(requireContext(), "Username tidak ditemukan", Toast.LENGTH_SHORT).show()
         } else {
-            // Ambil data user berdasarkan username
             userViewModel.getUserByUsername(username)
 
-            // Observe LiveData dari userViewModel
-            userViewModel.user.observe(viewLifecycleOwner) { user ->
+            userViewModel.loggedIn.observe(viewLifecycleOwner) { user ->
                 if (user != null) {
                     user.image.let {
                         Glide.with(binding.ivProfile.context)
@@ -66,13 +64,14 @@ class AdminProfileFragment : Fragment() {
             }
         }
 
-        binding.btnLogout.setOnClickListener {
+            binding.btnLogout.setOnClickListener {
                 val dialogBuilder = AlertDialog.Builder(requireContext())
                 dialogBuilder.setMessage("Apakah Anda yakin ingin logout")
                     .setCancelable(false)
                     .setPositiveButton("Ya") { _, _ ->
                         sharedPref.clear()
-                        Toast.makeText(requireContext(), "Logout berhasil", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Logout berhasil", Toast.LENGTH_SHORT)
+                            .show()
                         startActivity(Intent(requireContext(), LoginActivity::class.java))
                     }
                     .setNegativeButton("Tidak") { dialog, _ ->
@@ -83,15 +82,16 @@ class AdminProfileFragment : Fragment() {
                 alert.setTitle("Logout")
                 alert.show()
 
+            }
+
+
+            return binding.root
         }
 
+        override fun onDestroyView() {
+            super.onDestroyView()
+        }
 
-        return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
 
 
 

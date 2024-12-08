@@ -10,11 +10,11 @@ import dev.kelompokceria.smart_umkm.data.dao.ProductDao
 import dev.kelompokceria.smart_umkm.data.dao.TransactionDao
 import dev.kelompokceria.smart_umkm.data.dao.UserDao
 import dev.kelompokceria.smart_umkm.model.Product
-import dev.kelompokceria.smart_umkm.model.Transaksi
+import dev.kelompokceria.smart_umkm.model.Transaction
 import dev.kelompokceria.smart_umkm.model.User
 
 
-@Database(entities = [User::class, Product::class, Transaksi::class], version = 2, exportSchema = false)
+@Database(entities = [User::class, Product::class, Transaction::class], version = 2, exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class TestDatabase : RoomDatabase() {
 

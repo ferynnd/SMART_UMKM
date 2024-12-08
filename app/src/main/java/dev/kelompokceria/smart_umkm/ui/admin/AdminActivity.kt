@@ -2,12 +2,16 @@ package dev.kelompokceria.smart_umkm.ui.admin
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -17,10 +21,13 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.data.helper.Constant
+import dev.kelompokceria.smart_umkm.data.helper.NetworkStatusViewModel
 import dev.kelompokceria.smart_umkm.data.helper.PreferenceHelper
+import dev.kelompokceria.smart_umkm.data.helper.RetrofitHelper
 import dev.kelompokceria.smart_umkm.databinding.ActivityAdminBinding
-import dev.kelompokceria.smart_umkm.ui.user.TransactionFragment
+//import dev.kelompokceria.smart_umkm.ui.user.TransactionFragment
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
+import kotlinx.coroutines.launch
 
 class AdminActivity : AppCompatActivity() {
 
@@ -29,10 +36,12 @@ class AdminActivity : AppCompatActivity() {
      private lateinit var sharedPref: PreferenceHelper
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
          sharedPref = PreferenceHelper(this)
         val username = sharedPref.getString(Constant.PREF_USER_NAME)

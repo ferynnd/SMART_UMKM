@@ -9,7 +9,7 @@ import dev.kelompokceria.smart_umkm.databinding.CardCategoryBinding
 import dev.kelompokceria.smart_umkm.model.ProductCategory
 
 class ProductCategoryAdapter(
-    private val onDeleteClick: (ProductCategory) -> Unit
+    private val onDeleteClick: (ProductCategory, id : Int) -> Unit
     )    :
     ListAdapter<ProductCategory, ProductCategoryAdapter.ViewHolder>(DiffCallback()) {
 
@@ -18,7 +18,7 @@ class ProductCategoryAdapter(
         fun bind(category: ProductCategory) {
             binding.textViewName.text = category.name
             binding.buttonDelete.setOnClickListener {
-                onDeleteClick(category)
+                onDeleteClick(category, category.id)
             }
         }
     }
