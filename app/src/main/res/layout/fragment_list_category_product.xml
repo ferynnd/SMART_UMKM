@@ -1,138 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/swiperefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.admin.ListCategoryProductFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Guidelines for consistent margin -->
-      <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineStart"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                tools:context=".ui.admin.ListCategoryProductFragment">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineEnd"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="16dp" />
+                <!-- Guidelines for consistent margin -->
+                  <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineStart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="16dp" />
 
-    <!-- SearchView for searching products with outline -->
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineEnd"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="16dp" />
 
-
-    <!-- Title -->
-    <TextView
-        android:id="@+id/textViewListUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_bold"
-        android:text="LIST CATEGORY"
-        android:textColor="@color/blue"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginTop="50dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="@id/guidelineStart" />
+                <!-- SearchView for searching products with outline -->
 
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutCategory"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:boxStrokeColor="@color/blue"
-        app:boxStrokeWidth="2dp"
-        app:boxBackgroundMode="outline"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-        android:layout_marginVertical="10dp"
-        app:boxCornerRadiusTopStart="5dp"
-        app:boxCornerRadiusBottomEnd="5dp"
-        app:boxCornerRadiusTopEnd="5dp"
-        app:boxCornerRadiusBottomStart="5dp"
-        app:boxStrokeErrorColor="@color/red"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintStart_toStartOf="@id/guidelineStart"
-        app:layout_constraintTop_toBottomOf="@id/textViewListUser"
-        app:layout_constraintEnd_toStartOf="@id/btnAddCategory"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edCategory"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="Input Category "
-            android:textColorHint="@color/gray"/> <!-- Mengatur warna hint agar samar -->
-    </com.google.android.material.textfield.TextInputLayout>
-
-       <com.google.android.material.button.MaterialButton
-           android:id="@+id/btnAddCategory"
-           android:layout_width="wrap_content"
-           android:layout_height="65dp"
-           android:backgroundTint="@color/blue"
-           android:text="ADD"
-           android:layout_marginVertical="10dp"
-           android:textColor="@color/white"
-           android:textSize="12sp"
-           app:cornerRadius="10dp"
-           app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-           app:layout_constraintTop_toBottomOf="@id/textViewListUser"/>
+                <!-- Title -->
+                <TextView
+                    android:id="@+id/textViewListUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_bold"
+                    android:text="LIST CATEGORY"
+                    android:textColor="@color/blue"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="50dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/guidelineStart" />
 
 
-    <!-- Scrollable product list -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@id/guidelineStart"
-        app:layout_constraintTop_toBottomOf="@id/layoutCategory"
-        tools:listitem="@layout/card_category" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutCategory"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:boxStrokeColor="@color/blue"
+                    app:boxStrokeWidth="2dp"
+                    app:boxBackgroundMode="outline"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_marginVertical="10dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxStrokeErrorColor="@color/red"
+                    android:layout_marginEnd="10dp"
+                    app:layout_constraintStart_toStartOf="@id/guidelineStart"
+                    app:layout_constraintTop_toBottomOf="@id/textViewListUser"
+                    app:layout_constraintEnd_toStartOf="@id/btnAddCategory"
+                    >
 
-    <LinearLayout
-        android:id="@+id/linear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:orientation="vertical"
-        >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Input Category "
+                        android:textColorHint="@color/gray"/> <!-- Mengatur warna hint agar samar -->
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            android:layout_gravity="center"
-            android:translationZ="-10dp"
-            android:src="@drawable/nodata"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No Category Product"
-            android:fontFamily="@font/roboto_bold"
-            android:textSize="20sp"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="You do not have an product"
-            android:fontFamily="@font/roboto_medium"
-            android:textSize="15sp"
-            android:layout_gravity="center"/>
+                   <com.google.android.material.button.MaterialButton
+                       android:id="@+id/btnAddCategory"
+                       android:layout_width="wrap_content"
+                       android:layout_height="65dp"
+                       android:backgroundTint="@color/blue"
+                       android:text="ADD"
+                       android:layout_marginVertical="10dp"
+                       android:textColor="@color/white"
+                       android:textSize="12sp"
+                       app:cornerRadius="10dp"
+                       app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+                       app:layout_constraintTop_toBottomOf="@id/textViewListUser"/>
 
 
-    </LinearLayout>
+                <!-- Scrollable product list -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="8dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+                    app:layout_constraintStart_toStartOf="@id/guidelineStart"
+                    app:layout_constraintTop_toBottomOf="@id/layoutCategory"
+                    tools:listitem="@layout/card_category" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <LinearLayout
+                    android:id="@+id/linear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:orientation="vertical"
+                    >
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:scaleType="centerCrop"
+                        android:layout_gravity="center"
+                        android:translationZ="-10dp"
+                        android:src="@drawable/nodata"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No Category Product"
+                        android:fontFamily="@font/roboto_bold"
+                        android:textSize="20sp"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="You do not have an product"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="15sp"
+                        android:layout_gravity="center"/>
+
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -14,13 +14,13 @@ import dev.kelompokceria.smart_umkm.data.dao.UserDao
 import dev.kelompokceria.smart_umkm.model.User
 import dev.kelompokceria.smart_umkm.model.Product
 import dev.kelompokceria.smart_umkm.model.ProductCategory
-import dev.kelompokceria.smart_umkm.model.Transaksi
+import dev.kelompokceria.smart_umkm.model.Transaction
 import dev.kelompokceria.smart_umkm.model.UserRole
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [User::class, Product::class, Transaksi::class, ProductCategory::class], version = 2, exportSchema = false)
+@Database(entities = [User::class, Product::class, Transaction::class, ProductCategory::class], version = 3, exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -75,12 +75,12 @@ abstract class AppDatabase : RoomDatabase() {
                 email = "admin@example.com",
                 phone = "081111111",
                 username = "admin",
-                password = "admin",
+                password = "admin123",
                 role = UserRole.ADMIN,
                 id = 1,
                 image = "hahaha"
             )
-            userDao.addUser(defaultUser)
+            userDao.insert(defaultUser)
         }
     }
 }

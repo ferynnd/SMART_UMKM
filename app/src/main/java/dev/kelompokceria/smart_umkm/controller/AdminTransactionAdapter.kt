@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dev.kelompokceria.smart_umkm.databinding.CardCategoryLayoutBinding
 import dev.kelompokceria.smart_umkm.databinding.CardListTransactionBinding
-import dev.kelompokceria.smart_umkm.model.Transaksi
-import java.text.NumberFormat
+import dev.kelompokceria.smart_umkm.model.Transaction
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -18,8 +17,8 @@ class AdminTransactionListAdapter :
 
     inner class TransactionViewHolder(private val binding: CardListTransactionBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(transaction: Transaksi) {
-            binding.textViewId.text = transaction.transaction_id
+        fun bind(transaction: Transaction) {
+            binding.textViewId.text = transaction.id
             // Format input tetap sama karena data dari transaction.transactionTime dalam format "yyyy-MM-dd"
             val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
@@ -28,7 +27,7 @@ class AdminTransactionListAdapter :
 
             try {
                 // Parse tanggal dari string input
-                val date = inputFormat.parse(transaction.transactionTime)
+                val date = inputFormat.parse(transaction.time)
                 // Format tanggal ke output yang diinginkan
                 date?.let {
                     binding.textViewTime.text = outputFormat.format(it).uppercase() // Ubah ke uppercase agar tampil: 06 JAN 24
@@ -39,14 +38,14 @@ class AdminTransactionListAdapter :
                 binding.textViewTime.text = "Invalid date"
             }
 
-            binding.tvheadertotal.text = transaction.transactionTotal
-            binding.textViewFullTime.text = transaction.transactionTime
-            binding.textViewUser.text = transaction.transactionUser
-            binding.textViewTotal.text = transaction.transactionTotal
-            binding.textViewCashback.text = transaction.transactionCashback
+            binding.tvheadertotal.text = transaction.total
+            binding.textViewFullTime.text = transaction.time
+            binding.textViewUser.text = transaction.user
+            binding.textViewTotal.text = transaction.total
+            binding.textViewCashback.text = transaction.cashback
 //             val numberFormat = NumberFormat.getCurrencyInstance(Locale("in", "ID"))
             // Mengolah produk
-            val products = transaction.transactionProduct.joinToString("\n") {
+            val products = transaction.products?.joinToString("\n") {
                 "${it.name} - ${it.price} - qty x ${it.quantity}"
             }
             binding.textViewProduct.text = products
@@ -66,7 +65,7 @@ class AdminTransactionListAdapter :
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is Transaksi -> TYPE_VIEW.CONTENT.ordinal
+            is Transaction -> TYPE_VIEW.CONTENT.ordinal
               is String -> TYPE_VIEW.HEADER.ordinal
             else -> throw IllegalArgumentException("Unknown item type")
         }
@@ -90,8 +89,8 @@ class AdminTransactionListAdapter :
          val item = getItem(position)
         when(holder) {
                is TransactionViewHolder -> {
-                   val transaksi = getItem(position) as Transaksi
-                   holder.bind(transaksi)
+                   val transaction = getItem(position) as Transaction
+                   holder.bind(transaction)
                }
                is CatergoryViewHolder -> {
                    holder.binding.textViewHeader.text = (item as String)
@@ -103,15 +102,15 @@ class AdminTransactionListAdapter :
     class DiffCallback : DiffUtil.ItemCallback<Any>() {
         override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
             return when ( oldItem) {
-                is Transaksi -> {
-                    if (newItem is Transaksi) {
-                        (oldItem.transaction_id) == (newItem.transaction_id)
+                is Transaction -> {
+                    if (newItem is Transaction) {
+                        (oldItem.id) == (newItem.id)
                     } else {
                         false
                     }
                 }
                 else -> {
-                    if (newItem is Transaksi) {
+                    if (newItem is Transaction) {
                         false
                     } else {
                         (oldItem) == (newItem)
@@ -122,15 +121,15 @@ class AdminTransactionListAdapter :
 
         override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
             return when ( oldItem) {
-                is Transaksi -> {
-                    if (newItem is Transaksi) {
+                is Transaction -> {
+                    if (newItem is Transaction) {
                         (oldItem) == (newItem)
                     } else {
                         false
                     }
                 }
                 else -> {
-                    if (newItem is Transaksi) {
+                    if (newItem is Transaction) {
                         false
                     } else {
                         (oldItem) == (newItem)

@@ -2,6 +2,7 @@ package dev.kelompokceria.smart_umkm.ui.admin
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,10 +13,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.controller.AdminUserAdapter
+import dev.kelompokceria.smart_umkm.data.helper.NetworkStatusViewModel
 import dev.kelompokceria.smart_umkm.databinding.FragmentListUserBinding
 import dev.kelompokceria.smart_umkm.model.User
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ListUserFragment : Fragment() {
 
@@ -23,11 +27,13 @@ class ListUserFragment : Fragment() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var userAdapter: AdminUserAdapter
 
+    private lateinit var networkStatusViewModel: NetworkStatusViewModel
     private lateinit var user : User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
+        networkStatusViewModel = ViewModelProvider(this)[NetworkStatusViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -36,92 +42,124 @@ class ListUserFragment : Fragment() {
     ): View {
         binding = FragmentListUserBinding.inflate(inflater, container, false)
 
-        binding.recyclerViewUsers.layoutManager = LinearLayoutManager(requireContext())
-
         // Inisialisasi adapter dengan list kosong
         userAdapter = AdminUserAdapter({ user ->
-            deleteUser(user)
-        }, { userImage, userName, userEmail, userPhone, userUsername, userPassword, userRole, userId ->
-            getNavigateToEdit(userImage, userName, userEmail, userPhone, userUsername, userPassword, userRole, userId)
+            onEditClick(user)
+        }, { user ->
+            onDeleteClick(user)
         })
 
-        binding.recyclerViewUsers.adapter = userAdapter
+        binding.recyclerViewUsers.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = userAdapter
+        }
 
-        userViewModel.allUser.observe(viewLifecycleOwner) { userList ->
-            userList?.let {
-                userAdapter.submitList(it)
+        networkStatusViewModel.networkStatus.observe(viewLifecycleOwner){ isConnected ->
+            if (isConnected) {
+                 binding.floatAddUser.setOnClickListener {
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.nav_host_fragment_admin, CreateUserFragment())
+                        .addToBackStack(null)
+                        .commit()
+                }
+            } else {
+                Toast.makeText(requireContext(), "Network is not connected", Toast.LENGTH_LONG).show()
             }
         }
 
-        setupSearchView()
 
-        binding.floatAddUser.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment_admin, CreateUserFragment())
-                .addToBackStack(null)
-                .commit()
+         binding.swiperefresh.setOnRefreshListener {
+            lifecycleScope.launch {
+                try {
+                    userViewModel.refreshUsers()
+                    userViewModel.refreshDeleteUsers()
+                } catch (e: Exception) {
+                    Log.e("ProductList", "Error fetching product data", e)
+                } finally {
+                    binding.swiperefresh.isRefreshing = false
+                }
+            }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            userViewModel.allUser.observe(viewLifecycleOwner) { user ->
+                  user?.let {
+                      lifecycleScope.launch(Dispatchers.Main) {
+                            userAdapter.submitList(user)
+                      }
+                  }
+            }
+        }
+
+//        setupSearchView()
 
         return binding.root
     }
 
-    private fun setupSearchView() {
-        binding.searchView1.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                userViewModel.allUser.observe(viewLifecycleOwner) { userList ->
-                    userList?.let {
-                        userAdapter.submitList(it)
-                    }
-                }
-                return false
-            }
+//    private fun setupSearchView() {
+//        binding.searchView1.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                userViewModel.allUser.observe(viewLifecycleOwner) { userList ->
+//                    userList?.let {
+//                        userAdapter.submitList(it)
+//                    }
+//                }
+//                return false
+//            }
+//
+//            override fun onQueryTextChange(searchText: String?): Boolean {
+//                userAdapter.filter(searchText ?: "")
+//                return true
+//            }
+//        })
+//    }
 
-            override fun onQueryTextChange(searchText: String?): Boolean {
-                userAdapter.filter(searchText ?: "")
-                return true
-            }
-        })
-    }
-
-    private fun getNavigateToEdit(userImage: String, userName: String, userEmail: String, userPhone: String, userUsername: String, userPassword: String, userRole: String, userId : Int) {
-        val fragmentEditUser = EditUserFragment()
-        val bundle = Bundle()
-        bundle.putString("IMAGE_PATH", userImage)
-        bundle.putString("NAME", userName)
-        bundle.putString("EMAIL", userEmail)
-        bundle.putString("PHONE", userPhone)
-        bundle.putString("USERNAME", userUsername)
-        bundle.putString("PASSWORD", userPassword)
-        bundle.putString("ROLE", userRole)
-        bundle.putString("USER_ID", userId.toString())
-        fragmentEditUser.arguments = bundle
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.nav_host_fragment_admin, fragmentEditUser)
-            .addToBackStack(null)
-            .commit()
-    }
-
-    private fun deleteUser(user: User) {
+    private fun onDeleteClick(user: User) {
         val dialogBuilder = AlertDialog.Builder(requireContext())
-        dialogBuilder.setMessage("Apakah Anda yakin ingin menghapus User ${user.name}?")
+        dialogBuilder.setMessage("Apakah Anda yakin ingin menghapus user ${user.name}?")
             .setCancelable(false)
             .setPositiveButton("Ya") { _, _ ->
-                 lifecycleScope.launch {
+                lifecycleScope.launch(Dispatchers.IO) {
                     try {
-                        userViewModel.deleteUser(user)
-                        Toast.makeText(requireContext(), "User deleted successfully", Toast.LENGTH_SHORT).show()
+
+                        // Hapus produk dari ViewModel
+                        userViewModel.deleteUser(user, user.id)
+
+                        withContext(Dispatchers.Main) {
+                             userViewModel.allUser.observe(viewLifecycleOwner) { productList ->
+                                productList?.let {
+                                    userAdapter.submitList(productList)
+                                }
+                            }
+                        }
                     } catch (e: Exception) {
-                        Toast.makeText(requireContext(), "Delete failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                        // Tampilkan pesan error di thread utama
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(requireContext(), "Delete failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }
             .setNegativeButton("Tidak") { dialog, _ ->
                 dialog.dismiss()
             }
-
         val alert = dialogBuilder.create()
         alert.setTitle("Hapus User")
         alert.show()
+    }
+
+
+     private fun onEditClick(user: User ) {
+        val bundle = Bundle().apply {
+            putInt("userId", user.id ?: 0)
+        }
+        val createUserFragment = CreateUserFragment()
+        createUserFragment.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.nav_host_fragment_admin, createUserFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
 

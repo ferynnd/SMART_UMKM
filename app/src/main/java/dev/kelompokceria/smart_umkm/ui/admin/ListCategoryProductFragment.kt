@@ -2,6 +2,7 @@ package dev.kelompokceria.smart_umkm.ui.admin
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.card.MaterialCardView
 import dev.kelompokceria.smart_umkm.R
+import dev.kelompokceria.smart_umkm.data.helper.NetworkStatusViewModel
 import dev.kelompokceria.smart_umkm.databinding.FragmentListCategoryProductBinding
 import dev.kelompokceria.smart_umkm.model.ProductCategory
 import dev.kelompokceria.smart_umkm.viewmodel.ProductCategoryViewModel
@@ -23,10 +25,12 @@ class ListCategoryProductFragment : Fragment() {
     private lateinit var binding: FragmentListCategoryProductBinding
     private lateinit var productCategoryViewModel: ProductCategoryViewModel
     private lateinit var categoryAdapter: ProductCategoryAdapter
+    private lateinit var networkStatusViewModel: NetworkStatusViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         productCategoryViewModel = ViewModelProvider(this).get(ProductCategoryViewModel::class.java)
+        networkStatusViewModel = ViewModelProvider(this).get(NetworkStatusViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -37,8 +41,8 @@ class ListCategoryProductFragment : Fragment() {
 
         hideBottomNavigationView()
         // Set up RecyclerView
-        categoryAdapter = ProductCategoryAdapter { product ->
-            onDeleteClick(product)
+        categoryAdapter = ProductCategoryAdapter { product, id ->
+            onDeleteClick(product, id)
         }
 
         binding.recyclerView.apply {
@@ -46,8 +50,21 @@ class ListCategoryProductFragment : Fragment() {
             adapter = categoryAdapter
         }
 
+        binding.swiperefresh.setOnRefreshListener {
+            lifecycleScope.launch {
+                try {
+                    productCategoryViewModel.refreshProductCategory()
+                    productCategoryViewModel.refreshDeleteProductCategory()
+                } catch (e: Exception) {
+                    Log.e("ProductList", "Error fetching product data", e)
+                } finally {
+                    binding.swiperefresh.isRefreshing = false
+                }
+            }
+        }
+
         // Observe LiveData from ViewModel
-        productCategoryViewModel.allProductCategory.observe(viewLifecycleOwner) { categories ->
+        productCategoryViewModel.productCategory.observe(viewLifecycleOwner) { categories ->
             categories.let {
                 lifecycleScope.launch(Dispatchers.Main) {
                     if (it.isNotEmpty()) {
@@ -62,35 +79,40 @@ class ListCategoryProductFragment : Fragment() {
             }
         }
 
-        // Add category on button click
-        binding.btnAddCategory.setOnClickListener {
-            val categoryName = binding.edCategory.text.toString().uppercase()
-            if (categoryName.isNotBlank()) {
-                val category = ProductCategory(name = categoryName)
+        networkStatusViewModel.networkStatus.observe(viewLifecycleOwner) {  isConnected ->
+            if(isConnected){
+                // Add category on button click
+                    binding.btnAddCategory.setOnClickListener {
+                        val categoryName = binding.edCategory.text.toString().uppercase()
+                        if (categoryName.isNotBlank()) {
+                            val category = ProductCategory(name = categoryName)
 
-                lifecycleScope.launch(Dispatchers.IO) {
-                    productCategoryViewModel.addProductCategory(category)
-                    launch(Dispatchers.Main) {
-                        Toast.makeText(requireContext(), "Category added successfully", Toast.LENGTH_SHORT).show()
-                        binding.edCategory.text?.clear()
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                productCategoryViewModel.createProductCategory(category)
+                                launch(Dispatchers.Main) {
+                                    Toast.makeText(requireContext(), "Category added successfully", Toast.LENGTH_SHORT).show()
+                                    binding.edCategory.text?.clear()
+                                }
+                            }
+                        } else {
+                            Toast.makeText(requireContext(), "Category name cannot be empty", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }
             } else {
-                Toast.makeText(requireContext(), "Category name cannot be empty", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Network is not connected", Toast.LENGTH_LONG).show()
             }
         }
-
         return binding.root
     }
 
-    private fun onDeleteClick(product: ProductCategory) {
+    private fun onDeleteClick(product: ProductCategory, id: Int) {
         val dialogBuilder = AlertDialog.Builder(requireContext())
         dialogBuilder.setMessage("Apakah Anda yakin ingin menghapus category ${product.name}?")
             .setCancelable(false)
             .setPositiveButton("Ya") { _, _ ->
                 lifecycleScope.launch {
                     try {
-                        productCategoryViewModel.deleteProductCategory(product)
+                        productCategoryViewModel.deleteProductCategory(product, id)
                         launch(Dispatchers.Main) {
                             Toast.makeText(requireContext(), "Category deleted successfully", Toast.LENGTH_SHORT).show()
                         }

@@ -4,18 +4,20 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "user_table" , indices = [Index(value = ["user_username"], unique = true)])
+@Entity(tableName = "user_table" , indices = [Index(value = ["username"], unique = true)])
 data class User (
-//    @ColumnInfo(name = "user_image") val image : ByteArray? = null ,
-    @ColumnInfo(name = "user_image") val image : String = "" ,
-    @ColumnInfo(name = "user_name") val name : String,
-    @ColumnInfo(name = "user_email") val email : String,
-    @ColumnInfo(name = "user_phone") val phone : String,
-    @ColumnInfo(name = "user_username") val username : String,
-    @ColumnInfo(name = "user_password") val password :String,
-    @ColumnInfo(name = "user_role") val role: UserRole,
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "user_id" )val id : Int = 0,
+    val image : String? = null,
+    val name : String? = null,
+    val email : String? = null,
+    val phone : String? = null,
+    val username : String? = null,
+    val password :String? = null,
+    val role: UserRole? = null,
+    @SerializedName("created_at") val createAt : String? = null,
+    @SerializedName("updated_at") val updateAt : String? = null,
+    @PrimaryKey(autoGenerate = true) val id : Int = 0,
 )
 
 enum class UserRole {

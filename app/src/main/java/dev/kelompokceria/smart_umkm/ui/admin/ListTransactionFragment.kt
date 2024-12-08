@@ -1,6 +1,5 @@
 package dev.kelompokceria.smart_umkm.ui.admin
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
@@ -11,8 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.kelompokceria.smart_umkm.controller.AdminTransactionListAdapter
 import dev.kelompokceria.smart_umkm.databinding.FragmentListTransactionBinding
-import dev.kelompokceria.smart_umkm.databinding.FragmentTransactionBinding
-import dev.kelompokceria.smart_umkm.model.Transaksi
+import dev.kelompokceria.smart_umkm.model.Transaction
 import dev.kelompokceria.smart_umkm.viewmodel.TransactionViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -77,7 +75,7 @@ class ListTransactionFragment : Fragment() {
 
     }
 
-    private fun setTransaction(newProducts: List<Transaksi>) {
+    private fun setTransaction(newProducts: List<Transaction>) {
         groupedData.clear()
 
         // Format tanggal untuk parsing dan pengelompokan
@@ -85,11 +83,11 @@ class ListTransactionFragment : Fragment() {
         val formatBulan = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
 
         // Urutkan transaksi berdasarkan waktu
-        val sortedTransactions = newProducts.sortedByDescending { it.transactionTime }
+        val sortedTransactions = newProducts.sortedByDescending { it.time }
 
         // Kelompokkan transaksi berdasarkan bulan
         val groupedByMonth = sortedTransactions.groupBy { transaksi ->
-            val date = formatTanggal.parse(transaksi.transactionTime)
+            val date = formatTanggal.parse(transaksi.time)
             date?.let { formatBulan.format(it) } ?: "Unknown" // Handle null values
         }
 

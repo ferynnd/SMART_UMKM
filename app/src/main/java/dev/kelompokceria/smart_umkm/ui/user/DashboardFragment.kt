@@ -38,8 +38,8 @@ class DashboardFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
-        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
+        userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
         sharedPref = PreferenceHelper(requireContext())
     }
 
@@ -52,8 +52,8 @@ class DashboardFragment : Fragment() {
         setupRecyclerView()
         setupProductObservers()
         setupUserObservers()
-        setupSearch()
-        setupCheckoutButton()
+//        setupSearch()
+//        setupCheckoutButton()
         showBottomNavigationView()
 
 
@@ -86,7 +86,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun setupProductObservers() {
-        productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
+        productViewModel.products.observe(viewLifecycleOwner) { products ->
             lifecycleScope.launch(Dispatchers.Main) {
                 if (products.isNotEmpty()) {
                     binding.linear.visibility = View.GONE
@@ -98,7 +98,7 @@ class DashboardFragment : Fragment() {
                     dashboardProductAdapter.submitList(emptyList())
                     dashboardProductAdapter.notifyDataSetChanged() // Memaksa pembaruan adapter
                 }
-            }
+           }
         }
 
         productViewModel.selectedPositions.observe(viewLifecycleOwner) { selectedProducts ->
@@ -112,12 +112,16 @@ class DashboardFragment : Fragment() {
 
         if (sortedProducts.isNotEmpty()) {
             var currentCategory = sortedProducts[0].category
-            groupedData.add(currentCategory) // Tambahkan kategori awal sebagai header
+            if (currentCategory != null) {
+                groupedData.add(currentCategory)
+            } // Tambahkan kategori awal sebagai header
 
             for (product in sortedProducts) {
                 if (product.category != currentCategory) {
                     currentCategory = product.category
-                    groupedData.add(currentCategory) // Tambahkan kategori baru
+                    if (currentCategory != null) {
+                        groupedData.add(currentCategory)
+                    } // Tambahkan kategori baru
                 }
                 groupedData.add(product) // Tambahkan produk
             }
@@ -132,7 +136,7 @@ class DashboardFragment : Fragment() {
         if (username != null) {
             userViewModel.getUserByUsername(username)
 
-            userViewModel.user.observe(viewLifecycleOwner) { user ->
+            userViewModel.loggedIn.observe(viewLifecycleOwner) { user ->
                 if (user != null) {
                     binding.tvName.text = user.name
                 } else {
@@ -144,47 +148,47 @@ class DashboardFragment : Fragment() {
         }
     }
 
-   private fun setupSearch() {
-        binding.productSearch.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                dashboardProductAdapter.submitList(emptyList())
-                return false // Tidak melakukan aksi apapun saat submit
-            }
+//   private fun setupSearch() {
+//        binding.productSearch.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                dashboardProductAdapter.submitList(emptyList())
+//                return false // Tidak melakukan aksi apapun saat submit
+//            }
+//
+//            override fun onQueryTextChange(searchText: String?): Boolean {
+//                searchText?.let {
+//                    // Melakukan pencarian produk dengan query
+//                    lifecycleScope.launch {
+//                        // Cari produk berdasarkan query
+//                        productViewModel.productSearch(it)
+//
+//                        // Mengobservasi hasil pencarian dan memperbarui adapter
+//                        productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
+//                            dashboardProductAdapter.submitList(products)
+//                        }
+//                    }
+//                }
+//                return true
+//            }
+//        })
+//    }
+//
+//
 
-            override fun onQueryTextChange(searchText: String?): Boolean {
-                searchText?.let {
-                    // Melakukan pencarian produk dengan query
-                    lifecycleScope.launch {
-                        // Cari produk berdasarkan query
-                        productViewModel.productSearch(it)
-
-                        // Mengobservasi hasil pencarian dan memperbarui adapter
-                        productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
-                            dashboardProductAdapter.submitList(products)
-                        }
-                    }
-                }
-                return true
-            }
-        })
-    }
-
-
-
-    private fun setupCheckoutButton() {
-        binding.btnCheckout.setOnClickListener {
-            val selectedIds = dashboardProductAdapter.getSelectedProductIds()
-            val bundle = Bundle().apply {
-                putIntArray("KEY_SELECTED_IDS", selectedIds.toIntArray())
-            }
-            val checkoutFragment = TransactionFragment()
-            checkoutFragment.arguments = bundle
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment_user, checkoutFragment)
-//                .addToBackStack(null)
-                .commit()
-        }
-    }
+//    private fun setupCheckoutButton() {
+//        binding.btnCheckout.setOnClickListener {
+//            val selectedIds = dashboardProductAdapter.getSelectedProductIds()
+//            val bundle = Bundle().apply {
+//                putIntArray("KEY_SELECTED_IDS", selectedIds.toIntArray())
+//            }
+//            val checkoutFragment = TransactionFragment()
+//            checkoutFragment.arguments = bundle
+//            parentFragmentManager.beginTransaction()
+//                .replace(R.id.nav_host_fragment_user, checkoutFragment)
+////                .addToBackStack(null)
+//                .commit()
+//        }
+//    }
 
     private fun toggleCheckoutButton(isVisible: Boolean) {
         binding.layoutCheckout.visibility = if (isVisible) View.VISIBLE else View.GONE
