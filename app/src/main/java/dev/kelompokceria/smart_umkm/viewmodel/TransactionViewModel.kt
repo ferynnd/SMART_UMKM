@@ -24,22 +24,71 @@ class TransactionViewModel (application: Application) : AndroidViewModel(applica
       init {
             val transaksiDao = AppDatabase.getInstance(application).transactionDao()
             repository = TransactionRepository(transaksiDao)
-            getAllTransactions()
+            getAllTransaction()
       }
 
-    private fun getAllTransactions() = viewModelScope.launch(Dispatchers.IO) {
-         val transactions = repository.getAllTransactions()
-            withContext(Dispatchers.Main) {
-                _allTransac.value = transactions
+    private fun getAllTransaction() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _allTransac.postValue(repository.getAllTransactions())
+        }
+    }
+
+    suspend fun createTransaction(transaction: Transaction) {
+        viewModelScope.launch(Dispatchers.IO) {
+//            save ke ROOM Database
+            repository.insert(transaction)
+//            save ke API
+            repository.createTransaction(transaction)
+        }
+    }
+
+    suspend fun deleteTransaction(transaction: Transaction, id : Int) {
+        viewModelScope.launch {
+            repository.deleteTransaction(transaction, id)
+        }
+    }
+
+    fun refreshTransaction() {
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val apiTransaction = repository.getTransactionsFromApi()
+                val existingTransaction = repository.getAllTransactions()
+
+                val newTransaction = apiTransaction.filter { apiTransaction ->
+                    existingTransaction.none { existingTransaction ->
+                        existingTransaction.id == apiTransaction.id
+                    }
+                }
+                repository.insertAll(newTransaction)
+
+                val updatedTransaction = repository.getAllTransactions()
+                _allTransac.postValue(updatedTransaction)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
+        }
     }
 
+    fun refreshDeleteTransaction() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val apiTransaction = repository.getTransactionsFromApi()
+                val existingTransaction = repository.getAllTransactions()
 
+                val deletedTransaction = existingTransaction.filter { roomTransaction ->
+                    apiTransaction.none { apiTransaction ->
+                        apiTransaction.id == roomTransaction.id
+                    }
+                }
+                repository.deleteAll(deletedTransaction)
 
-    fun insert(transaction: Transaction) = viewModelScope.launch {
-        repository.insert(transaction)
+                val updatedTransaction = repository.getAllTransactions()
+                _allTransac.postValue(updatedTransaction)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
-
 
 
 }

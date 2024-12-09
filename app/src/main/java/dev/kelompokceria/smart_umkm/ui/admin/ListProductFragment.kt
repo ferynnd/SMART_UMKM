@@ -54,8 +54,8 @@ class ListProductFragment : Fragment() {
         // Inisialisasi adapter dengan list kosong dan callback untuk edit dan hapus
         productAdapter = ProductAdapter({ product ->
             onEditClick(product)
-        }, { product ->
-            onDeleteClick(product)
+        }, { product, id ->
+            onDeleteClick(product, id)
         })
 
 
@@ -172,7 +172,7 @@ class ListProductFragment : Fragment() {
             .commit()
     }
 
-    private fun onDeleteClick(product: Product) {
+    private fun onDeleteClick(product: Product, id : Int) {
         val dialogBuilder = AlertDialog.Builder(requireContext())
         dialogBuilder.setMessage("Apakah Anda yakin ingin menghapus produk ${product.name}?")
             .setCancelable(false)
@@ -180,9 +180,12 @@ class ListProductFragment : Fragment() {
                 lifecycleScope.launch(Dispatchers.IO) {
                     try {
 
-                        // Hapus produk dari ViewModel
-                        productViewModel.deleteProduct(product, product.id!!)
+                        if (product.id == null) {
+                            Toast.makeText(requireContext(), "Product ID is null", Toast.LENGTH_SHORT).show()
+                            return@launch
+                        }
 
+                        productViewModel.deleteProduct(product, id)
                         withContext(Dispatchers.Main) {
                              productViewModel.products.observe(viewLifecycleOwner) { productList ->
                                 productList?.let {

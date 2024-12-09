@@ -27,7 +27,7 @@ import java.util.Locale
 
 class ProductAdapter(
     private val onEditClick: (Product) -> Unit,
-    private val onDeleteClick: (Product) -> Unit
+    private val onDeleteClick: (Product, id : Int) -> Unit
 ) : ListAdapter<Any, RecyclerView.ViewHolder>(ProductDiffCallback()) {
 
 
@@ -49,7 +49,11 @@ class ProductAdapter(
              getViewModel(view.root.context).networkStatus.observe(view.root.context as LifecycleOwner) { isConnected ->
                     if (isConnected) {
                         view.btnEdit.setOnClickListener { onEditClick(product) }
-                        view.btnDel.setOnClickListener { onDeleteClick(product)  }
+                        view.btnDel.setOnClickListener { product.id?.let { it1 ->
+                            onDeleteClick(product,
+                                it1
+                            )
+                        } }
                     } else {
                         Toast.makeText(view.root.context, "Network is not connected", Toast.LENGTH_SHORT).show()
                     }

@@ -39,9 +39,12 @@ interface ProductDao {
     suspend fun delete(product: Product)
 
     @Query("SELECT * FROM product_table ORDER BY id ASC")
-    fun getAllProducts(): List<Product>
+    suspend fun getAllProducts(): List<Product>
 
     @Query("SELECT * FROM product_table WHERE id = :id")
     fun getProductById(id: Int): LiveData<Product?>
+
+    @Query("SELECT * FROM product_table WHERE id IN (:ids)")
+    fun getProductsByIds(ids: List<Int>): LiveData<List<Product?>>
 
 }

@@ -3,6 +3,7 @@ package dev.kelompokceria.smart_umkm.data.helper
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dev.kelompokceria.smart_umkm.data.api.CategoryApiService
 import dev.kelompokceria.smart_umkm.data.api.ProductApiService
+import dev.kelompokceria.smart_umkm.data.api.TransactionApiService
 import dev.kelompokceria.smart_umkm.data.api.UserApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -65,6 +66,10 @@ object RetrofitHelper {
 
     val userApiService: UserApiService by lazy {
         retrofit.create(UserApiService::class.java)
+    }
+
+    val transactionApiService: TransactionApiService by lazy {
+        retrofit.create(TransactionApiService::class.java)
     }
 
 

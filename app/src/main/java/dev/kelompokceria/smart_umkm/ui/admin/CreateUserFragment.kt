@@ -53,6 +53,8 @@ class CreateUserFragment : Fragment() {
     private var imagePart: MultipartBody.Part? = null
     private var usertId: Int? = null
 
+    private var isClicked = true
+
     private var imageUpdate: String? = null
 
     override fun onCreateView(
@@ -60,6 +62,7 @@ class CreateUserFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        isClicked = true
         binding = FragmentCreateUserBinding.inflate(inflater, container, false)
         userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
         networkStatusViewModel = ViewModelProvider(this)[NetworkStatusViewModel::class.java]
@@ -110,8 +113,16 @@ class CreateUserFragment : Fragment() {
             pickImageLauncher.launch("image/*")
         }
 
+         if (isClicked){
+            binding.btnCreate.setText("SAVE")
+        } else {
+            binding.btnCreate.setText("LOADING")
+        }
+
+
         binding.btnCreate.setOnClickListener {
             if (validateInputs()) {
+                isClicked = false
                 uploadUser()
             } else {
                 Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()

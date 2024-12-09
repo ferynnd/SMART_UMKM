@@ -59,6 +59,11 @@ interface UserApiService {
         @Field("password") userPassword: String
     ): LoginResponse
 
+    @GET("user/username/{username}")
+    suspend fun getUserByUsername(
+        @Path("username") username: String
+    ): UpdateUserResponse
+
 //     @POST("auth/login")
 //    suspend fun login(
 //        @Part("username") userName: RequestBody,

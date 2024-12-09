@@ -83,5 +83,9 @@ class ProductRepository(private val productDao: ProductDao) {
         productDao.insert(product)
     }
 
+    fun getProductByIds(ids: List<Int>): LiveData<List<Product?>> {
+        return productDao.getProductsByIds(ids)
+    }
+
 
 }

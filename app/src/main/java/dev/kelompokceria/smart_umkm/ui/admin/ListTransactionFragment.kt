@@ -1,6 +1,7 @@
 package dev.kelompokceria.smart_umkm.ui.admin
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
@@ -43,6 +44,19 @@ class ListTransactionFragment : Fragment() {
 
         setupRecyclerView()
         fetchTransactions()
+
+         binding.swiperefresh.setOnRefreshListener {
+            lifecycleScope.launch {
+                try {
+                    transactionViewModel.refreshTransaction()
+                    transactionViewModel.refreshDeleteTransaction()
+                } catch (e: Exception) {
+                    Log.e("TransactionList", "Error fetching transaction data", e)
+                } finally {
+                    binding.swiperefresh.isRefreshing = false
+                }
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -59,8 +73,8 @@ class ListTransactionFragment : Fragment() {
                 lifecycleScope.launch {
                     if (transactions.isNotEmpty()) {
                         binding.linear.visibility = View.GONE
-//                         adapter.submitList(it)
-                        setTransaction(it)
+                         adapter.submitList(it)
+                            setTransaction(it)
 
                     } else {
                         binding.linear.visibility = View.VISIBLE

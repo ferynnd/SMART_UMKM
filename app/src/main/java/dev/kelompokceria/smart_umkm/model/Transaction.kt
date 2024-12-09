@@ -18,8 +18,8 @@ data class Transaction(
 )
 
 data class TransactionProduct(
-    val id: Long? = null,
-     @SerializedName("transaction_id") val transactionId: String? = null,
+    @PrimaryKey val id: Long? = null,
+    @SerializedName("transaction_id") val transactionId: String? = null,
     val name: String? = null,
     val price: String? = null,
     val quantity: Int? = null,

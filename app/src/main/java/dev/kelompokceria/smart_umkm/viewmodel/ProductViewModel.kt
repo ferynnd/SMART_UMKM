@@ -42,7 +42,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 
      private fun getAllProduct() {
         viewModelScope.launch {
-            _products.value = repository.getAllProducts()
+            _products.postValue(repository.getAllProducts())
         }
     }
 
@@ -132,7 +132,6 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
                 try {
                     val response = repository.getProductById(id)
                     _product.postValue(response)
-//                    _product.value = response
                 } catch (e: Exception) {
                     _product.value = UpdateProductResponse(status = false, message = e.message ?: "An error occurred", data = null)
                 }
@@ -164,12 +163,12 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 //        return repository.getProductById(id) // Mengambil produk dari repository
 //    }
 //
-//    fun getProductsByIds(ids: List<Int>): LiveData<List<Product>> {
-//    if (ids.isEmpty()) {
-//        return MutableLiveData(emptyList()) // Mengembalikan LiveData kosong jika ID kosong
-//        }
-//        return repository.getProductsByIds(ids)
-//    }
+    fun getProductsByIds(ids: List<Int>): LiveData<List<Product?>> {
+        if (ids.isEmpty()) {
+            return MutableLiveData(emptyList()) // Mengembalikan LiveData kosong jika ID kosong
+        }
+        return repository.getProductByIds(ids)
+    }
 //
 //
 //    // Fungsi untuk mencari produk berdasarkan nama

@@ -1,6 +1,7 @@
 package dev.kelompokceria.smart_umkm.ui.user
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,7 @@ class DashboardFragment : Fragment() {
     private lateinit var dashboardProductAdapter: DashboardProductAdapter
 
     private lateinit var sharedPref: PreferenceHelper
+    private lateinit var nameUser : String
 
     private val groupedData = mutableListOf<Any>()
 
@@ -49,11 +51,22 @@ class DashboardFragment : Fragment() {
     ): View {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
 
+        binding.swiperefresh.setOnRefreshListener {
+            lifecycleScope.launch {
+                try {
+                    productViewModel.refreshProducts()
+                    productViewModel.refreshDeleteProducts()
+                } catch (e: Exception) {
+                    Log.e("ProductList", "Error fetching product data", e)
+                } finally {
+                    binding.swiperefresh.isRefreshing = false
+                }
+            }
+        }
         setupRecyclerView()
         setupProductObservers()
         setupUserObservers()
-//        setupSearch()
-//        setupCheckoutButton()
+        setupCheckoutButton()
         showBottomNavigationView()
 
 
@@ -91,7 +104,6 @@ class DashboardFragment : Fragment() {
                 if (products.isNotEmpty()) {
                     binding.linear.visibility = View.GONE
                     dashboardProductAdapter.submitList(products)
-                    setProduct(products)
                     setProduct(products)
                 } else {
                     binding.linear.visibility = View.VISIBLE
@@ -136,9 +148,11 @@ class DashboardFragment : Fragment() {
         if (username != null) {
             userViewModel.getUserByUsername(username)
 
-            userViewModel.loggedIn.observe(viewLifecycleOwner) { user ->
+            userViewModel.loggedInUser.observe(viewLifecycleOwner) { user ->
                 if (user != null) {
                     binding.tvName.text = user.name
+
+                    nameUser = user.name!!
                 } else {
                     Toast.makeText(requireContext(), "User tidak ditemukan", Toast.LENGTH_SHORT).show()
                 }
@@ -175,20 +189,21 @@ class DashboardFragment : Fragment() {
 //
 //
 
-//    private fun setupCheckoutButton() {
-//        binding.btnCheckout.setOnClickListener {
-//            val selectedIds = dashboardProductAdapter.getSelectedProductIds()
-//            val bundle = Bundle().apply {
-//                putIntArray("KEY_SELECTED_IDS", selectedIds.toIntArray())
-//            }
-//            val checkoutFragment = TransactionFragment()
-//            checkoutFragment.arguments = bundle
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.nav_host_fragment_user, checkoutFragment)
-////                .addToBackStack(null)
-//                .commit()
-//        }
-//    }
+    private fun setupCheckoutButton() {
+        binding.btnCheckout.setOnClickListener {
+            val selectedIds = dashboardProductAdapter.getSelectedProductIds()
+            val bundle = Bundle().apply {
+                putIntArray("KEY_SELECTED_IDS", selectedIds.toIntArray())
+                putString("KEY_USER_NAME", nameUser)
+            }
+            val checkoutFragment = TransactionFragment()
+            checkoutFragment.arguments = bundle
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment_user, checkoutFragment)
+//                .addToBackStack(null)
+                .commit()
+        }
+    }
 
     private fun toggleCheckoutButton(isVisible: Boolean) {
         binding.layoutCheckout.visibility = if (isVisible) View.VISIBLE else View.GONE
