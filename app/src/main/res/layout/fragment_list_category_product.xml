@@ -30,6 +30,15 @@
 
                 <!-- SearchView for searching products with outline -->
 
+                <ImageView
+                    android:id="@+id/btnBack"
+                    android:layout_width="40dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="52dp"
+                    android:src="@drawable/back"
+                    app:layout_constraintStart_toStartOf="@id/guidelineStart"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/blue" />
 
                 <!-- Title -->
                 <TextView
@@ -43,7 +52,7 @@
                     android:textStyle="bold"
                     android:layout_marginTop="50dp"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="@id/guidelineStart" />
+                    app:layout_constraintEnd_toEndOf="@id/guidelineEnd"/>
 
 
                 <com.google.android.material.textfield.TextInputLayout

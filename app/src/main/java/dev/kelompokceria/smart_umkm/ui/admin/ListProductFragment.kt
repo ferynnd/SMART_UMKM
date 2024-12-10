@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.card.MaterialCardView
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.controller.ProductAdapter
 import dev.kelompokceria.smart_umkm.data.helper.NetworkStatusViewModel
@@ -42,6 +43,7 @@ class ListProductFragment : Fragment() {
         super.onCreate(savedInstanceState)
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         networkStatusViewModel = ViewModelProvider(this).get(NetworkStatusViewModel::class.java)
+         activity?.findViewById<MaterialCardView>(R.id.layoutNavAdmin)?.visibility = View.VISIBLE
     }
 
     override fun onCreateView(
@@ -105,8 +107,15 @@ class ListProductFragment : Fragment() {
             productViewModel.products.observe(viewLifecycleOwner) { products ->
                   products?.let {
                       lifecycleScope.launch(Dispatchers.Main) {
-                            productAdapter.submitList(products)
-                            setProduct(products)
+                          if(products.isNotEmpty()){
+                              binding.linear.visibility = View.GONE
+                              productAdapter.submitList(products)
+                              setProduct(products)
+                          }else{
+                              binding.linear.visibility = View.VISIBLE
+                              productAdapter.submitList(emptyList())
+                              productAdapter.notifyDataSetChanged()
+                          }
                       }
                   }
             }
@@ -231,5 +240,7 @@ class ListProductFragment : Fragment() {
         }
         productAdapter.submitList(groupedData)
     }
+
+
 
 }

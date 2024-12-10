@@ -28,7 +28,7 @@ class ListTransactionFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        transactionViewModel = ViewModelProvider(this).get(TransactionViewModel::class.java)
+        transactionViewModel = ViewModelProvider(this)[TransactionViewModel::class.java]
     }
 
     override fun onCreateView(

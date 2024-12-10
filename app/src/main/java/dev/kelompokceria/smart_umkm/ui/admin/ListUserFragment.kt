@@ -85,7 +85,14 @@ class ListUserFragment : Fragment() {
             userViewModel.allUser.observe(viewLifecycleOwner) { user ->
                   user?.let {
                       lifecycleScope.launch(Dispatchers.Main) {
-                            userAdapter.submitList(user)
+                          if (user.isNotEmpty()){
+                              binding.linear.visibility = View.GONE
+                               userAdapter.submitList(user)
+                          } else {
+                              binding.linear.visibility = View.VISIBLE
+                              userAdapter.submitList(emptyList())
+                              userAdapter.notifyDataSetChanged()
+                          }
                       }
                   }
             }
