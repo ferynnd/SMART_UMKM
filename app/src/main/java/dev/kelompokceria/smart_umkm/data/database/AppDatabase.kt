@@ -20,7 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [User::class, Product::class, Transaction::class, ProductCategory::class], version = 3, exportSchema = false)
+@Database(entities = [User::class, Product::class, Transaction::class, ProductCategory::class], version = 1, exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -38,7 +38,7 @@ abstract class AppDatabase : RoomDatabase() {
                 INSTANCE ?: Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "smartumkm_db"
+                    "data_db"
                 )
                     .fallbackToDestructiveMigration()
                     .addCallback(DatabaseCallback(context)) // Tambahkan callback untuk populasi data

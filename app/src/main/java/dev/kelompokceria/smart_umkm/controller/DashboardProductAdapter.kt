@@ -22,8 +22,6 @@ import java.util.Locale
 class DashboardProductAdapter(
     private val onItemClicked: (Product) -> Unit,
     private val onSelectionChanged: (Boolean) -> Unit
-//    private val setBackgroundColor: (Int) -> Unit
-
 ) : ListAdapter<Any, RecyclerView.ViewHolder>(DashboardDiffCallback()) {
 
 

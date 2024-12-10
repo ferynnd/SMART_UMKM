@@ -29,7 +29,7 @@
 
         <!-- SearchView for searching products with outline -->
         <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchView1"
+            android:id="@+id/searchView"
             android:layout_width="0dp"
             android:layout_height="55dp"
             android:layout_marginTop="32dp"
@@ -52,7 +52,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/searchView1" />
+            app:layout_constraintTop_toBottomOf="@id/searchView" />
 
         <!-- Scrollable product list -->
         <androidx.recyclerview.widget.RecyclerView

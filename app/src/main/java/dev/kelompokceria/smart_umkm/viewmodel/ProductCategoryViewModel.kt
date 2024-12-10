@@ -32,7 +32,6 @@ class ProductCategoryViewModel (application: Application) : AndroidViewModel(app
 
     private fun getAllProductCategory() {
         viewModelScope.launch(Dispatchers.IO) {
-//            _productCategory.value = repository.getAllProductCategory()
             _productCategory.postValue(repository.getAllProductCategory())
         }
     }

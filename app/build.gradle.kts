@@ -86,6 +86,7 @@ dependencies {
 //    androidTestImplementation(libs.androidx.espresso.core.v311)
 //    androidTestImplementation(libs.androidx.runner)
 
+    ksp("com.google.devtools.ksp:symbol-processing-api:1.7.10-1.0.0") // Ganti dengan versi yang sesuai
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")

@@ -39,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
         // Cek apakah sudah login sebelumnya
         checkLogin()
 
-        networkStatusViewModel.networkStatus.observe(this, Observer { isConnected ->
+        networkStatusViewModel.networkStatus.observe(this){ isConnected ->
             if (isConnected) {
                 binding.btnLogin.setOnClickListener {
                     val username = binding.edUsername.text.toString()
@@ -58,10 +58,10 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Network is not connected", Toast.LENGTH_SHORT).show()
             }
-        })
+        }
 
         // Mengamati perubahan nilai user
-        userViewModel.loggedIn.observe(this) { user ->
+        userViewModel.loggedInUser.observe(this) { user ->
             if (user != null) {
                 // Simpan status login ke SharedPreferences
                 sharedPref.put(Constant.PREF_IS_LOGIN, true)

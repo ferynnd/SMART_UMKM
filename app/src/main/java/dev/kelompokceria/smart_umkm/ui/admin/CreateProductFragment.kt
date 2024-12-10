@@ -49,6 +49,8 @@ class CreateProductFragment : Fragment() {
     private var imagePart: MultipartBody.Part? = null
     private var productId : Int? = null
 
+    private var isClicked = true
+
     private var imageUpdate : String? = null
 
     override fun onCreateView(
@@ -59,6 +61,8 @@ class CreateProductFragment : Fragment() {
         productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
         productCategoryViewModel = ViewModelProvider(this)[ProductCategoryViewModel::class.java]
         networkStatusViewModel = ViewModelProvider(this)[NetworkStatusViewModel::class.java]
+        isClicked = true
+
         return binding.root
     }
 
@@ -93,7 +97,6 @@ class CreateProductFragment : Fragment() {
                     }
 
                     // Ubah teks tombol ke "UPDATE" dan tambahkan logika update
-                    binding.btnCreate.text = "UPDATE"
                     binding.btnCreate.setOnClickListener {
                         updateProduct(productId!!)
                     }
@@ -110,8 +113,15 @@ class CreateProductFragment : Fragment() {
             pickImageLauncher.launch("image/*")
         }
 
+        if (isClicked){
+            binding.btnCreate.setText("SAVE")
+        } else {
+            binding.btnCreate.setText("LOADING")
+        }
+
         binding.btnCreate.setOnClickListener {
             if (validateInputs()) {
+                isClicked = false
                 uploadProduct()
             } else {
                 Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()

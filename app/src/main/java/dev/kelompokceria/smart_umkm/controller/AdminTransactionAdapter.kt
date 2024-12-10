@@ -46,7 +46,7 @@ class AdminTransactionListAdapter :
 //             val numberFormat = NumberFormat.getCurrencyInstance(Locale("in", "ID"))
             // Mengolah produk
             val products = transaction.products?.joinToString("\n") {
-                "${it.name} - ${it.price} - qty x ${it.quantity}"
+                "${it.name} - Rp.${it.price} - qty x ${it.quantity}"
             }
             binding.textViewProduct.text = products
             binding.btnPayAllBills.setOnClickListener {

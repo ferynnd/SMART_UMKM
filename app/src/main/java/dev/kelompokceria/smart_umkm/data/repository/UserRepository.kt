@@ -74,7 +74,19 @@ class UserRepository(private val userDao: UserDao) {
                 message = e.message ?: "An error occurred",
                 data = null
             )
+        }
+    }
 
+    suspend fun getUserByUserName(username: String): UpdateUserResponse {
+        return try {
+            val response = ApiUser.getUserByUsername(username)
+            response // Mengembalikan response dari API
+        } catch (e: Exception) {
+            UpdateUserResponse(
+                status = false,
+                message = e.message ?: "An error occurred",
+                data = null
+            )
         }
     }
 

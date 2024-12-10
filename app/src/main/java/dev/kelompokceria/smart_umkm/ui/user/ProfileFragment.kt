@@ -47,7 +47,7 @@ class ProfileFragment : Fragment() {
             userViewModel.getUserByUsername(username)
 
             // Observe LiveData dari userViewModel
-            userViewModel.loggedIn.observe(viewLifecycleOwner) { user ->
+            userViewModel.loggedInUser.observe(viewLifecycleOwner) { user ->
                 if (user != null) {
                     user.image.let {
                             Glide.with(binding.ivProfile.context)

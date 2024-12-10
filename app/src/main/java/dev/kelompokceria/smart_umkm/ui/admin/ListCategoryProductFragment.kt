@@ -50,6 +50,13 @@ class ListCategoryProductFragment : Fragment() {
             adapter = categoryAdapter
         }
 
+        binding.btnBack.setOnClickListener{
+            val checkoutFragment = ListProductFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment_admin, checkoutFragment)
+                .commit()
+        }
+
         binding.swiperefresh.setOnRefreshListener {
             lifecycleScope.launch {
                 try {
