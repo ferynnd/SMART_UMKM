@@ -93,6 +93,7 @@
 
             <!-- Item Saved -->
             <LinearLayout
+                android:id="@+id/btnMoreInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -122,35 +123,7 @@
 
             <!-- Item Following -->
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingVertical="10dp">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/contact_us" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:text="Contact us"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/baseline_keyboard_arrow_right_24" />
-            </LinearLayout>
-
-
-            <!-- Item Following -->
-            <LinearLayout
+                android:id="@+id/btnFaq"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -180,6 +153,7 @@
 
             <!-- Item Following -->
             <LinearLayout
+                android:id="@+id/btnAboutUs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"

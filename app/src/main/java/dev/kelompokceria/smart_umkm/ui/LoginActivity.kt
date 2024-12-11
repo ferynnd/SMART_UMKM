@@ -41,6 +41,9 @@ class LoginActivity : AppCompatActivity() {
 
         networkStatusViewModel.networkStatus.observe(this){ isConnected ->
             if (isConnected) {
+
+                Toast.makeText(this, "Network is connected", Toast.LENGTH_SHORT).show()
+
                 binding.btnLogin.setOnClickListener {
                     val username = binding.edUsername.text.toString()
                     val password = binding.edPassword.text.toString()

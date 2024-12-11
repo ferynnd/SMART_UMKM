@@ -15,7 +15,10 @@ import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.data.helper.Constant
 import dev.kelompokceria.smart_umkm.data.helper.PreferenceHelper
 import dev.kelompokceria.smart_umkm.databinding.FragmentProfileBinding
+import dev.kelompokceria.smart_umkm.ui.AboutUsFragment
+import dev.kelompokceria.smart_umkm.ui.FaqFragment
 import dev.kelompokceria.smart_umkm.ui.LoginActivity
+import dev.kelompokceria.smart_umkm.ui.MoreInfoFragment
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
@@ -90,6 +93,30 @@ class ProfileFragment : Fragment() {
             alert.setTitle("Logout")
             alert.show()
 
+        }
+
+        binding.btnMI.setOnClickListener{
+            val fragment = MoreInfoFragment()
+            val pindah = parentFragmentManager.beginTransaction()
+            pindah.replace(R.id.nav_host_fragment_user, fragment)
+            pindah.addToBackStack(null)
+            pindah.commit()
+        }
+
+        binding.btnF.setOnClickListener{
+            val fragment = FaqFragment()
+            val pindah = parentFragmentManager.beginTransaction()
+            pindah.replace(R.id.nav_host_fragment_user, fragment)
+            pindah.addToBackStack(null)
+            pindah.commit()
+        }
+
+        binding.btnAU.setOnClickListener{
+            val fragment = AboutUsFragment()
+            val pindah = parentFragmentManager.beginTransaction()
+            pindah.replace(R.id.nav_host_fragment_user, fragment)
+            pindah.addToBackStack(null)
+            pindah.commit()
         }
 
         return binding.root

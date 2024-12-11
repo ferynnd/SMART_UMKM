@@ -15,7 +15,10 @@ import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.data.helper.Constant
 import dev.kelompokceria.smart_umkm.data.helper.PreferenceHelper
 import dev.kelompokceria.smart_umkm.databinding.FragmentAdminProfileBinding
+import dev.kelompokceria.smart_umkm.ui.AboutUsFragment
+import dev.kelompokceria.smart_umkm.ui.FaqFragment
 import dev.kelompokceria.smart_umkm.ui.LoginActivity
+import dev.kelompokceria.smart_umkm.ui.MoreInfoFragment
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
@@ -64,26 +67,48 @@ class AdminProfileFragment : Fragment() {
             }
         }
 
-            binding.btnLogout.setOnClickListener {
-                val dialogBuilder = AlertDialog.Builder(requireContext())
-                dialogBuilder.setMessage("Apakah Anda yakin ingin logout")
-                    .setCancelable(false)
-                    .setPositiveButton("Ya") { _, _ ->
-                        sharedPref.clear()
-                        Toast.makeText(requireContext(), "Logout berhasil", Toast.LENGTH_SHORT)
-                            .show()
-                        startActivity(Intent(requireContext(), LoginActivity::class.java))
-                    }
-                    .setNegativeButton("Tidak") { dialog, _ ->
+        binding.btnLogout.setOnClickListener {
+            val dialogBuilder = AlertDialog.Builder(requireContext())
+            dialogBuilder.setMessage("Apakah Anda yakin ingin logout")
+                .setCancelable(false)
+                .setPositiveButton("Ya") { _, _ ->
+                    sharedPref.clear()
+                    Toast.makeText(requireContext(), "Logout berhasil", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(requireContext(), LoginActivity::class.java))
+                }
+                .setNegativeButton("Tidak") { dialog, _ ->
                         dialog.dismiss()
-                    }
+                }
 
-                val alert = dialogBuilder.create()
-                alert.setTitle("Logout")
-                alert.show()
+            val alert = dialogBuilder.create()
+            alert.setTitle("Logout")
+            alert.show()
 
-            }
+        }
 
+        binding.btnMoreInfo.setOnClickListener{
+            val fragment = MoreInfoFragment()
+            val pindah = parentFragmentManager.beginTransaction()
+            pindah.replace(R.id.nav_host_fragment_admin, fragment)
+            pindah.addToBackStack(null)
+            pindah.commit()
+        }
+
+        binding.btnFaq.setOnClickListener{
+            val fragment = FaqFragment()
+            val pindah = parentFragmentManager.beginTransaction()
+            pindah.replace(R.id.nav_host_fragment_admin, fragment)
+            pindah.addToBackStack(null)
+            pindah.commit()
+        }
+
+        binding.btnAboutUs.setOnClickListener{
+            val fragment = AboutUsFragment()
+            val pindah = parentFragmentManager.beginTransaction()
+            pindah.replace(R.id.nav_host_fragment_admin, fragment)
+            pindah.addToBackStack(null)
+            pindah.commit()
+        }
 
             return binding.root
         }
@@ -91,8 +116,4 @@ class AdminProfileFragment : Fragment() {
         override fun onDestroyView() {
             super.onDestroyView()
         }
-
-
-
-
 }
