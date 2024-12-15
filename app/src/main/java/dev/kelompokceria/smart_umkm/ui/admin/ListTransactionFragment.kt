@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -57,6 +58,33 @@ class ListTransactionFragment : Fragment() {
                 }
             }
         }
+
+        binding.searchView1.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+
+                    lifecycleScope.launch {
+                        newText?.let {
+                            transactionViewModel.searchTransaction(it)
+                            transactionViewModel.trans.observe(viewLifecycleOwner) { trans ->
+                                trans?.let {
+                                    adapter.submitList(trans)
+//                                    setTransaction(trans)
+                                }
+                            }
+                        }
+                    }
+
+                    return true
+                }
+        })
+
+
+
     }
 
     private fun setupRecyclerView() {
@@ -74,7 +102,7 @@ class ListTransactionFragment : Fragment() {
                     if (transactions.isNotEmpty()) {
                         binding.linear.visibility = View.GONE
                          adapter.submitList(it)
-                            setTransaction(it)
+                        setTransaction(it)
 
                     } else {
                         binding.linear.visibility = View.VISIBLE
@@ -102,16 +130,12 @@ class ListTransactionFragment : Fragment() {
         // Kelompokkan transaksi berdasarkan bulan
         val groupedByMonth = sortedTransactions.groupBy { transaksi ->
             val date = formatTanggal.parse(transaksi.time)
-            date?.let { formatBulan.format(it) } ?: "Unknown" // Handle null values
+            date?.let { formatBulan.format(it) } ?: "Unknown"
         }
-
-        // Bangun data untuk adapter
         groupedByMonth.forEach { (bulan, transaksiList) ->
-            groupedData.add(bulan) // Tambahkan header bulan
-            groupedData.addAll(transaksiList) // Tambahkan transaksi di bulan itu
+            groupedData.add(bulan)
+            groupedData.addAll(transaksiList)
         }
-
-        // Kirim data yang sudah dikelompokkan ke adapter
         adapter.submitList(groupedData)
     }
 }

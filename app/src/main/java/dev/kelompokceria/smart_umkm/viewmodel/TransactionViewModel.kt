@@ -48,6 +48,17 @@ class TransactionViewModel (application: Application) : AndroidViewModel(applica
         }
     }
 
+    suspend fun searchTransaction(query: String){
+         withContext(Dispatchers.IO) {
+            val allTrans = repository.getAllTransactions()
+            val filteredProducts = allTrans.filter { trans ->
+                trans.user?.contains(query, ignoreCase = true) == true ||
+                trans.time?.contains(query, ignoreCase = true) == true
+            }
+            _allTransac.postValue(filteredProducts)
+        }
+    }
+
     fun refreshTransaction() {
         viewModelScope.launch(Dispatchers.IO){
             try {

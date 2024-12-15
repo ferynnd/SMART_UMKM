@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,6 +67,27 @@ class ListUserFragment : Fragment() {
                 Toast.makeText(requireContext(), "Network is not connected", Toast.LENGTH_LONG).show()
             }
         }
+
+
+        binding.searchView1.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                      lifecycleScope.launch {
+                        newText?.let {
+                            userViewModel.searchUser(it)
+                            userViewModel.allUser.observe(viewLifecycleOwner) { userList ->
+                                userList?.let {
+                                    userAdapter.submitList(it)
+                                }
+                            }
+                        }
+                    }
+                    return true
+                }
+        })
 
 
          binding.swiperefresh.setOnRefreshListener {

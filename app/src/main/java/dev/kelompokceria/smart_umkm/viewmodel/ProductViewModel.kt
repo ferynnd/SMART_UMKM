@@ -143,14 +143,15 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         repository.deleteProduct(product, id)
     }
 
-    suspend fun searchProduct(query: String): List<Product> {
-        return withContext(Dispatchers.IO) {
+   suspend fun searchProduct(query: String) {
+        withContext(Dispatchers.IO) {
             val allProducts = repository.getAllProducts()
-            allProducts.filter { product ->
+            val filteredProducts = allProducts.filter { product ->
                 product.name?.contains(query, ignoreCase = true) == true ||
                 product.category?.contains(query, ignoreCase = true) == true
             }
+            _products.postValue(filteredProducts)
         }
-    }
+   }
 
 }

@@ -106,6 +106,10 @@ class CreateUserFragment : Fragment() {
             }
         }
 
+        binding.btnBack.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
         hideBottomNavigationView()
         setupSpinner()
 

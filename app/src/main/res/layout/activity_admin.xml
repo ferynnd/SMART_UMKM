@@ -21,13 +21,12 @@
         android:id="@+id/layoutNavAdmin"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        app:backgroundTint="@color/white"
-        android:background="@color/white"
         android:layout_alignParentBottom="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="10dp"
         android:layout_marginBottom="10dp"
+        app:cardElevation="0dp"
         app:cardCornerRadius="30dp"
         app:layout_constraintStart_toStartOf="parent">
            <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -35,9 +34,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 app:itemBackground="@color/white"
-                app:itemIconTint="@color/primary_blue"
+                app:itemIconTint="@color/black"
                 app:itemRippleColor="@color/light_blue"
-                app:itemTextColor="@color/primary_blue"
+                app:itemTextColor="@color/black"
                 android:layout_alignParentBottom="true"
                 app:labelVisibilityMode="unlabeled"
                 app:menu="@menu/admin_menu"/>

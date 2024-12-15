@@ -7,11 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.card.MaterialCardView
@@ -122,6 +122,31 @@ class ListProductFragment : Fragment() {
 
         }
 
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+
+                    lifecycleScope.launch {
+                        newText?.let {
+                            productViewModel.searchProduct(it)
+                            productViewModel.products.observe(viewLifecycleOwner) { products ->
+                                products?.let {
+                                    productAdapter.submitList(products)
+                                    setProduct(products)
+                                }
+                            }
+                        }
+                    }
+
+                    return true
+                }
+        })
+
+
 
         binding.btnSwitch.setOnClickListener {
                 if (binding.btnAddProduct.visibility == View.GONE && binding.btnAddCategory.visibility == View.GONE) {
@@ -136,38 +161,8 @@ class ListProductFragment : Fragment() {
         return binding.root
     }
 
-//    private fun setupSearchView() {
-//        binding.searchView1.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(searchText: String?): Boolean {
-//                val filteredProducts = productViewModel.allProducts.value?.filter {
-//                    it.name.contains(searchText ?: "", ignoreCase = true)
-//                } ?: emptyList()
-//
-//                setProduct(filteredProducts)
-//                return true
-//            }
-//
-////            override fun onQueryTextChange(searchText: String?): Boolean {
-////                if (searchText.isNullOrEmpty()) {
-////                    // Jika pencarian dibatalkan atau teks kosong, tampilkan semua produk
-////                    productViewModel.allProducts.observe(viewLifecycleOwner) { products ->
-////                        products?.let {
-////                            productAdapter.submitList(it) // Tampilkan semua produk
-////                        }
-////                    }
-////                } else {
-////                    // Panggil metode filter dari adapter
-//////                    productAdapter.filter(searchText)
-////                }
-////                return true
-////            }
-//        })
-//    }
-//
+
+
     private fun onEditClick(product: Product) {
         val bundle = Bundle().apply {
             putInt("productId", product.id ?: 0)

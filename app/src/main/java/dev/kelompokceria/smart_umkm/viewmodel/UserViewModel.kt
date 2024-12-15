@@ -135,16 +135,16 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         repository.deleteUser(user, id)
     }
 
-    suspend fun searchUser(query: String): List<User> {
-        return withContext(Dispatchers.IO) {
+    suspend fun searchUser(query: String){
+         withContext(Dispatchers.IO) {
             val allUsers = repository.getAllUsers()
-            allUsers.filter { user ->
+            val filteredProducts = allUsers.filter { user ->
                 user.name?.contains(query, ignoreCase = true) == true ||
                 user.username?.contains(query, ignoreCase = true) == true
             }
+            _allUser.postValue(filteredProducts)
         }
     }
-
 
     private val _loggedInUser = MutableLiveData<User?>()
     val loggedInUser: LiveData<User?> = _loggedInUser

@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.google.android.material.card.MaterialCardView
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.data.helper.Constant
 import dev.kelompokceria.smart_umkm.data.helper.PreferenceHelper
@@ -15,8 +16,7 @@ import dev.kelompokceria.smart_umkm.databinding.FragmentMoreInfoBinding
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
 
 class MoreInfoFragment : Fragment() {
-    private var _binding: FragmentMoreInfoBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentMoreInfoBinding
 
     private lateinit var userViewModel: UserViewModel
 
@@ -34,7 +34,7 @@ class MoreInfoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMoreInfoBinding.inflate(inflater, container, false)
+        binding = FragmentMoreInfoBinding.inflate(inflater, container, false)
 
         val username = sharedPref.getString(Constant.PREF_USER_NAME)
 
@@ -74,12 +74,20 @@ class MoreInfoFragment : Fragment() {
                 requireActivity().onBackPressed()
             }
 
+            hideBottomNavigationView()
+
         }
         return binding.root
     }
 
+    private fun hideBottomNavigationView() {
+        activity?.findViewById<MaterialCardView>(R.id.layoutNavAdmin)?.visibility = View.GONE
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        activity?.findViewById<MaterialCardView>(R.id.layoutNavAdmin)?.visibility = View.VISIBLE
     }
+
+
 }

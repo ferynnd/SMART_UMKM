@@ -27,25 +27,31 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.9"/>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideTop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.0" />
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/baseline_keyboard_arrow_right_24"
+            app:tint="@color/black"
+            app:layout_constraintStart_toEndOf="@id/guideStart"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
 
         <TextView
             android:id="@+id/textHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:fontFamily="@font/montserrat_bold"
             android:text="CREATE USER"
+            android:layout_marginTop="10dp"
             android:textColor="@color/black"
-            android:textSize="25sp"
+            android:textSize="22sp"
             app:layout_constraintEnd_toStartOf="@id/guideEnd"
             app:layout_constraintStart_toEndOf="@id/guideStart"
-            app:layout_constraintTop_toBottomOf="@id/guideTop" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
@@ -191,10 +197,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="CREATE"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:layout_marginTop="30dp"
             app:cornerRadius="10dp"
-            android:backgroundTint="@color/black"
+            android:backgroundTint="@color/primary_blue"
             android:paddingVertical="10dp"
             android:paddingBottom="50dp"
             android:fontFamily="@font/montserrat_semibold"
