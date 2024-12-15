@@ -15,10 +15,10 @@
 
     <ImageView
         android:id="@+id/backButton"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="34dp"
+        android:layout_height="30dp"
         android:contentDescription="Back Button"
-        android:src="@drawable/baseline_arrow_back_ios_new_24"
+        android:src="@drawable/baseline_keyboard_arrow_right_24"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -26,13 +26,13 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:contentDescription="Back Button"
         android:src="@drawable/logo"
         android:translationZ="20dp"
         android:layout_marginStart="20dp"
-        android:translationY="-20dp"
+        android:translationY="-30dp"
         app:layout_constraintTop_toTopOf="@id/innerCard"
         app:layout_constraintStart_toStartOf="@id/innerCard" />
 
@@ -54,9 +54,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="About Us"
+            android:fontFamily="@font/montserrat_bold"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:layout_gravity="center"
             android:gravity="center" />
 
@@ -84,6 +85,7 @@
                 android:layout_marginHorizontal="40dp"
                 android:justificationMode="inter_word"
                 android:lineSpacingExtra="5dp"
+                android:fontFamily="@font/montserrat"
                 android:text="SMART UMKM adalah aplikasi kasir modern yang dirancang khusus untuk membantu Usaha Mikro, Kecil, dan Menengah (UMKM) dalam meningkatkan efisiensi pengelolaan bisnis. Dengan teknologi yang mudah digunakan dan fitur yang relevan, kami hadir sebagai solusi digital untuk mempermudah pencatatan transaksi dan pengelolaan operasional usaha."
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
@@ -91,63 +93,25 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/additionalCard"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                app:cardBackgroundColor="#4379F2"
-                android:translationY="100dp"
-                app:cardCornerRadius="30dp"
-                app:cardElevation="4dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/descriptionText">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <Button
-                        android:id="@+id/buttonInCard"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="80dp"
-                        android:layout_marginTop="40dp"
-                        android:layout_marginEnd="80dp"
-                        android:backgroundTint="@color/white"
-                        android:drawableLeft="@drawable/instagram"
-                        android:drawablePadding="8dp"
-                        android:elevation="4dp"
-                        android:text="SMART_UMKM"
-                        android:textColor="@color/black"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/secondButtonInCard"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="80dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="80dp"
-                        android:layout_marginBottom="16dp"
-                        android:backgroundTint="@color/white"
-                        android:drawableLeft="@drawable/baseline_web_24"
-                        android:drawablePadding="8dp"
-                        android:elevation="4dp"
-                        android:text="www.smart_umkm.com"
-                        android:textColor="@color/black"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/buttonInCard" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/additionalCard"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        app:cardBackgroundColor="@color/black"
+        android:layout_marginBottom="-160dp"
+        app:cardCornerRadius="30dp"
+        android:translationZ="10dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+    </androidx.cardview.widget.CardView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

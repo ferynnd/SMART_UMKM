@@ -5,10 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    tools:context=".ui.admin.ListUserFragment">
+    android:background="@android:color/white">
 
-    <!-- Guideline Start -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_start"
         android:layout_width="wrap_content"
@@ -16,7 +14,6 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="16dp" />
 
-    <!-- Guideline End -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_end"
         android:layout_width="wrap_content"
@@ -24,12 +21,11 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="16dp" />
 
-    <!-- CardView Header -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardHeader"
         android:layout_width="0dp"
         android:layout_height="400dp"
-        app:cardBackgroundColor="#4379F2"
+        app:cardBackgroundColor="@color/black"
         app:cardElevation="4dp"
         app:cardCornerRadius="20dp"
         android:layout_marginTop="-250dp"
@@ -63,13 +59,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="EVITA"
-        android:textColor="@android:color/black"
-        android:fontFamily="@font/roboto_bold"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:fontFamily="@font/montserrat_bold"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardImage" />
+
 
     <!-- CardView untuk Menu -->
     <androidx.cardview.widget.CardView
@@ -93,7 +91,7 @@
 
             <!-- Item Saved -->
             <LinearLayout
-                android:id="@+id/btnMoreInfo"
+                android:id="@+id/btnMI"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -110,8 +108,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
-                    android:text="More info"
-                    android:textColor="@android:color/black"
+                    android:text="MORE INFO"
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
                 <ImageView
@@ -121,9 +119,10 @@
 
             </LinearLayout>
 
+
             <!-- Item Following -->
             <LinearLayout
-                android:id="@+id/btnFaq"
+                android:id="@+id/btnFAQ"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -141,7 +140,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
                     android:text="FAQ"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
                 <ImageView
@@ -153,7 +152,7 @@
 
             <!-- Item Following -->
             <LinearLayout
-                android:id="@+id/btnAboutUs"
+                android:id="@+id/btnAbout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -170,8 +169,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
-                    android:text="About us"
-                    android:textColor="@android:color/black"
+                    android:text="ABOUT US"
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
                 <ImageView
@@ -200,8 +199,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
-                    android:text="Logout"
-                    android:textColor="@android:color/black"
+                    android:text="LOGOUT"
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
                 <ImageView

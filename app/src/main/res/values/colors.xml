@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
+    <color name="black">#1A1A1A</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#4379F2</color>
     <color name="gray_100">#6d6d6d</color>
     <color name="red">#FF5733</color>
     <color name="red2">#C62E2E</color>
     <color name="gray">#e7e7e7</color>
-    <color name="light_blue">#E3F2FD</color>
+    <color name="light_blue">#c1e3f6</color>
+
+    <color name="primary_blue">#177ab2</color>
+
+    <color name="mcdonalds_yellow">#FFC72C</color>
+    <color name="light_gray">#EEEEEE</color>
+    <color name="discount_background">#FFECB3</color>
+    <color name="discount_text">#FF6D00</color>
+    <color name="price_color">#4CAF50</color>
+    <color name="cart_icon_color">#4CAF50</color>
+    <color name="cart_button_stroke">#E0E0E0</color>
+    <color name="bottom_nav_inactive">#BDBDBD</color>
 </resources>
