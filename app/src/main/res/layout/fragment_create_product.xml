@@ -37,10 +37,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:fontFamily="@font/roboto_bold"
+            android:fontFamily="@font/montserrat_bold"
             android:text="CREATE PRODUCT"
-            android:textColor="@color/blue"
-            android:textSize="30sp"
+            android:textColor="@color/black"
+            android:textSize="25sp"
             app:layout_constraintEnd_toStartOf="@id/guideEnd"
             app:layout_constraintStart_toEndOf="@id/guideStart"
             app:layout_constraintTop_toBottomOf="@id/guideTop" />
@@ -69,10 +69,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="bottom"
-                app:backgroundTint="@color/blue"
-                android:textColor="@color/white"
+                app:backgroundTint="@color/light_blue"
+                android:textColor="@color/primary_blue"
                 android:layout_marginBottom="5dp"
-                android:layout_marginHorizontal="50dp"
+                android:layout_marginHorizontal="90dp"
+                android:fontFamily="@font/montserrat_semibold"
                 android:text="ADD IMAGE"/>
         </androidx.cardview.widget.CardView>
 
@@ -92,6 +93,7 @@
                 android:id="@+id/edName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat"
                 android:hint="Name" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -129,6 +131,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="numberDecimal"
+                android:fontFamily="@font/montserrat"
                 android:hint="Price" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -148,6 +151,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="textMultiLine"
+                android:fontFamily="@font/montserrat"
                 android:hint="Description" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -156,9 +160,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="CREATE"
+            android:fontFamily="@font/montserrat_semibold"
             android:layout_marginTop="24dp"
             app:cornerRadius="10dp"
-            android:backgroundTint="@color/blue"
+            android:backgroundTint="@color/black"
             android:paddingVertical="12dp"
             app:layout_constraintStart_toEndOf="@id/guideStart"
             app:layout_constraintEnd_toStartOf="@id/guideEnd"

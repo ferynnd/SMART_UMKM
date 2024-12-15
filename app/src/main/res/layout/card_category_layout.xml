@@ -2,24 +2,26 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="@color/blue"
     android:layout_margin="4dp"
+    app:cardBackgroundColor="@color/white"
     app:cardElevation="3dp"
+    app:strokeColor="@color/black"
+    app:strokeWidth="2dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:id="@+id/textViewHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="CATEGORY"
-        android:textColor="@color/white"
+        android:fontFamily="@font/montserrat_semibold"
+        android:gravity="center"
         android:padding="10dp"
-        android:fontFamily="@font/roboto_medium"
+        android:text="CATEGORY"
         android:textAllCaps="true"
-        android:layout_marginStart="10dp"
-        android:textSize="20sp"/>
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </com.google.android.material.card.MaterialCardView>

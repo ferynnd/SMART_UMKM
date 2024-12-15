@@ -46,9 +46,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:fontFamily="@font/roboto_bold"
+            android:fontFamily="@font/montserrat_semibold"
             android:text="LIST PRODUCT"
-            android:textColor="@color/blue"
+            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
@@ -125,7 +125,7 @@
                 android:contentDescription="Add Category"
                 android:layout_margin="5dp"
                 android:src="@drawable/fab_tag"
-                app:backgroundTint="@color/blue"
+                app:backgroundTint="@color/black"
                 android:visibility="gone"
                 app:fabSize="normal"
                 app:tint="#FFFFFFFF" />
@@ -138,8 +138,7 @@
                 android:contentDescription="Add Product"
                 android:layout_margin="5dp"
                 android:src="@drawable/fab_product"
-                app:backgroundTint="@color/blue"
-
+                app:backgroundTint="@color/black"
                 android:visibility="gone"
                 app:fabSize="normal"
                 app:tint="#FFFFFFFF" />
@@ -151,7 +150,7 @@
                 android:contentDescription="Switch"
                 android:src="@drawable/fab_menu"
                 android:layout_margin="1dp"
-                app:backgroundTint="@color/blue"
+                app:backgroundTint="@color/black"
                 app:fabSize="normal"
                 app:tint="#FFFFFFFF" />
         </LinearLayout>
