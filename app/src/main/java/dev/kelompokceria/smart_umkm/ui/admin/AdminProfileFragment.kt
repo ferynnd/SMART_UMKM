@@ -84,7 +84,7 @@ class AdminProfileFragment : Fragment() {
 
         }
 
-        binding.btnMoreInfo.setOnClickListener{
+        binding.btnMI.setOnClickListener{
             val fragment = MoreInfoFragment()
             val pindah = parentFragmentManager.beginTransaction()
             pindah.replace(R.id.nav_host_fragment_admin, fragment)
@@ -92,7 +92,7 @@ class AdminProfileFragment : Fragment() {
             pindah.commit()
         }
 
-        binding.btnFaq.setOnClickListener{
+        binding.btnFAQ.setOnClickListener{
             val fragment = FaqFragment()
             val pindah = parentFragmentManager.beginTransaction()
             pindah.replace(R.id.nav_host_fragment_admin, fragment)
@@ -100,7 +100,7 @@ class AdminProfileFragment : Fragment() {
             pindah.commit()
         }
 
-        binding.btnAboutUs.setOnClickListener{
+        binding.btnAbout.setOnClickListener{
             val fragment = AboutUsFragment()
             val pindah = parentFragmentManager.beginTransaction()
             pindah.replace(R.id.nav_host_fragment_admin, fragment)

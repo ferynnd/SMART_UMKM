@@ -33,7 +33,7 @@ class AdminUserAdapter(
             binding.textViewEmail.text = user.email
             binding.textViewPhone.text = user.phone
             binding.textViewUsername.text = user.username
-//            binding.textViewPassword.text = user.password
+            binding.textViewPassword.text = user.password
             binding.textViewRole.text = user.role.toString()
 
             Glide.with(binding.imageView.context)

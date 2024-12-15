@@ -119,6 +119,10 @@ class CreateProductFragment : Fragment() {
             binding.btnCreate.setText("LOADING")
         }
 
+         binding.btnBack.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
         binding.btnCreate.setOnClickListener {
             if (validateInputs()) {
                 isClicked = false

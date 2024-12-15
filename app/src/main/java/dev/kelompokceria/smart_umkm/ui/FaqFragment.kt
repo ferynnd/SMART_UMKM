@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.google.android.material.card.MaterialCardView
 import dev.kelompokceria.smart_umkm.R
 import dev.kelompokceria.smart_umkm.databinding.FragmentFaqBinding
 
@@ -56,7 +57,18 @@ class FaqFragment : Fragment() {
                 binding.answer4.visibility = View.GONE
             }
         }
+        hideBottomNavigationView()
 
         return binding.root
     }
+
+    private fun hideBottomNavigationView() {
+        activity?.findViewById<MaterialCardView>(R.id.layoutNavAdmin)?.visibility = View.GONE
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        activity?.findViewById<MaterialCardView>(R.id.layoutNavAdmin)?.visibility = View.VISIBLE
+    }
+
 }

@@ -85,8 +85,8 @@
                 android:text="Edit"
                 android:textSize="12sp"
                 android:fontFamily="@font/montserrat_semibold"
-                android:textColor="#FFFFFFFF"
-                android:backgroundTint="@color/black"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/primary_blue"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/viewDesk" />

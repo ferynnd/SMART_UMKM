@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:fontFamily="@font/montserrat_semibold"
+            android:fontFamily="@font/montserrat_bold"
             android:text="LIST PRODUCT"
             android:textColor="@color/black"
             android:textSize="20sp"
