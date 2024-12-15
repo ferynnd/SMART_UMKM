@@ -25,6 +25,9 @@ import dev.kelompokceria.smart_umkm.data.helper.NetworkStatusViewModel
 import dev.kelompokceria.smart_umkm.data.helper.PreferenceHelper
 import dev.kelompokceria.smart_umkm.data.helper.RetrofitHelper
 import dev.kelompokceria.smart_umkm.databinding.ActivityAdminBinding
+import dev.kelompokceria.smart_umkm.ui.ConnectionDialog
+import dev.kelompokceria.smart_umkm.viewmodel.ProductViewModel
+import dev.kelompokceria.smart_umkm.viewmodel.TransactionViewModel
 //import dev.kelompokceria.smart_umkm.ui.user.TransactionFragment
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
@@ -32,8 +35,12 @@ import kotlinx.coroutines.launch
 class AdminActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAdminBinding
-    private val viewModel : UserViewModel by viewModels()
-     private lateinit var sharedPref: PreferenceHelper
+    private lateinit var sharedPref: PreferenceHelper
+    private val transactionViewModel: TransactionViewModel by viewModels()
+    private val productViewModel: ProductViewModel by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
+
+     private lateinit var networkStatusViewModel: NetworkStatusViewModel
 
 
 
@@ -42,9 +49,23 @@ class AdminActivity : AppCompatActivity() {
         binding = ActivityAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        networkStatusViewModel = NetworkStatusViewModel(application)
 
-         sharedPref = PreferenceHelper(this)
+        sharedPref = PreferenceHelper(this)
         val username = sharedPref.getString(Constant.PREF_USER_NAME)
+
+        networkStatusViewModel.networkStatus.observe(this, Observer { isConnected ->
+            if (isConnected) {
+                userViewModel.refreshUsers()
+                userViewModel.refreshDeleteUsers()
+                transactionViewModel.refreshTransaction()
+                transactionViewModel.refreshDeleteTransaction()
+                productViewModel.refreshProducts()
+                productViewModel.refreshDeleteProducts()
+            } else {
+                showConnectionErrorDialog()
+            }
+        })
 
         loadFragment(ListTransactionFragment(), username!!)
 
@@ -69,6 +90,14 @@ class AdminActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.nav_host_fragment_admin,fragment)
         transaction.commit()
+    }
+
+     private fun showConnectionErrorDialog() {
+        val connectionErrorDialog = ConnectionDialog(this)
+        connectionErrorDialog.show {
+            Toast.makeText(this, "Retrying connection...", Toast.LENGTH_SHORT).show()
+            // Retry the connection
+        }
     }
 
 
