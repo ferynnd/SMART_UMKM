@@ -14,6 +14,7 @@ import dev.kelompokceria.smart_umkm.data.repository.ProductRepository
 import dev.kelompokceria.smart_umkm.model.Product
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
@@ -142,57 +143,14 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         repository.deleteProduct(product, id)
     }
 
-
-//    // Fungsi untuk menambahkan produk baru ke database
-//    fun addProduct(product: Product) = viewModelScope.launch {
-//        repository.insert(product) // Memastikan ini memanggil fungsi insert yang tepat
-//    }
-//
-//    // Fungsi untuk menghapus produk
-//    fun deleteProduct(product: Product) = viewModelScope.launch {
-//        repository.delete(product)
-//    }
-//
-//    // Fungsi untuk memperbarui produk
-//    fun updateProduct(product: Product) = viewModelScope.launch {
-//        repository.update(product)
-//    }
-//
-//    // Fungsi untuk mendapatkan produk berdasarkan ID
-//    fun getProductById(id: Int): LiveData<Product?> {
-//        return repository.getProductById(id) // Mengambil produk dari repository
-//    }
-//
-    fun getProductsByIds(ids: List<Int>): LiveData<List<Product?>> {
-        if (ids.isEmpty()) {
-            return MutableLiveData(emptyList()) // Mengembalikan LiveData kosong jika ID kosong
+    suspend fun searchProduct(query: String): List<Product> {
+        return withContext(Dispatchers.IO) {
+            val allProducts = repository.getAllProducts()
+            allProducts.filter { product ->
+                product.name?.contains(query, ignoreCase = true) == true ||
+                product.category?.contains(query, ignoreCase = true) == true
+            }
         }
-        return repository.getProductByIds(ids)
-    }
-//
-//
-//    // Fungsi untuk mencari produk berdasarkan nama
-//    fun productSearch(query: String) {
-//        viewModelScope.launch {
-//            val result = repository.productSearch(query)
-//            _filteredProducts.postValue(result)
-//        }
-//    }
-//
-//     // Tambahkan atau hapus posisi dari daftar seleksi
-    fun toggleSelection(position: Product) {
-        val currentSelections = _selectedPositions.value?.toMutableSet() ?: mutableSetOf()
-        if (currentSelections.contains(position)) {
-            currentSelections.remove(position)
-        } else {
-            currentSelections.add(position)
-        }
-        _selectedPositions.value = currentSelections
-    }
-
-    // Set ulang semua seleksi
-    fun clearSelections() {
-        _selectedPositions.value = emptySet()
     }
 
 }

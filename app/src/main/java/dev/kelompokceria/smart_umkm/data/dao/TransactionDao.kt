@@ -23,24 +23,12 @@ interface TransactionDao {
     @Delete
     suspend fun deleteAll(transactions: List<Transaction>)
 
-//    @Query("UPDATE product_table SET name = :name, price = :price, description = :description, category = :category, image = :image WHERE id = :id")
-//    suspend fun updateProductById(
-//        id: Int,
-//        name: String,
-//        price: Int,
-//        description: String,
-//        category: String,
-//        image: String
-//    )
-
     @Delete
     suspend fun delete(transaction: Transaction)
 
     @Query("SELECT * FROM transaction_table ORDER BY id ASC")
     fun getAllTransactions(): List<Transaction>
 
-//    @Query("SELECT * FROM product_table WHERE id = :id")
-//    fun getProductById(id: Int): LiveData<Product?>
-//
+
 
 }

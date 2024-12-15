@@ -48,5 +48,4 @@ interface UserDao {
     @Query("SELECT * FROM user_table WHERE username = :username LIMIT 1")
     suspend fun getUserByUsername(username: String): User?
 
-
 }

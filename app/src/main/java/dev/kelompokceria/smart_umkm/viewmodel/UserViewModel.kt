@@ -135,26 +135,16 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         repository.deleteUser(user, id)
     }
 
-//    private val _loggedInUser  = MutableLiveData<User?>()
-//    val loggedIn: LiveData<User?> get() = _loggedInUser
-//
-//    fun getUserLogin(username: String, password: String) = viewModelScope.launch {
-//            val result = repository.loginUser (username, password)
-//            if (result.status) {
-//                _loggedInUser.postValue(result.data)
-//                result.data?.let { repository.insert(it) }
-//            } else {
-//                // Tangani kesalahan login, misalnya dengan menampilkan pesan kesalahan
-//                Log.e("LoginError", result.message)
-//            }
-//    }
-//
-//    fun getUserByUsername(username: String) {
-//        viewModelScope.launch {
-//            val user = repository.getUserByUsername(username)
-//            _loggedInUser.postValue(user) // Menggunakan postValue untuk mengupdate LiveData
-//        }
-//    }
+    suspend fun searchUser(query: String): List<User> {
+        return withContext(Dispatchers.IO) {
+            val allUsers = repository.getAllUsers()
+            allUsers.filter { user ->
+                user.name?.contains(query, ignoreCase = true) == true ||
+                user.username?.contains(query, ignoreCase = true) == true
+            }
+        }
+    }
+
 
     private val _loggedInUser = MutableLiveData<User?>()
     val loggedInUser: LiveData<User?> = _loggedInUser
@@ -166,26 +156,21 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     val errorMessage: LiveData<String> = _errorMessage
 
     fun getUserLogin(username: String, password: String) = viewModelScope.launch {
-        Log.d("LoginViewModel", "Attempting login for username: $username")
         val result = repository.loginUser(username, password)
         if (result.status) {
             _loginStatus.postValue(true)
-            Log.d("LoginViewModel", "Login successful, fetching user data")
             getUserByUsername(username)
         } else {
             _loginStatus.postValue(false)
             _errorMessage.postValue("Login failed: ${result.message}")
-            Log.e("LoginError", "Login failed: ${result.message}")
         }
     }
 
     fun getUserByUsername(username: String) {
         viewModelScope.launch {
-            Log.d("LoginViewModel", "Fetching user data for username: $username")
             try {
                 val user = repository.getUserByUserName(username)
                 if (user != null) {
-                    Log.d("LoginViewModel", "User data fetched successfully: $user")
                     if (user.status){
                         _loginStatus.postValue(true)
                         _loggedInUser.postValue(user.data)
@@ -196,12 +181,10 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                     }
 
                 } else {
-                    Log.e("LoginViewModel", "User data is null for username: $username")
                     _errorMessage.postValue("Failed to fetch user data")
                     _loginStatus.postValue(false)
                 }
             } catch (e: Exception) {
-                Log.e("GetUserError", "Error getting user data: ${e.message}")
                 _errorMessage.postValue("Error fetching user data: ${e.message}")
                 _loginStatus.postValue(false)
             }
