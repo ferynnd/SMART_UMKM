@@ -47,4 +47,6 @@ interface ProductDao {
     @Query("SELECT * FROM product_table WHERE id IN (:ids)")
     fun getProductsByIds(ids: List<Int>): LiveData<List<Product?>>
 
+    @Query("SELECT name, category FROM product_table WHERE name LIKE :name OR category LIKE :name")
+    suspend fun searchProducts(name: String): List<Product>
 }
