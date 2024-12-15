@@ -5,15 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    tools:context=".ui.FaqFragment">
+    android:background="@color/white">
 
     <ImageView
         android:id="@+id/backButton"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
         android:contentDescription="Back Button"
-        android:src="@drawable/baseline_arrow_back_ios_new_24"
+        android:src="@drawable/baseline_keyboard_arrow_right_24"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,9 +23,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Frequently Asked Questions"
-        android:textSize="24sp"
+        android:textSize="22sp"
         android:textStyle="bold"
-        android:textColor="#000000"
+        android:textColor="@color/black"
+        android:fontFamily="@font/montserrat_bold"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/backButton"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,9 +68,10 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/montserrat"
                         android:text="Siapa saja yang dapat menggunakan aplikasi ini?"
-                        android:textSize="16sp"
-                        android:textColor="#000000" />
+                        android:textSize="16sp"/>
 
                     <TextView
                         android:id="@+id/toggleButton1"
@@ -87,7 +88,9 @@
                     android:layout_height="wrap_content"
                     android:text="Aplikasi ini dapat digunakan oleh semua pengguna yang memiliki akun."
                     android:textSize="14sp"
-                    android:textColor="#757575"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:textColor="@color/primary_blue"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -113,7 +116,8 @@
                         android:layout_weight="1"
                         android:text="Bagaimana cara owner menambahkan kasir baru?"
                         android:textSize="16sp"
-                        android:textColor="#000000" />
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/montserrat"/>
 
                     <TextView
                         android:id="@+id/toggleButton2"
@@ -130,7 +134,9 @@
                     android:layout_height="wrap_content"
                     android:text="Owner dapat menambahkan kasir baru melalui menu pengaturan pengguna di aplikasi."
                     android:textSize="14sp"
-                    android:textColor="#757575"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:textColor="@color/primary_blue"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -156,7 +162,8 @@
                         android:layout_weight="1"
                         android:text="Apakah aplikasi ini memerlukan koneksi internet?"
                         android:textSize="16sp"
-                        android:textColor="#000000" />
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/montserrat"/>
 
                     <TextView
                         android:id="@+id/toggleButton3"
@@ -173,7 +180,9 @@
                     android:layout_height="wrap_content"
                     android:text="Ya, aplikasi ini memerlukan koneksi internet untuk sinkronisasi data."
                     android:textSize="14sp"
-                    android:textColor="#757575"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:textColor="@color/primary_blue"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -199,7 +208,8 @@
                         android:layout_weight="1"
                         android:text="Bagaimana cara mengatur kategori produk?"
                         android:textSize="16sp"
-                        android:textColor="#000000" />
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/montserrat"/>
 
                     <TextView
                         android:id="@+id/toggleButton4"
@@ -216,7 +226,9 @@
                     android:layout_height="wrap_content"
                     android:text="Sebagai owner, Anda dapat menambahkan, mengedit, atau menghapus kategori produk melalui fitur CRUD Produk."
                     android:textSize="14sp"
-                    android:textColor="#757575"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:textColor="@color/primary_blue"
                     android:visibility="gone" />
             </LinearLayout>
 

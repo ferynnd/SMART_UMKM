@@ -61,8 +61,6 @@ class AdminProfileFragment : Fragment() {
                             binding.ivProfile.setImageResource(R.drawable.picture) // Default image
                         }
                     binding.tvName.text = user.username
-                } else {
-                    Toast.makeText(requireContext(), "User tidak ditemukan", Toast.LENGTH_SHORT).show()
                 }
             }
         }
