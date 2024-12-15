@@ -56,15 +56,15 @@
 
                             <TextView
                                 android:id="@+id/tvName"
-                                android:textAllCaps="true"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text=""
-                                android:textSize="30sp"
-                                android:textColor="@color/white"
-                                android:fontFamily="@font/roboto_bold"
+                                android:layout_marginStart="5sp"
+                                android:fontFamily="More Fonts..."
                                 android:gravity="start"
-                                android:layout_marginStart="5sp" />
+                                android:text=""
+                                android:textAllCaps="true"
+                                android:textColor="@color/white"
+                                android:textSize="30sp" />
 
                         </LinearLayout>
 
@@ -118,7 +118,7 @@
                 android:id="@+id/linear"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:translationZ="0dp"
                 android:orientation="vertical">
 

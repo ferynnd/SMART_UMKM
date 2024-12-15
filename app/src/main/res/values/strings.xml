@@ -1,10 +1,4 @@
 <resources>
-    <string name="app_name">SMART UMKM</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="app_name">ADMIN SMART UMKM</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string-array name="shift_time_array">
-        <item>Pagi</item>
-        <item>Siang</item>
-        <item>Malam</item>
-    </string-array>
 </resources>

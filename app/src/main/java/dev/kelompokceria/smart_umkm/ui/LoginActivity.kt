@@ -12,10 +12,8 @@ import dev.kelompokceria.smart_umkm.data.helper.Constant
 import dev.kelompokceria.smart_umkm.data.helper.NetworkStatusViewModel
 import dev.kelompokceria.smart_umkm.data.helper.PreferenceHelper
 import dev.kelompokceria.smart_umkm.databinding.ActivityLoginBinding
-import dev.kelompokceria.smart_umkm.model.User
 import dev.kelompokceria.smart_umkm.model.UserRole
 import dev.kelompokceria.smart_umkm.ui.admin.AdminActivity
-import dev.kelompokceria.smart_umkm.ui.user.UserActivity
 import dev.kelompokceria.smart_umkm.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
@@ -59,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
                 }
 
             } else {
-                Toast.makeText(this, "Network is not connected", Toast.LENGTH_SHORT).show()
+                showConnectionErrorDialog()
             }
         }
 
@@ -70,6 +68,7 @@ class LoginActivity : AppCompatActivity() {
                 sharedPref.put(Constant.PREF_IS_LOGIN, true)
                 user.username?.let { sharedPref.put(Constant.PREF_USER_NAME, it) }
                 user.password?.let { sharedPref.put(Constant.PREF_USER_PASSWORD, it) }
+                user.name?.let { sharedPref.put(Constant.PREF_USER_REAL_NAME, it) }
                 user.role?.let { sharedPref.put(Constant.PREF_USER_ROLE, it.name) } // Simpan role dengan nama enum
                 // Navigasi berdasarkan role
                 user.role?.let { navigateToRole(it) }
@@ -82,27 +81,26 @@ class LoginActivity : AppCompatActivity() {
     private fun checkLogin() {
         if (sharedPref.getBoolean(Constant.PREF_IS_LOGIN)) {
             val role = sharedPref.getString(Constant.PREF_USER_ROLE)
-            when (role) {
-                UserRole.ADMIN.name -> navigateToRole(UserRole.ADMIN)
-                UserRole.USER.name -> navigateToRole(UserRole.USER)
-                else -> {
-                    // Tidak ada role, logout
-                    sharedPref.clear()
-                }
-            }
+           if (role == UserRole.ADMIN.toString()) {
+               navigateToRole(UserRole.ADMIN)
+           } else {
+              sharedPref.clear()
+           }
         }
     }
 
     private fun navigateToRole(role: UserRole) {
-        when (role) {
-            UserRole.ADMIN -> {
-                startActivity(Intent(this, AdminActivity::class.java))
-                finish()
-            }
-            UserRole.USER -> {
-                startActivity(Intent(this, UserActivity::class.java))
-                finish()
-            }
+        startActivity(Intent(this, AdminActivity::class.java))
+        finish()
+    }
+
+    private fun showConnectionErrorDialog() {
+        val connectionErrorDialog = ConnectionDialog(this)
+        connectionErrorDialog.show {
+            // This is the retry callback
+            // Implement your retry logic here
+            Toast.makeText(this, "Retrying connection...", Toast.LENGTH_SHORT).show()
+            // Retry the connection
         }
     }
 }
