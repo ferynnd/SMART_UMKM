@@ -33,6 +33,7 @@
                 android:layout_height="wrap_content"
                 android:text="SEBLAK MEWEK"
                 android:textColor="@android:color/black"
+                android:fontFamily="@font/montserrat_semibold"
                 android:textSize="16sp"
                 android:layout_marginStart="10dp"
                 android:textStyle="bold"
@@ -45,6 +46,7 @@
                 android:layout_height="wrap_content"
                 android:text="Rp.20.000"
                 android:textColor="@color/gray_100"
+                android:fontFamily="@font/montserrat_medium"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="@id/viewName"
                 app:layout_constraintTop_toBottomOf="@id/viewName" />
@@ -53,11 +55,16 @@
                 android:id="@+id/viewCate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/discount_bg"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
                 android:text="MAKANAN"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@id/viewPrice"
-                app:layout_constraintTop_toBottomOf="@id/viewPrice" />
+                android:fontFamily="@font/montserrat_medium"
+                android:textColor="@color/primary_blue"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/viewPrice"
+                app:layout_constraintTop_toBottomOf="@+id/viewPrice" />
 
             <TextView
                 android:id="@+id/viewDesk"
@@ -65,6 +72,7 @@
                 android:layout_height="wrap_content"
                 android:text="DESPRIKSI"
                 android:visibility="gone"
+                android:fontFamily="@font/montserrat"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="@id/viewCate"
@@ -76,8 +84,9 @@
                 android:layout_height="wrap_content"
                 android:text="Edit"
                 android:textSize="12sp"
+                android:fontFamily="@font/montserrat_semibold"
                 android:textColor="#FFFFFFFF"
-                android:backgroundTint="@color/blue"
+                android:backgroundTint="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/viewDesk" />
@@ -90,6 +99,7 @@
                 android:backgroundTint="@color/red2"
                 android:text="Delete"
                 android:textSize="12sp"
+                android:fontFamily="@font/montserrat_semibold"
                 android:textColor="@color/white"
                 android:drawableLeft="@drawable/delete"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -101,7 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@android:drawable/arrow_down_float"
-                app:tint="@color/blue"
+                app:tint="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
