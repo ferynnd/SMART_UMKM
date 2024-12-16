@@ -90,8 +90,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun navigateToRole(role: UserRole) {
-        startActivity(Intent(this, AdminActivity::class.java))
-        finish()
+        if (role == UserRole.ADMIN) {
+            startActivity(Intent(this, AdminActivity::class.java))
+            finish()
+        } else {
+            Toast.makeText(this, "Login Tidak Sesuai Role", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun showConnectionErrorDialog() {
