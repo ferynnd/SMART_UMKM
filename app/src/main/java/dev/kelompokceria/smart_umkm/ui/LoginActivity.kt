@@ -81,7 +81,8 @@ class LoginActivity : AppCompatActivity() {
     private fun checkLogin() {
         if (sharedPref.getBoolean(Constant.PREF_IS_LOGIN)) {
             val role = sharedPref.getString(Constant.PREF_USER_ROLE)
-           if (role == UserRole.ADMIN.toString()) {
+            val cekRole = UserRole.ADMIN.toString()
+           if (role == cekRole) {
                navigateToRole(UserRole.ADMIN)
            } else {
               sharedPref.clear()
